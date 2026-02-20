@@ -45,7 +45,12 @@ public final class Divides extends Operation
      * @param l The first integer
      * @param r The second integer that should divide the first
      * @return The integer that is the result of the division
+     * @throws ArithmeticException If the second integer is zero, as division by zero is not allowed
      */
-  public int op(int l, int r)
-    { return (l/r); }
+  public int op(int l, int r) {
+    if (r == 0) {
+      throw new ArithmeticException("Division by zero is not allowed.");
+    }
+    return (l/r);
+  }
 }
