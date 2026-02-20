@@ -79,7 +79,7 @@ class TestDivides {
 	@Test
 	void testDivisionByZero() {
 		// It should not be possible to divide by zero, so an ArithmeticException should be thrown if the second parameter is zero
-		params = Arrays.asList(new MyNumber(value1), new MyNumber(0));
+		params = Arrays.asList(new MyNumber(value1), new MyNumber(3-3));
 		assertThrows(ArithmeticException.class, () -> op = new Divides(params));
 	}
 
