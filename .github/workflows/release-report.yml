@@ -1,0 +1,89 @@
+name: Release report (JavaDoc, tests, coverage, quality)
+# This workflow has been generated using Copilot
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write  # required to upload assets to the GitHub Release
+
+jobs:
+  build-and-attach-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "25"
+          cache: maven
+
+      # This MUST fail if tests fail (unit + BDD).
+      # verify runs tests; your JaCoCo "report" execution is bound to phase "test"
+      - name: Build and test (must pass)
+        run: mvn -B clean verify --file pom.xml
+
+      # Your JavaDoc is bound to "package", but verify already includes package.
+      # So apidocs should already exist after verify.
+      # (Optional explicit call if you want to be extra strict)
+      # - name: Generate JavaDoc (explicit)
+      #   run: mvn -B -DskipTests javadoc:javadoc --file pom.xml
+
+      - name: Publish test report (workflow UI)
+        if: ${{ always() }}
+        uses: scacap/action-surefire-report@v1.9.1
+
+      # Validate the required reports exist (fail if missing)
+      - name: Verify required reports exist
+        run: |
+          set -euxo pipefail
+
+          test -d target/site/apidocs
+          test -d target/site/jacoco
+
+          # At least one Surefire report file should exist
+          test -d target/surefire-reports
+          ls -la target/surefire-reports
+
+      - name: Bundle release report
+        run: |
+          set -euxo pipefail
+
+          TAG="${{ github.event.release.tag_name }}"
+          OUTDIR="release-report-${TAG}"
+          mkdir -p "${OUTDIR}"
+
+          # JavaDoc (full HTML)
+          cp -R target/site/apidocs "${OUTDIR}/apidocs"
+
+          # Coverage report (HTML + xml/csv if present)
+          cp -R target/site/jacoco "${OUTDIR}/jacoco"
+
+          # Raw test results (JUnit XML, etc.)
+          cp -R target/surefire-reports "${OUTDIR}/surefire-reports"
+
+          # If you later add other Maven reports (checkstyle/pmd/spotbugs), they often appear in target/site
+          # This includes index.html etc. (can be large, but comprehensive)
+          cp -R target/site "${OUTDIR}/maven-site"
+
+          # Add metadata
+          cat > "${OUTDIR}/REPORT_INFO.txt" << EOF
+          Release report for ${TAG}
+
+          Contents:
+          - apidocs/           : JavaDoc HTML (from target/site/apidocs)
+          - jacoco/            : JaCoCo coverage report (from target/site/jacoco)
+          - surefire-reports/  : test results (JUnit/Surefire XML + logs)
+          - maven-site/        : full Maven site output (may contain additional reports)
+          EOF
+
+          zip -r "${OUTDIR}.zip" "${OUTDIR}"
+
+      - name: Upload report asset to the GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-report-${{ github.event.release.tag_name }}.zip
