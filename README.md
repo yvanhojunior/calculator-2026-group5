@@ -1,4 +1,4 @@
-[![](https://img.shields.io/github/v/release/yvanhojunior/calculator-2026-group5?label=Latest%20Release)](https://github.com/University-of-Mons/calculator-cucumber/releases/latest)
+[![](https://img.shields.io/github/v/release/yvanhojunior/calculator-2026-group5?label=Latest%20Release)](https://github.com/yvanhojunior/calculator-2026-group5/releases/latest)
 
 Code quality: ![Maven Build](https://github.com/yvanhojunior/calculator-2026-group5/actions/workflows/maven.yml/badge.svg)
 
