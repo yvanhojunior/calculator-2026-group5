@@ -41,15 +41,15 @@ public class NotationVisitor extends Visitor {
         }
 
         String result = switch (notation) {
+            case PREFIX -> 
+            // ex for 3 + 4: + ( 3, 4 ) | ex for 3 + 4 + 5: + ( 3, 4, 5 )
+                o.getSymbol() + " (" + args.stream().collect(Collectors.joining(", ")) + ")";
             case INFIX -> 
             // ex for 3 + 4 | ex for 3 + 4 + 5: ( 3 + 4 + 5 )
                 "( " + args.stream().collect(Collectors.joining(" " + o.getSymbol() + " ")) + " )";
-            case PREFIX -> 
-            // ex for 3 + 4: + ( 3, 4 ) | ex for 3 + 4 + 5: + ( 3, 4, 5 )
-                o.getSymbol() + " ( " + args.stream().collect(Collectors.joining(", ")) + " )";
             case POSTFIX -> 
             // ex for 3 + 4: ( 3, 4 ) + | ex for 3 + 4 + 5: ( 3, 4 , 5 ) + 
-                "(" + args.stream().collect(Collectors.joining(", ")) + ")" + " " + o.getSymbol();
+                "(" + args.stream().collect(Collectors.joining(", ")) + ") " + o.getSymbol();
         };
 
         stack.push(result);
