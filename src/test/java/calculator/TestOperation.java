@@ -4,6 +4,8 @@ package calculator;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 
+import visitor.CountingVisitor;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +13,7 @@ class TestOperation {
 
 	private Operation o;
 	private Operation o2;
+	CountingVisitor cv = new visitor.CountingVisitor();
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -28,17 +31,20 @@ class TestOperation {
 
 	@Test
 	void testCountDepth() {
-		assertEquals(2, o.countDepth());
+		o.accept(cv);
+		assertEquals(2, cv.getDepth());
 	}
 
 	@Test
 	void testCountOps() {
-		assertEquals(3, o.countOps());
+		o.accept(cv);
+		assertEquals(3, cv.getOps());
 	}
 
 	@Test
 	void testCountNbs() {
-		assertEquals(Integer.valueOf(6), o.countNbs());
+		o.accept(cv);
+		assertEquals(Integer.valueOf(6), cv.getNbs());
 	}
 
 }

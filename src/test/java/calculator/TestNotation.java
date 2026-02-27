@@ -5,25 +5,30 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import io.cucumber.java.mk_latn.No;
+
 import java.util.Arrays;
 import java.util.List;
+import visitor.NotationVisitor;
 
 
 class TestNotation {
 
-    /* This is an auxilary method to avoid code duplication.
-     */
-	void testNotation(String s,Operation o,Notation n) {
-		assertEquals(s, o.toString(n));
+	/* This is an auxilary method to avoid code duplication.
+		*/
+	void testNotation(String s, Operation o, Notation n) {
+		NotationVisitor v = new NotationVisitor(n);
+		o.accept(v);
+		assertEquals(s, v.getResult());
 		o.notation = n;
 		assertEquals(s, o.toString());
 	}
 
 	/* This is an auxilary method to avoid code duplication.
-     */
-	void testNotations(String symbol,int value1,int value2,Operation op) {
+	 */
+	void testNotations(String symbol, int value1, int value2, Operation op) {
 		//prefix notation:
-		testNotation(symbol +" (" + value1 + ", " + value2 + ")", op, Notation.PREFIX);
+		testNotation(symbol + " (" + value1 + ", " + value2 + ")", op, Notation.PREFIX);
 		//infix notation:
 		testNotation("( " + value1 + " " + symbol + " " + value2 + " )", op, Notation.INFIX);
 		//postfix notation:
@@ -51,5 +56,4 @@ class TestNotation {
 		}
 		testNotations(symbol, value1, value2, op);
 	}
-
 }
