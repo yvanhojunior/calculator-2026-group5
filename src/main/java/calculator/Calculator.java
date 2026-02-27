@@ -1,6 +1,7 @@
 package calculator;
 
 import visitor.Evaluator;
+import visitor.CountingVisitor;
 
 /**
  * This class represents the core logic of a Calculator.
@@ -45,9 +46,11 @@ public class Calculator {
      */
     public void printExpressionDetails(Expression e) {
         print(e);
-        System.out.print("It contains " + e.countDepth() + " levels of nested expressions, ");
-        System.out.print(e.countOps() + " operations");
-        System.out.println(" and " + e.countNbs() + " numbers.");
+        CountingVisitor cv = new visitor.CountingVisitor();
+        e.accept(cv);
+        System.out.print("It contains " + cv.getDepth() + " levels of nested expressions, ");
+        System.out.print(cv.getOps() + " operations");
+        System.out.println(" and " + cv.getNbs() + " numbers.");
         System.out.println();
     }
 
