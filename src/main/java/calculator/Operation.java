@@ -128,6 +128,13 @@ public abstract class Operation implements Expression {
 		return this.args.equals(other.getArgs());
 	}
 
+	@Override
+	public final String toString() {
+		NotationVisitor v = new visitor.NotationVisitor(notation);
+		this.accept(v);
+		return v.getResult();
+	}
+
 	/** The method hashCode needs to be overridden it the equals method is overridden;
 	 * 	otherwise there may be problems when you use your object in hashed collections
 	 * 	such as HashMap, HashSet, LinkedHashSet.
