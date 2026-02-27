@@ -10,48 +10,47 @@ import java.util.List;
  * @see Times
  * @see Plus
  */
-public final class Divides extends Operation
-{
+public final class Divides extends Operation {
 
-  /**
-   * Class constructor specifying a number of Expressions to divide.
-   *
-   * @param elist The list of Expressions to divide
-   * @throws IllegalConstruction    If an empty list of expressions if passed as parameter
-   * @see #Divides(List<Expression>,Notation)
-   */
-  public /*constructor*/ Divides(List<Expression> elist) throws IllegalConstruction {
-	this(elist, null);
-  }
+	/**
+	 * Class constructor specifying a number of Expressions to divide.
+	 *
+	 * @param elist The list of Expressions to divide
+	 * @throws IllegalConstruction    If an empty list of expressions if passed as parameter
+	 * @see #Divides(List<Expression>,Notation)
+	 */
+	public /*constructor*/ Divides(List<Expression> elist) throws IllegalConstruction {
+		this(elist, null);
+	}
 
-    /**
-     * Class constructor specifying a number of Expressions to divide,
-     * as well as the notation used to represent the operation.
-     *
-     * @param elist The list of Expressions to divide
-     * @param n The Notation to be used to represent the operation
-     * @throws IllegalConstruction  If an empty list of expressions if passed as parameter
-     * @see #Divides(List<Expression>)
-     * @see Operation#Operation(List<Expression>,Notation)
-     */
-  public Divides(List<Expression> elist, Notation n) throws IllegalConstruction {
-	super(elist,n);
-	symbol = "/";
-	neutral = 1;
-  }
+	/**
+	 * Class constructor specifying a number of Expressions to divide,
+	 * as well as the notation used to represent the operation.
+	 *
+	 * @param elist The list of Expressions to divide
+	 * @param n The Notation to be used to represent the operation
+	 * @throws IllegalConstruction  If an empty list of expressions if passed as parameter
+	 * @see #Divides(List<Expression>)
+	 * @see Operation#Operation(List<Expression>,Notation)
+	 */
+	public Divides(List<Expression> elist, Notation n) throws IllegalConstruction {
+		super(elist,n);
+		symbol = "/";
+		neutral = 1;
+	}
 
-    /**
-     * The actual computation of the (binary) arithmetic division of two integers
-     * @param l The first integer
-     * @param r The second integer that should divide the first
-     * @return The integer that is the result of the division
-     * @throws ArithmeticException If the second integer is zero, as division by zero is not allowed
-     */
-  public int op(int l, int r) throws ArithmeticException {
-    //Don't use == but use .equals() to compare the second integer with zero, as it is an Integer object and not a primitive int. 
-    if (Integer.valueOf(r).equals(0)) {
-      throw new ArithmeticException("Division by zero is not allowed.");
-    }
-    return (l/r);
-  }
+	/**
+	 * The actual computation of the (binary) arithmetic division of two integers
+	 * @param l The first integer
+	 * @param r The second integer that should divide the first
+	 * @return The integer that is the result of the division
+	 * @throws ArithmeticException If the second integer is zero, as division by zero is not allowed
+	 */
+	public int op(int l, int r) throws ArithmeticException {
+	//Don't use == but use .equals() to compare the second integer with zero, as it is an Integer object and not a primitive int. 
+	if (Integer.valueOf(r).equals(0)) {
+		throw new ArithmeticException("Division by zero is not allowed.");
+	}
+		return l/r;
+	}
 }

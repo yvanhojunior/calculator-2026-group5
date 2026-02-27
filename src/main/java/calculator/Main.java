@@ -23,8 +23,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
-  	Expression e;
-  	Calculator c = new Calculator();
+	Expression e;
+	Calculator c = new Calculator();
 	Logger logger = Logger.getLogger(Main.class.getName());
 
 	try{
@@ -35,7 +35,7 @@ public class Main {
 
 	    List<Expression> params = new ArrayList<>();
 	    Collections.addAll(params, new MyNumber(3), new MyNumber(4), new MyNumber(5));
-	    e = new Plus(params,Notation.PREFIX);
+	    e = new Plus(params, Notation.PREFIX);
 		c.printExpressionDetails(e);
 		c.eval(e);
 	
@@ -53,7 +53,7 @@ public class Main {
 
 		List<Expression> params4 = new ArrayList<>();
 		Collections.addAll(params4, new Plus(params), new Minus(params2), new MyNumber(5));
-		e = new Divides(params4,Notation.POSTFIX);
+		e = new Divides(params4, Notation.POSTFIX);
 		c.print(e);
 		c.eval(e);
 	}

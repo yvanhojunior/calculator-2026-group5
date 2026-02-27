@@ -1,6 +1,7 @@
 package calculator;
 
 import visitor.Visitor;
+import visitor.NotationVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,40 +14,37 @@ import java.util.stream.Stream;
  * @see Expression
  * @see MyNumber
  */
-public abstract class Operation implements Expression
-{
+public abstract class Operation implements Expression {
 	/**
 	 * The list of expressions passed as an argument to the arithmetic operation
 	 */
 	public List<Expression> args;
 
-  /**
-   * The character used to represent the arithmetic operation (e.g. "+", "*")
-   */
-  protected String symbol;
+	/**
+	 * The character used to represent the arithmetic operation (e.g. "+", "*")
+	 */
+	protected String symbol;
 
-  /**
-   * The neutral element of the operation (e.g. 1 for *, 0 for +)
-   */
-  protected int neutral;
+	/**
+	 * The neutral element of the operation (e.g. 1 for *, 0 for +)
+	 */
+	protected int neutral;
 
-  /**
-   * The notation used to render operations as strings.
-   * By default, the infix notation will be used.
-   */
-  public Notation notation = Notation.INFIX;
+	/**
+	 * The notation used to render operations as strings.
+	 * By default, the infix notation will be used.
+	 */
+	public Notation notation = Notation.INFIX;
 
-  /** It is not allowed to construct an operation with a null list of expressions.
-   * Note that it is allowed to have an EMPTY list of arguments.
-   *
-   * @param elist	The list of expressions passed as argument to the arithmetic operation
-   * @throws IllegalConstruction	Exception thrown if a null list of expressions is passed as argument
-   */
-  protected /*constructor*/ Operation(List<Expression> elist)
-		  throws IllegalConstruction
-	{
+	/** It is not allowed to construct an operation with a null list of expressions.
+	 * Note that it is allowed to have an EMPTY list of arguments.
+	 *
+	 * @param elist	The list of expressions passed as argument to the arithmetic operation
+	 * @throws IllegalConstruction	Exception thrown if a null list of expressions is passed as argument
+	 */
+	protected /*constructor*/ Operation(List<Expression> elist) throws IllegalConstruction {
 		this(elist, null);
-    }
+	}
 
 	/** To construct an operation with a list of expressions as arguments,
 	 * as well as the Notation used to represent the operation.
@@ -74,8 +72,8 @@ public abstract class Operation implements Expression
 	 * @return	The number of arguments of the arithmetic operation.
 	 */
 	public List<Expression> getArgs() {
-  	return args;
-  }
+		return args;
+	}
 
 	/**
 	 * Abstract method representing the actual binary arithmetic operation to compute
@@ -83,16 +81,16 @@ public abstract class Operation implements Expression
 	 * @param r	second argument of the binary operation
 	 * @return	result of computing the binary operation
 	 */
-   public abstract int op(int l, int r);
-    // the operation itself is specified in the subclasses
+	public abstract int op(int l, int r);
+	// the operation itself is specified in the subclasses
 
 	/** Add more parameters to the existing list of parameters
 	 *
 	 * @param params	The list of parameters to be added
 	 */
 	public void addMoreParams(List<Expression> params) {
-  	args.addAll(params);
-  }
+		args.addAll(params);
+	}
 
 	/**
 	 * Accept method to implement the visitor design pattern to traverse arithmetic expressions.
@@ -101,10 +99,10 @@ public abstract class Operation implements Expression
 	 *
 	 * @param v	The visitor object
 	 */
-  public void accept(Visitor v) {
-  	for(Expression a:args) { a.accept(v); }
-  	v.visit(this);
-  }
+	public void accept(Visitor v) {
+		for(Expression a:args) { a.accept(v); }
+		v.visit(this);
+	}
 
 	/**
 	 * Two operation objects are equal if their list of arguments is equal and they correspond to the same operation.
@@ -128,7 +126,7 @@ public abstract class Operation implements Expression
 
 		Operation other = (Operation) o;
 		return this.args.equals(other.getArgs());
-	  }
+	}
 
 	/** The method hashCode needs to be overridden it the equals method is overridden;
 	 * 	otherwise there may be problems when you use your object in hashed collections
