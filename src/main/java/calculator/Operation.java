@@ -63,7 +63,9 @@ public abstract class Operation implements Expression
 		else {
 			args = new ArrayList<>(elist);
 		}
-		if (n!=null) notation = n;
+		if (n!=null) {
+			notation = n;
+		}
 	}
 
 	/**
@@ -183,11 +185,17 @@ public abstract class Operation implements Expression
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (o == null) return false; // No object should be equal to null
+		if (o == null) {
+			return false; // No object should be equal to null
+		}
 
-		if (this == o) return true; // If it's the same object, they're obviously equal
+		if (this == o) {
+			return true; // If it's the same object, they're obviously equal
+		}
 
-		if (getClass() != o.getClass()) return false; // getClass() instead of instanceof() because an addition is not the same as a multiplication
+		if (getClass() != o.getClass()) {
+			return false; // getClass() instead of instanceof() because an addition is not the same as a multiplication
+		}
 
 		Operation other = (Operation) o;
 		return this.args.equals(other.getArgs());
