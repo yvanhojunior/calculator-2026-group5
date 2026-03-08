@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<title>Calculatrice</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="calculator">
+        
+        <div class="header">
+            <h2>Calculator</h2>
+
+            <div class="modeSelector">
+                    <select id="mode">
+                        <option value="standard">Standard</option>
+                        <option value="scientific">Scientific</option>
+                        <option value="metric">Metric Conversion</option>
+                    </select>
+            </div>
+
+        </div>
+
+        <div id="display" class="display">0</div>
+
+        <!-- Standard Mode -->
+        <div id="standard" class="scene active">
+
+            <div class="grid">
+                <button class="light" data-fn="clear">C</button><button class="light" data-fn="opposite">+/-</button><button class="light" data-fn="percent">%</button><button class="op">÷</button>
+                <button>7</button><button>8</button><button>9</button><button class="op">×</button>
+                <button>4</button><button>5</button><button>6</button><button class="op">−</button>
+                <button>1</button><button>2</button><button>3</button><button class="op">+</button>
+                <button class="wide">0</button><button>.</button><button class="op">=</button>
+            </div>
+
+        </div>
+
+        <!-- Scientific Mode -->
+        <div id="scientific" class="scene">
+
+            <!-- TODO: Add scientific calculator buttons here -->
+
+        </div>
+
+
+        <!-- Metric Conversion -->
+        <div id="metric" class="scene">
+
+            <!-- TODO: Add metric conversion inputs and buttons here -->
+
+        </div>
+
+    </div>
+</div>
+<script src="script.js"></script>
+
+</body>
+</html>
