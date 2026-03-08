@@ -16,19 +16,18 @@
             <h2>Calculator</h2>
 
             <div class="modeSelector">
-                    <select id="mode">
-                        <option value="standard">Standard</option>
-                        <option value="scientific">Scientific</option>
-                        <option value="metric">Metric Conversion</option>
-                    </select>
+                <select id="mode">
+                    <option value="standard">Standard</option>
+                    <option value="scientific">Scientific</option>
+                    <option value="metric">Metric Conversion</option>
+                </select>
             </div>
 
         </div>
 
-        <div id="display" class="display">0</div>
-
         <!-- Standard Mode -->
         <div id="standard" class="scene active">
+            <div id="display" class="display">0</div>
 
             <div class="grid">
                 <button class="light" data-fn="clear">C</button><button class="light" data-fn="opposite">+/-</button><button class="light" data-fn="percent">%</button><button class="op">÷</button>
@@ -42,48 +41,49 @@
 
         <!-- Scientific Mode -->
         <div id="scientific" class="scene">
+            <div id="display" class="display">0</div>
 
-            <div class="grid scientific">
+            <div class="grid sct">
 
-                <button class="scbutton" data-fn="sin">sin</button>
-                <button class="scbutton" data-fn="cos">cos</button>
-                <button class="scbutton" data-fn="tan">tan</button>
-                <button class="scbutton" data-fn="pi">π</button>
+                <button class="sct" data-fn="sin">sin</button>
+                <button class="sct" data-fn="cos">cos</button>
+                <button class="sct" data-fn="tan">tan</button>
+                <button class="sct" data-fn="pi">π</button>
                 <button class="light" data-fn="delete">⌫</button>
 
-                <button class="scbutton" data-fn="log">log</button>
-                <button class="scbutton" data-fn="ln">ln</button>
-                <button class="scbutton" data-fn="factorial">x<span style="font-style: normal;">!</span></button>
-                <button class="scbutton" data-fn="inv">x⁻¹</button>
+                <button class="sct" data-fn="log">log</button>
+                <button class="sct" data-fn="ln">ln</button>
+                <button class="sct" data-fn="factorial">x<span style="font-style: normal;">!</span></button>
+                <button class="sct" data-fn="inv">x⁻¹</button>
                 <button class="light" data-fn="clear">C</button>
 
                 
-                <button class="scbutton" data-fn="pow10">10ˣ</button>
-                <button class="scbutton" data-fn="exp">eˣ</button>
-                <button class="scbutton" data-fn="leftParen">(</button>
-                <button class="scbutton" data-fn="rightParen">)</button>
+                <button class="sct" data-fn="pow10">10ˣ</button>
+                <button class="sct" data-fn="exp">eˣ</button>
+                <button class="sct" data-fn="leftParen">(</button>
+                <button class="sct" data-fn="rightParen">)</button>
                 <button class="op">÷</button>
 
                 
-                <button class="scbutton" data-fn="modulo">mod</button>
+                <button class="sct" data-fn="modulo">mod</button>
                 <button>7</button>
                 <button>8</button>
                 <button>9</button>
                 <button class="op">×</button>
                 
-                <button class="scbutton" data-fn="power2">x²</button>
+                <button class="sct" data-fn="power2">x²</button>
                 <button>4</button>
                 <button>5</button>
                 <button>6</button>
                 <button class="op">−</button>
 
-                <button class="scbutton" data-fn="sqrt">√</button>
+                <button class="sct" data-fn="sqrt">√</button>
                 <button>1</button>
                 <button>2</button>
                 <button>3</button>
                 <button class="op">+</button>
 
-                <button class="scbutton" data-fn="powerY">xʸ</button>
+                <button class="sct" data-fn="powerY">xʸ</button>
                 <button class="light" data-fn="opposite">+/-</button>
                 <button>0</button>
                 <button>.</button>
@@ -96,8 +96,40 @@
         <!-- Metric Conversion -->
         <div id="metric" class="scene">
 
-            <!-- TODO: Add metric conversion inputs and buttons here -->
+            <div class="container"></div>
+                <div class="smcont">
+                    <p class="small">Conversion Type</p>
+                    <div class="grid">
+                        <button class="selected" data-fn="length">Length</button>
+                        <button data-fn="weight">Weight</button>
+                        <button data-fn="temperature">Temperature</button>
+                        <button data-fn="volume">Volume</button>
+                    </div>
+                </div>
+                <div class="smcont">
+                    <p class="small">From</p>
+                    <select id="fromUnits" class="small">
+                        <option>Option 1</option>
+                        <option>Option 2</option>
+                        <option>Option 3</option>
+                        <option>Option 4</option>
+                    </select>
+                    <input id="fromValue" type="text" value="1">
+                </div>
 
+                <button data-fn="switchMetrics" class="swap">↑↓ Swap</button>
+                
+                <div class="smcont">
+                    <p class="small">To</p>
+                    <select id="toUnits" class="small">
+                        <option>Option 1</option>
+                        <option>Option 2</option>
+                        <option>Option 3</option>
+                        <option>Option 4</option>
+                    </select>
+                    <input id="toValue" type="text" value="1" readonly>
+                </div>
+            
         </div>
 
     </div>

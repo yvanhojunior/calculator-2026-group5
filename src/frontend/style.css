@@ -12,11 +12,20 @@ body{
     text-align:center;
 }
 
+.smcont{
+    background:#f0f4fc;
+    color:black;
+    padding:10px;
+    border-radius:8px;
+    margin:10px 20px;
+    text-align: left;
+}
+
 .calculator{
     background:#24364d;
     border-radius:14px;
     overflow: hidden;
-    width:360px;
+    width:480px;
     box-shadow:0 10px 25px rgba(0,0,0,0.3);
 }
 
@@ -32,11 +41,12 @@ body{
 
 .header select{
     width:100%;
-    padding:10px;
+    padding:16px;
     border-radius:8px;
     border:1px solid #2d6cdf;
     background:#1e2f45;
     color:white;
+    font-size: large;
 }
 
 .display{
@@ -46,15 +56,20 @@ body{
     color:white;
 }
 
+.display.conversion{
+    font-size:40px;
+    color:#c5c8cf;
+    text-align: left;
+}
+
 .grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    height: fit-content;
     gap:10px;
     padding:15px;
 }
 
-.scientific.grid{
+.grid.sct{
     grid-template-columns:repeat(5,1fr);
     gap:6px;
     padding:15px;
@@ -70,7 +85,7 @@ button{
     cursor:pointer;
 }
 
-button:hover{
+div.container button:hover{
     opacity: 0.8;
 }
 
@@ -78,9 +93,18 @@ button:hover{
     grid-column:span 2;
 }
 
-.scbutton{
+button.sct{
     background:#EA00FF;
     font-style: italic;
+}
+
+button.swap{
+    background: #2b7fff;
+}
+
+button.swap:hover{
+    background: #155dfc;
+    color: white;
 }
 
 .op{
@@ -104,4 +128,49 @@ select,input{
     width:100%;
     margin:6px 0;
     padding:6px;
+}
+
+p.small{
+    font-size: 16px;
+    margin: 0px 0px 8px;
+}
+
+div.smcont .grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:6px;
+    padding:0;
+}
+
+div.smcont button{
+    background-color: #FFF;
+    color: #000;
+    font-size: medium;
+}
+
+div.smcont button.selected{
+    background: #2b7fff;
+    color: white;
+}
+
+div.smcont select{
+    width: 100%;
+    border-radius: 6px;
+    font-size: 16px;
+    background: white;
+    color: black;
+    border-color: #aaaaaa;
+}
+
+div.smcont input{
+    width: 100%;
+    border-radius: 6px;
+    font-size: 20px;
+    border-width: 2px;
+    border-color: #aaaaaa;
+    box-sizing: border-box;
+}
+
+div.smcont input:focus{
+    outline: none;
+    border-color: #2b7fff;
 }
