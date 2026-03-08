@@ -49,7 +49,14 @@ body{
 .grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
+    height: fit-content;
     gap:10px;
+    padding:15px;
+}
+
+.scientific.grid{
+    grid-template-columns:repeat(5,1fr);
+    gap:6px;
     padding:15px;
 }
 
@@ -69,6 +76,11 @@ button:hover{
 
 .wide{
     grid-column:span 2;
+}
+
+.scbutton{
+    background:#EA00FF;
+    font-style: italic;
 }
 
 .op{
