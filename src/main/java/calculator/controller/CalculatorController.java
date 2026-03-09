@@ -1,0 +1,33 @@
+package calculator.controller;
+
+import calculator.Calculator;
+import calculator.Expression;
+import calculator.parser.ExpressionParser;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api")
+public class CalculatorController {
+
+    private final Calculator calculator = new Calculator();
+
+    @GetMapping("/calculate")
+    public ResponseEntity<Map<String, Object>> calculate(
+            @RequestParam String expression) {
+        try {
+            Expression expr = ExpressionParser.parse(expression);
+            int result = calculator.eval(expr);
+            return ResponseEntity.ok(Map.of("result", result));
+        } catch (ArithmeticException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("error", "Division by zero"));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("error", "Invalid expression: " + e.getMessage()));
+        }
+    }
+}

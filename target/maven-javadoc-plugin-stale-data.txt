@@ -28,6 +28,7 @@
 -windowtitle
 'Calculator with JUnit5 and Cucumber tests 0.5.0 API'
 calculator
+calculator.parser
 visitor
 C:\Users\franc\.m2\repository\org\springframework\boot\spring-boot-starter-web\3.4.0\spring-boot-starter-web-3.4.0.jar = 1773089073590
 C:\Users\franc\.m2\repository\org\springframework\boot\spring-boot-starter\3.4.0\spring-boot-starter-3.4.0.jar = 1773089072746
@@ -64,19 +65,19 @@ C:\Users\franc\.m2\repository\org\slf4j\slf4j-api\2.0.6\slf4j-api-2.0.6.jar = 17
 C:\Users\franc\.m2\repository\org\springframework\spring-core\6.2.0\spring-core-6.2.0.jar = 1773089072499
 C:\Users\franc\.m2\repository\org\springframework\spring-jcl\6.2.0\spring-jcl-6.2.0.jar = 1773089074472
 C:\Users\franc\IdeaProjects\calculator-2026-group5\src\main\java = 1773086669260
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\generated-sources\annotations = 1773089274970
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\allclasses-index.html = 1773089284042
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\allpackages-index.html = 1773089284051
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\element-list = 1773089283377
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\help-doc.html = 1773089284208
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\index-all.html = 1773089284182
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\index.html = 1773089283990
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\member-search-index.js = 1773089284075
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\module-search-index.js = 1773089284056
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\overview-summary.html = 1773089284197
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\overview-tree.html = 1773089283976
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\package-search-index.js = 1773089284062
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\search.html = 1773089284190
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\serialized-form.html = 1773089283456
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\tag-search-index.js = 1773089284092
-C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\type-search-index.js = 1773089284068
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\generated-sources\annotations = 1773092915665
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\allclasses-index.html = 1773092919893
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\allpackages-index.html = 1773092919898
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\element-list = 1773092919727
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\help-doc.html = 1773092919934
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\index-all.html = 1773092919924
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\index.html = 1773092919873
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\member-search-index.js = 1773092919907
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\module-search-index.js = 1773092919900
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\overview-summary.html = 1773092919930
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\overview-tree.html = 1773092919866
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\package-search-index.js = 1773092919902
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\search.html = 1773092919927
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\serialized-form.html = 1773092919765
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\tag-search-index.js = 1773092919910
+C:\Users\franc\IdeaProjects\calculator-2026-group5\target\reports\apidocs\type-search-index.js = 1773092919905
