@@ -4,6 +4,10 @@ import calculator.*;
 import java.util.Arrays;
 
 public class ExpressionParser {
+    private ExpressionParser() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static Expression parse(String expression) throws Exception {
         expression = expression.trim();

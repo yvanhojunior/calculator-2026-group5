@@ -3,6 +3,7 @@ package calculator.controller;
 import calculator.Calculator;
 import calculator.Expression;
 import calculator.parser.ExpressionParser;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
@@ -15,8 +16,11 @@ public class CalculatorController {
 
     @GetMapping("/calculate")
     public ResponseEntity<Map<String, Object>> calculate(
-            @RequestParam String expression) {
+            HttpServletRequest request) {
         try {
+            // Récupère l'URL brute sans décodage automatique
+            String rawQuery = request.getQueryString();
+            String expression = rawQuery.replace("expression=", "");
             Expression expr = ExpressionParser.parse(expression);
             int result = calculator.eval(expr);
             return ResponseEntity.ok(Map.of("result", result));
