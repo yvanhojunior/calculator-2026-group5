@@ -18,9 +18,13 @@ public class CalculatorController {
     public ResponseEntity<Map<String, Object>> calculate(
             HttpServletRequest request) {
         try {
-            // Récupère l'URL brute sans décodage automatique
             String rawQuery = request.getQueryString();
             String expression = rawQuery.replace("expression=", "");
+            // Decode all URL-encoded operators
+            expression = expression.replace("%2B", "+");
+            expression = expression.replace("%2F", "/");
+            expression = expression.replace("%2A", "*");
+            expression = expression.replace("%2D", "-");
             Expression expr = ExpressionParser.parse(expression);
             int result = calculator.eval(expr);
             return ResponseEntity.ok(Map.of("result", result));

@@ -1,5 +1,6 @@
 calculator\TestMyNumber.class
 calculator\TestDivides.class
+calculator\RestApiSteps.class
 calculator\CucumberTest.class
 calculator\CalculatorSteps.class
 calculator\TestCounting.class
