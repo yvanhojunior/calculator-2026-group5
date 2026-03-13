@@ -1,6 +1,7 @@
 calculator\TestMyNumber.class
 calculator\RationalNumberSteps.class
 calculator\TestDivides.class
+calculator\ComplexNumberSteps.class
 calculator\CucumberTest.class
 calculator\CalculatorSteps.class
 calculator\TestCounting.class

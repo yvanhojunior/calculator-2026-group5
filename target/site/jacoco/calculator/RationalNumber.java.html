@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RationalNumber.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Calculator with JUnit5 and Cucumber tests</a> &gt; <a href="index.source.html" class="el_package">calculator</a> &gt; <span class="el_source">RationalNumber.java</span></div><h1>RationalNumber.java</h1><pre class="source lang-java linenums">package calculator;
 
-import java.util.Objects;
+import java.util.*;
 
 public class RationalNumber {
 
@@ -68,6 +68,57 @@ public class RationalNumber {
     @Override
     public String toString() {
 <span class="nc" id="L70">        return numerator + &quot;/&quot; + denominator;</span>
+    }
+
+    public static RationalNumber compute(List&lt;RationalNumber&gt; numbers, List&lt;String&gt; operators) {
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (numbers.size() != operators.size() + 1) {</span>
+<span class="nc" id="L75">            throw new IllegalArgumentException(&quot;Must have exactly one more number than operators&quot;);</span>
+        }
+
+        // Priorité des opérateurs
+<span class="nc" id="L79">        Map&lt;String, Integer&gt; priority = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L80">        priority.put(&quot;+&quot;, 1);</span>
+<span class="nc" id="L81">        priority.put(&quot;-&quot;, 1);</span>
+<span class="nc" id="L82">        priority.put(&quot;*&quot;, 2);</span>
+<span class="nc" id="L83">        priority.put(&quot;/&quot;, 2);</span>
+
+<span class="nc" id="L85">        Stack&lt;RationalNumber&gt; numStack = new Stack&lt;&gt;();</span>
+<span class="nc" id="L86">        Stack&lt;String&gt; opStack = new Stack&lt;&gt;();</span>
+
+<span class="nc" id="L88">        numStack.push(numbers.get(0));</span>
+
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        for (int i = 0; i &lt; operators.size(); i++) {</span>
+<span class="nc" id="L91">            String op = operators.get(i);</span>
+
+            // Applique les opérateurs de priorité supérieure ou égale
+<span class="nc bnc" id="L94" title="All 4 branches missed.">            while (!opStack.isEmpty() &amp;&amp; priority.get(opStack.peek()) &gt;= priority.get(op)) {</span>
+<span class="nc" id="L95">                RationalNumber b = numStack.pop();</span>
+<span class="nc" id="L96">                RationalNumber a = numStack.pop();</span>
+<span class="nc" id="L97">                numStack.push(applyOp(a, opStack.pop(), b));</span>
+<span class="nc" id="L98">            }</span>
+
+<span class="nc" id="L100">            opStack.push(op);</span>
+<span class="nc" id="L101">            numStack.push(numbers.get(i + 1));</span>
+        }
+
+        // Applique les opérateurs restants
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        while (!opStack.isEmpty()) {</span>
+<span class="nc" id="L106">            RationalNumber b = numStack.pop();</span>
+<span class="nc" id="L107">            RationalNumber a = numStack.pop();</span>
+<span class="nc" id="L108">            numStack.push(applyOp(a, opStack.pop(), b));</span>
+<span class="nc" id="L109">        }</span>
+
+<span class="nc" id="L111">        return numStack.pop();</span>
+    }
+
+    private static RationalNumber applyOp(RationalNumber a, String op, RationalNumber b) {
+<span class="nc bnc" id="L115" title="All 5 branches missed.">        return switch (op) {</span>
+<span class="nc" id="L116">            case &quot;+&quot; -&gt; a.add(b);</span>
+<span class="nc" id="L117">            case &quot;-&quot; -&gt; a.subtract(b);</span>
+<span class="nc" id="L118">            case &quot;*&quot; -&gt; a.multiply(b);</span>
+<span class="nc" id="L119">            case &quot;/&quot; -&gt; a.divide(b);</span>
+<span class="nc" id="L120">            default -&gt; throw new IllegalArgumentException(&quot;Unknown operator: &quot; + op);</span>
+        };
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

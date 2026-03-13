@@ -12,6 +12,7 @@ visitor\NotationVisitor$1.class
 visitor\NotationVisitor.class
 calculator\RationalNumber.class
 visitor\Evaluator.class
+calculator\ComplexNumber.class
 calculator\Operation.class
 calculator\Times.class
 calculator\Main.class
