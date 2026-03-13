@@ -68,6 +68,17 @@ public class Calculator {
         return v.getResult();
     }
 
+    /**
+     * converts a string representation of an arithmetic eexpression
+     * into an Expression object (AST)
+     *
+     * @param s the string containing the arithmetic expression
+     * @return the corresponding Expression tree
+     */
+    public Expression read(String s) {
+        return null;
+    }
+
     /*
      We could also have other methods, e.g. to verify whether an expression is syntactically correct
      public Boolean validate(Expression e)
