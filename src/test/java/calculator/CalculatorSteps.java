@@ -75,7 +75,7 @@ public class CalculatorSteps {
 
 	@Given("the expression {string}")
 	public void givenTheExpression(String s) {
-		fail("Not yet implemented");
+		expression = c.read(s);
 	}
 
 	@Then("its value is {int}")

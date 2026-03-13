@@ -3,6 +3,9 @@ package calculator;
 import visitor.Evaluator;
 import visitor.CountingVisitor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class represents the core logic of a Calculator.
  * It can be used to print and evaluate artihmetic expressions.
@@ -76,7 +79,19 @@ public class Calculator {
      * @return the corresponding Expression tree
      */
     public Expression read(String s) {
-        return null;
+        String[] parts = s.split(" ");
+        int left = Integer.parseInt(parts[0]);
+        int right = Integer.parseInt(parts[2]);
+
+        List<Expression> params = new ArrayList<>();
+        params.add(new MyNumber(left));
+        params.add(new MyNumber(right));
+
+        try {
+            return new Plus(params);
+        } catch (IllegalConstruction e) {
+            return null;
+        }
     }
 
     /*
