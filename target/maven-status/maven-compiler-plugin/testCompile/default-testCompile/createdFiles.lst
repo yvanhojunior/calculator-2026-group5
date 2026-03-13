@@ -4,6 +4,7 @@ calculator\TestDivides.class
 calculator\ComplexNumberSteps.class
 calculator\CucumberTest.class
 calculator\CalculatorSteps.class
+calculator\RealNumberSteps.class
 calculator\TestCounting.class
 calculator\TestTimes.class
 calculator\TestEvaluator.class

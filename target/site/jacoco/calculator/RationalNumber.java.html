@@ -1,124 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RationalNumber.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Calculator with JUnit5 and Cucumber tests</a> &gt; <a href="index.source.html" class="el_package">calculator</a> &gt; <span class="el_source">RationalNumber.java</span></div><h1>RationalNumber.java</h1><pre class="source lang-java linenums">package calculator;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Stack;
 
-public class RationalNumber {
+public class RationalNumber implements NumberType&lt;RationalNumber&gt; {
 
     private final int numerator;
     private final int denominator;
+    private final boolean error;
+    private final String errorMessage;
 
-<span class="fc" id="L10">    public RationalNumber(int numerator, int denominator) {</span>
-<span class="pc bpc" id="L11" title="1 of 2 branches missed.">        if (denominator == 0) throw new ArithmeticException(&quot;Denominator cannot be zero&quot;);</span>
-<span class="fc" id="L12">        int gcd = gcd(Math.abs(numerator), Math.abs(denominator));</span>
-<span class="fc" id="L13">        this.numerator = numerator / gcd;</span>
-<span class="fc" id="L14">        this.denominator = denominator / gcd;</span>
-<span class="fc" id="L15">    }</span>
+<span class="fc" id="L16">    public RationalNumber(int numerator, int denominator) {</span>
+<span class="pc bpc" id="L17" title="1 of 2 branches missed.">        if (denominator == 0) {</span>
+<span class="nc" id="L18">            this.numerator = 0;</span>
+<span class="nc" id="L19">            this.denominator = 1;</span>
+<span class="nc" id="L20">            this.error = true;</span>
+<span class="nc" id="L21">            this.errorMessage = &quot;Division by zero&quot;;</span>
+        } else {
+<span class="fc" id="L23">            int gcd = gcd(Math.abs(numerator), Math.abs(denominator));</span>
+<span class="fc" id="L24">            this.numerator = numerator / gcd;</span>
+<span class="fc" id="L25">            this.denominator = denominator / gcd;</span>
+<span class="fc" id="L26">            this.error = false;</span>
+<span class="fc" id="L27">            this.errorMessage = null;</span>
+        }
+<span class="fc" id="L29">    }</span>
 
+    @Override
+<span class="nc" id="L32">    public boolean isError() { return error; }</span>
+
+    @Override
+<span class="nc" id="L35">    public String getErrorMessage() { return errorMessage; }</span>
+
+    @Override
     public RationalNumber add(RationalNumber other) {
-<span class="fc" id="L18">        return new RationalNumber(</span>
+<span class="fc" id="L39">        return new RationalNumber(</span>
                 this.numerator * other.denominator + other.numerator * this.denominator,
                 this.denominator * other.denominator
         );
     }
 
+    @Override
     public RationalNumber subtract(RationalNumber other) {
-<span class="fc" id="L25">        return new RationalNumber(</span>
+<span class="fc" id="L47">        return new RationalNumber(</span>
                 this.numerator * other.denominator - other.numerator * this.denominator,
                 this.denominator * other.denominator
         );
     }
 
+    @Override
     public RationalNumber multiply(RationalNumber other) {
-<span class="fc" id="L32">        return new RationalNumber(</span>
+<span class="fc" id="L55">        return new RationalNumber(</span>
                 this.numerator * other.numerator,
                 this.denominator * other.denominator
         );
     }
 
+    @Override
     public RationalNumber divide(RationalNumber other) {
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (other.numerator == 0) throw new ArithmeticException(&quot;Division by zero&quot;);</span>
-<span class="fc" id="L40">        return new RationalNumber(</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (other.numerator == 0) throw new ArithmeticException(&quot;Division by zero&quot;);</span>
+<span class="fc" id="L64">        return new RationalNumber(</span>
                 this.numerator * other.denominator,
                 this.denominator * other.numerator
         );
     }
 
-    private int gcd(int a, int b) {
-<span class="fc bfc" id="L47" title="All 2 branches covered.">        while (b != 0) {</span>
-<span class="fc" id="L48">            int temp = b;</span>
-<span class="fc" id="L49">            b = a % b;</span>
-<span class="fc" id="L50">            a = temp;</span>
-<span class="fc" id="L51">        }</span>
-<span class="fc" id="L52">        return a;</span>
+    // Méthodes récursives pour n opérandes
+    public static RationalNumber add(List&lt;RationalNumber&gt; numbers) {
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        if (numbers.size() == 1) return numbers.get(0);</span>
+<span class="nc" id="L73">        return numbers.get(0).add(add(numbers.subList(1, numbers.size())));</span>
     }
+
+    public static RationalNumber subtract(List&lt;RationalNumber&gt; numbers) {
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (numbers.size() == 1) return numbers.get(0);</span>
+<span class="nc" id="L78">        return numbers.get(0).subtract(subtract(numbers.subList(1, numbers.size())));</span>
+    }
+
+    public static RationalNumber multiply(List&lt;RationalNumber&gt; numbers) {
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (numbers.size() == 1) return numbers.get(0);</span>
+<span class="nc" id="L83">        return numbers.get(0).multiply(multiply(numbers.subList(1, numbers.size())));</span>
+    }
+
+    public static RationalNumber divide(List&lt;RationalNumber&gt; numbers) {
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (numbers.size() == 1) return numbers.get(0);</span>
+<span class="nc" id="L88">        return numbers.get(0).divide(divide(numbers.subList(1, numbers.size())));</span>
+    }
+
+    // Méthode compute avec priorité des opérateurs (Shunting Yard)
+    public static RationalNumber compute(List&lt;RationalNumber&gt; numbers, List&lt;String&gt; operators) {
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (numbers.size() != operators.size() + 1) {</span>
+<span class="nc" id="L94">            throw new IllegalArgumentException(&quot;Must have exactly one more number than operators&quot;);</span>
+        }
+
+<span class="nc" id="L97">        Map&lt;String, Integer&gt; priority = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L98">        priority.put(&quot;+&quot;, 1);</span>
+<span class="nc" id="L99">        priority.put(&quot;-&quot;, 1);</span>
+<span class="nc" id="L100">        priority.put(&quot;*&quot;, 2);</span>
+<span class="nc" id="L101">        priority.put(&quot;/&quot;, 2);</span>
+
+<span class="nc" id="L103">        Stack&lt;RationalNumber&gt; numStack = new Stack&lt;&gt;();</span>
+<span class="nc" id="L104">        Stack&lt;String&gt; opStack = new Stack&lt;&gt;();</span>
+
+<span class="nc" id="L106">        numStack.push(numbers.get(0));</span>
+
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        for (int i = 0; i &lt; operators.size(); i++) {</span>
+<span class="nc" id="L109">            String op = operators.get(i);</span>
+<span class="nc bnc" id="L110" title="All 4 branches missed.">            while (!opStack.isEmpty() &amp;&amp; priority.get(opStack.peek()) &gt;= priority.get(op)) {</span>
+<span class="nc" id="L111">                RationalNumber b = numStack.pop();</span>
+<span class="nc" id="L112">                RationalNumber a = numStack.pop();</span>
+<span class="nc" id="L113">                numStack.push(applyOp(a, opStack.pop(), b));</span>
+<span class="nc" id="L114">            }</span>
+<span class="nc" id="L115">            opStack.push(op);</span>
+<span class="nc" id="L116">            numStack.push(numbers.get(i + 1));</span>
+        }
+
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        while (!opStack.isEmpty()) {</span>
+<span class="nc" id="L120">            RationalNumber b = numStack.pop();</span>
+<span class="nc" id="L121">            RationalNumber a = numStack.pop();</span>
+<span class="nc" id="L122">            numStack.push(applyOp(a, opStack.pop(), b));</span>
+<span class="nc" id="L123">        }</span>
+
+<span class="nc" id="L125">        return numStack.pop();</span>
+    }
+
+    private static RationalNumber applyOp(RationalNumber a, String op, RationalNumber b) {
+<span class="nc bnc" id="L129" title="All 5 branches missed.">        return switch (op) {</span>
+<span class="nc" id="L130">            case &quot;+&quot; -&gt; a.add(b);</span>
+<span class="nc" id="L131">            case &quot;-&quot; -&gt; a.subtract(b);</span>
+<span class="nc" id="L132">            case &quot;*&quot; -&gt; a.multiply(b);</span>
+<span class="nc" id="L133">            case &quot;/&quot; -&gt; a.divide(b);</span>
+<span class="nc" id="L134">            default -&gt; throw new IllegalArgumentException(&quot;Unknown operator: &quot; + op);</span>
+        };
+    }
+
+    private int gcd(int a, int b) {
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        while (b != 0) {</span>
+<span class="fc" id="L140">            int temp = b;</span>
+<span class="fc" id="L141">            b = a % b;</span>
+<span class="fc" id="L142">            a = temp;</span>
+<span class="fc" id="L143">        }</span>
+<span class="fc" id="L144">        return a;</span>
+    }
+
+<span class="nc" id="L147">    public int getNumerator() { return numerator; }</span>
+<span class="nc" id="L148">    public int getDenominator() { return denominator; }</span>
 
     @Override
     public boolean equals(Object o) {
-<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (this == o) return true;</span>
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (!(o instanceof RationalNumber)) return false;</span>
-<span class="fc" id="L59">        RationalNumber other = (RationalNumber) o;</span>
-<span class="pc bpc" id="L60" title="2 of 4 branches missed.">        return numerator == other.numerator &amp;&amp; denominator == other.denominator;</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        if (this == o) return true;</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        if (!(o instanceof RationalNumber)) return false;</span>
+<span class="fc" id="L154">        RationalNumber other = (RationalNumber) o;</span>
+<span class="pc bpc" id="L155" title="2 of 4 branches missed.">        return numerator == other.numerator &amp;&amp; denominator == other.denominator;</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L65">        return Objects.hash(numerator, denominator);</span>
+<span class="nc" id="L160">        return Objects.hash(numerator, denominator);</span>
     }
 
     @Override
     public String toString() {
-<span class="nc" id="L70">        return numerator + &quot;/&quot; + denominator;</span>
-    }
-
-    public static RationalNumber compute(List&lt;RationalNumber&gt; numbers, List&lt;String&gt; operators) {
-<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (numbers.size() != operators.size() + 1) {</span>
-<span class="nc" id="L75">            throw new IllegalArgumentException(&quot;Must have exactly one more number than operators&quot;);</span>
-        }
-
-        // Priorité des opérateurs
-<span class="nc" id="L79">        Map&lt;String, Integer&gt; priority = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L80">        priority.put(&quot;+&quot;, 1);</span>
-<span class="nc" id="L81">        priority.put(&quot;-&quot;, 1);</span>
-<span class="nc" id="L82">        priority.put(&quot;*&quot;, 2);</span>
-<span class="nc" id="L83">        priority.put(&quot;/&quot;, 2);</span>
-
-<span class="nc" id="L85">        Stack&lt;RationalNumber&gt; numStack = new Stack&lt;&gt;();</span>
-<span class="nc" id="L86">        Stack&lt;String&gt; opStack = new Stack&lt;&gt;();</span>
-
-<span class="nc" id="L88">        numStack.push(numbers.get(0));</span>
-
-<span class="nc bnc" id="L90" title="All 2 branches missed.">        for (int i = 0; i &lt; operators.size(); i++) {</span>
-<span class="nc" id="L91">            String op = operators.get(i);</span>
-
-            // Applique les opérateurs de priorité supérieure ou égale
-<span class="nc bnc" id="L94" title="All 4 branches missed.">            while (!opStack.isEmpty() &amp;&amp; priority.get(opStack.peek()) &gt;= priority.get(op)) {</span>
-<span class="nc" id="L95">                RationalNumber b = numStack.pop();</span>
-<span class="nc" id="L96">                RationalNumber a = numStack.pop();</span>
-<span class="nc" id="L97">                numStack.push(applyOp(a, opStack.pop(), b));</span>
-<span class="nc" id="L98">            }</span>
-
-<span class="nc" id="L100">            opStack.push(op);</span>
-<span class="nc" id="L101">            numStack.push(numbers.get(i + 1));</span>
-        }
-
-        // Applique les opérateurs restants
-<span class="nc bnc" id="L105" title="All 2 branches missed.">        while (!opStack.isEmpty()) {</span>
-<span class="nc" id="L106">            RationalNumber b = numStack.pop();</span>
-<span class="nc" id="L107">            RationalNumber a = numStack.pop();</span>
-<span class="nc" id="L108">            numStack.push(applyOp(a, opStack.pop(), b));</span>
-<span class="nc" id="L109">        }</span>
-
-<span class="nc" id="L111">        return numStack.pop();</span>
-    }
-
-    private static RationalNumber applyOp(RationalNumber a, String op, RationalNumber b) {
-<span class="nc bnc" id="L115" title="All 5 branches missed.">        return switch (op) {</span>
-<span class="nc" id="L116">            case &quot;+&quot; -&gt; a.add(b);</span>
-<span class="nc" id="L117">            case &quot;-&quot; -&gt; a.subtract(b);</span>
-<span class="nc" id="L118">            case &quot;*&quot; -&gt; a.multiply(b);</span>
-<span class="nc" id="L119">            case &quot;/&quot; -&gt; a.divide(b);</span>
-<span class="nc" id="L120">            default -&gt; throw new IllegalArgumentException(&quot;Unknown operator: &quot; + op);</span>
-        };
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (error) return &quot;Error: &quot; + errorMessage;</span>
+<span class="nc" id="L166">        return numerator + &quot;/&quot; + denominator;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,5 +1,6 @@
 calculator\IllegalConstruction.class
 calculator\Plus.class
+calculator\RealNumber.class
 calculator\Minus.class
 calculator\MyNumber.class
 calculator\Divides.class
@@ -13,6 +14,7 @@ visitor\NotationVisitor.class
 calculator\RationalNumber.class
 visitor\Evaluator.class
 calculator\ComplexNumber.class
+calculator\NumberType.class
 calculator\Operation.class
 calculator\Times.class
 calculator\Main.class
