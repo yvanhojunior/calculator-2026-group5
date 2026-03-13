@@ -81,6 +81,7 @@ public class Calculator {
     public Expression read(String s) {
         String[] parts = s.split(" ");
         int left = Integer.parseInt(parts[0]);
+        String op = parts[1];
         int right = Integer.parseInt(parts[2]);
 
         List<Expression> params = new ArrayList<>();
@@ -88,10 +89,15 @@ public class Calculator {
         params.add(new MyNumber(right));
 
         try {
-            return new Plus(params);
+            if(op.equals("+")){
+                return new Plus(params);
+            } else if(op.equals("-")){
+                return new Minus(params);
+            }
         } catch (IllegalConstruction e) {
             return null;
         }
+        return null;
     }
 
     /*
