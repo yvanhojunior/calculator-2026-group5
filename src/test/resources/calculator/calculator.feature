@@ -96,3 +96,14 @@ Feature: Integer Arithmetic Expressions
       Given the expression "2 + 3"
       Then its value is 5
 
+    Scenario: Evaluating a subtraction expression
+      Given the expression "7 - 5"
+      Then its value is 2
+
+    Scenario: Evaluating a multiplication expression
+      Given the expression "4 * 3"
+      Then its value is 12
+
+    Scenario: Evaluating a division expression
+      Given the expression "8 / 2"
+      Then its value is 4
