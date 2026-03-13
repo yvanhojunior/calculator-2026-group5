@@ -93,6 +93,10 @@ public class Calculator {
                 return new Plus(params);
             } else if(op.equals("-")){
                 return new Minus(params);
+            } else if (op.equals("*")) {
+                return new Times(params);
+            } else if(op.equals("/")) {
+                return new Divides(params);
             }
         } catch (IllegalConstruction e) {
             return null;
