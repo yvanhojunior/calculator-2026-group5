@@ -56,6 +56,20 @@ public class Main {
 		e = new Divides(params4, Notation.POSTFIX);
 		c.print(e);
 		c.eval(e);
+
+        List<RationalNumber> numbers = new ArrayList<>();
+        numbers.add(new RationalNumber(1, 2));
+        numbers.add(new RationalNumber(1, 2));
+        numbers.add(new RationalNumber(1, 2));
+        numbers.add(new RationalNumber(1, 2));
+
+        List<String> operators = new ArrayList<>();
+        operators.add("*");
+        operators.add("+");
+        operators.add("*");
+
+        logger.info("result is : " + RationalNumber.compute(numbers, operators));
+
 	}
 
 	catch(IllegalConstruction _) {

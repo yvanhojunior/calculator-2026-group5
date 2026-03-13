@@ -1,6 +1,6 @@
 package calculator;
 
-import java.util.Objects;
+import java.util.*;
 
 public class RationalNumber {
 
@@ -68,5 +68,56 @@ public class RationalNumber {
     @Override
     public String toString() {
         return numerator + "/" + denominator;
+    }
+
+    public static RationalNumber compute(List<RationalNumber> numbers, List<String> operators) {
+        if (numbers.size() != operators.size() + 1) {
+            throw new IllegalArgumentException("Must have exactly one more number than operators");
+        }
+
+        // Priorité des opérateurs
+        Map<String, Integer> priority = new HashMap<>();
+        priority.put("+", 1);
+        priority.put("-", 1);
+        priority.put("*", 2);
+        priority.put("/", 2);
+
+        Stack<RationalNumber> numStack = new Stack<>();
+        Stack<String> opStack = new Stack<>();
+
+        numStack.push(numbers.get(0));
+
+        for (int i = 0; i < operators.size(); i++) {
+            String op = operators.get(i);
+
+            // Applique les opérateurs de priorité supérieure ou égale
+            while (!opStack.isEmpty() && priority.get(opStack.peek()) >= priority.get(op)) {
+                RationalNumber b = numStack.pop();
+                RationalNumber a = numStack.pop();
+                numStack.push(applyOp(a, opStack.pop(), b));
+            }
+
+            opStack.push(op);
+            numStack.push(numbers.get(i + 1));
+        }
+
+        // Applique les opérateurs restants
+        while (!opStack.isEmpty()) {
+            RationalNumber b = numStack.pop();
+            RationalNumber a = numStack.pop();
+            numStack.push(applyOp(a, opStack.pop(), b));
+        }
+
+        return numStack.pop();
+    }
+
+    private static RationalNumber applyOp(RationalNumber a, String op, RationalNumber b) {
+        return switch (op) {
+            case "+" -> a.add(b);
+            case "-" -> a.subtract(b);
+            case "*" -> a.multiply(b);
+            case "/" -> a.divide(b);
+            default -> throw new IllegalArgumentException("Unknown operator: " + op);
+        };
     }
 }
