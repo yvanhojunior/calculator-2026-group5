@@ -76,4 +76,14 @@ public class ExpressionAstBuilder extends  ExpressionBaseVisitor<Expression>{
 
         return result;
     }
+
+    /**
+     * Visitor entry point. Delegates to additionExpr which is the actual root.
+     * @param ctx the parse tree
+     * @return result of visiting additionExpr
+     */
+    @Override
+    public Expression visitExpression(calculator.ExpressionParser.ExpressionContext ctx) {
+        return visit(ctx.additionExpr());
+    }
 }
