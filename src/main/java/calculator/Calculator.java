@@ -79,29 +79,14 @@ public class Calculator {
      * @return the corresponding Expression tree
      */
     public Expression read(String s) {
-        String[] parts = s.split(" ");
-        int left = Integer.parseInt(parts[0]);
-        String op = parts[1];
-        int right = Integer.parseInt(parts[2]);
+        calculator.ExpressionLexer lexer = new calculator.ExpressionLexer(org.antlr.v4.runtime.CharStreams.fromString(s));
+        org.antlr.v4.runtime.CommonTokenStream tokens = new org.antlr.v4.runtime.CommonTokenStream(lexer);
+        calculator.ExpressionParser parser = new calculator.ExpressionParser(tokens);
 
-        List<Expression> params = new ArrayList<>();
-        params.add(new MyNumber(left));
-        params.add(new MyNumber(right));
+        calculator.ExpressionParser.ExpressionContext tree = parser.expression();
 
-        try {
-            if(op.equals("+")){
-                return new Plus(params);
-            } else if(op.equals("-")){
-                return new Minus(params);
-            } else if (op.equals("*")) {
-                return new Times(params);
-            } else if(op.equals("/")) {
-                return new Divides(params);
-            }
-        } catch (IllegalConstruction e) {
-            return null;
-        }
-        return null;
+        ExpressionAstBuilder builder = new ExpressionAstBuilder();
+        return builder.visit(tree);
     }
 
     /*
