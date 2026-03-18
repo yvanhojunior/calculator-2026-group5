@@ -107,3 +107,7 @@ Feature: Integer Arithmetic Expressions
     Scenario: Evaluating a division expression
       Given the expression "8 / 2"
       Then its value is 4
+
+    Scenario: Evaluating an expression with parentheses
+      Given the expression "(2 + 3) * 4"
+      Then its value is 20
