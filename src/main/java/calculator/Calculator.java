@@ -3,6 +3,9 @@ package calculator;
 import visitor.Evaluator;
 import visitor.CountingVisitor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class represents the core logic of a Calculator.
  * It can be used to print and evaluate artihmetic expressions.
@@ -66,6 +69,24 @@ public class Calculator {
         e.accept(v);
         // and return the result of the evaluation at the end of the process
         return v.getResult();
+    }
+
+    /**
+     * converts a string representation of an arithmetic eexpression
+     * into an Expression object (AST)
+     *
+     * @param s the string containing the arithmetic expression
+     * @return the corresponding Expression tree
+     */
+    public Expression read(String s) {
+        calculator.ExpressionLexer lexer = new calculator.ExpressionLexer(org.antlr.v4.runtime.CharStreams.fromString(s));
+        org.antlr.v4.runtime.CommonTokenStream tokens = new org.antlr.v4.runtime.CommonTokenStream(lexer);
+        calculator.ExpressionParser parser = new calculator.ExpressionParser(tokens);
+
+        calculator.ExpressionParser.ExpressionContext tree = parser.expression();
+
+        ExpressionAstBuilder builder = new ExpressionAstBuilder();
+        return builder.visit(tree);
     }
 
     /*

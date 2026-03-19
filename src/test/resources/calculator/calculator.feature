@@ -91,3 +91,23 @@ Feature: Integer Arithmetic Expressions
       | "-" | 8| 5|     3|
       | "*" | 7| 2|    14|
       | "/" | 6| 2|     3|
+
+    Scenario: Evaluating a simple Expression
+      Given the expression "2 + 3"
+      Then its value is 5
+
+    Scenario: Evaluating a subtraction expression
+      Given the expression "7 - 5"
+      Then its value is 2
+
+    Scenario: Evaluating a multiplication expression
+      Given the expression "4 * 3"
+      Then its value is 12
+
+    Scenario: Evaluating a division expression
+      Given the expression "8 / 2"
+      Then its value is 4
+
+    Scenario: Evaluating an expression with parentheses
+      Given the expression "(2 + 3) * 4"
+      Then its value is 20
