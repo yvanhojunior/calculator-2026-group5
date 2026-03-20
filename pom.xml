@@ -38,7 +38,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -64,7 +63,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <!-- Spring Boot Web sans Logback -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -83,7 +81,7 @@
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
 
-        <!-- Spring Boot Test pour les tests d'intégration -->
+        <!-- Spring Boot Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -96,7 +94,7 @@
             </exclusions>
         </dependency>
 
-        <!-- RestAssured pour tester les endpoints dans Cucumber -->
+        <!-- RestAssured -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
@@ -104,9 +102,15 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Cucumber Spring pour démarrer le contexte Spring dans les tests -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
-    <!-- Repository Spring Snapshots pour 3.5.0-SNAPSHOT -->
     <repositories>
         <repository>
             <id>spring-snapshots</id>
@@ -141,11 +145,16 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+
+            <!-- Surefire : exclut les tests REST API -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven.surefire.version}</version>
                 <configuration>
+                    <excludes>
+                        <exclude>**/RestApiSteps.java</exclude>
+                    </excludes>
                     <properties>
                         <configurationParameters>
                             cucumber.junit-platform.naming-strategy=long
@@ -153,6 +162,31 @@
                     </properties>
                 </configuration>
             </plugin>
+
+            <!-- Failsafe : exécute les tests REST API en integration-test -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/RestApiSteps.java</include>
+                    </includes>
+                    <properties>
+                        <configurationParameters>
+                            cucumber.junit-platform.naming-strategy=long
+                        </configurationParameters>
+                    </properties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -205,9 +239,26 @@
                 </executions>
             </plugin>
 
+            <!-- Spring Boot : démarre/arrête le serveur pour les tests d'intégration -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>
