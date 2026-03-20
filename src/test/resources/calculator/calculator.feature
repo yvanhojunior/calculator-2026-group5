@@ -91,3 +91,8 @@ Feature: Integer Arithmetic Expressions
       | "-" | 8| 5|     3|
       | "*" | 7| 2|    14|
       | "/" | 6| 2|     3|
+
+    Scenario: Evaluating a simple Expression
+      Given the expression "2 + 3"
+      Then its value is 5
+
