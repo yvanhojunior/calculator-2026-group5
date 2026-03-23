@@ -61,9 +61,93 @@ const CONVERSIONS = {
 const conversionTypeButtons = document.querySelectorAll("#metric .smcont .grid button[data-fn]")
 const fromUnitsSelect = document.getElementById("fromUnits")
 const toUnitsSelect = document.getElementById("toUnits")
+const fromValueInput = document.getElementById("fromValue")
+const toValueInput = document.getElementById("toValue")
+const swapMetricsButton = document.querySelector("#metric button[data-fn='switchMetrics']")
+
+function getActiveConversionType() {
+    const selectedButton = document.querySelector("#metric .smcont .grid button.selected")
+    return selectedButton ? selectedButton.dataset.fn : "length"
+}
 
 function getUnitsForType(type) {
     return Object.keys(CONVERSIONS[type] || {})
+}
+
+function convertTemperature(value, fromUnit, toUnit) {
+    if (fromUnit === toUnit) {
+        return value
+    }
+
+    let celsius
+
+    // Convert from the source unit to Celsius, then from Celsius to the target unit
+    if (fromUnit === "celsius") {
+        celsius = value
+    } else if (fromUnit === "fahrenheit") {
+        celsius = (value - 32) * 5 / 9
+    } else if (fromUnit === "kelvin") {
+        celsius = value - 273.15
+    }
+
+    if (toUnit === "celsius") {
+        return celsius
+    }
+    if (toUnit === "fahrenheit") {
+        return (celsius * 9 / 5) + 32
+    }
+    if (toUnit === "kelvin") {
+        return celsius + 273.15
+    }
+}
+
+function convertMetricValue(type, value, fromUnit, toUnit) {
+    if (type === "temperature") {
+        return convertTemperature(value, fromUnit, toUnit)
+    }
+
+    const units = CONVERSIONS[type] || {}
+    const fromFactor = units[fromUnit]
+    const toFactor = units[toUnit]
+
+    if (typeof fromFactor !== "number" || typeof toFactor !== "number") {
+        return NaN
+    }
+
+    return value * fromFactor / toFactor
+}
+
+function formatConvertedValue(value) {
+    if (!Number.isFinite(value)) {
+        return ""
+    }
+
+    return Number(value.toPrecision(12)).toString()
+}
+
+function updateMetricConversion() {
+    if (!fromUnitsSelect || !toUnitsSelect || !fromValueInput || !toValueInput) {
+        return
+    }
+
+    const rawValue = fromValueInput.value.trim().replace(",", ".")
+
+    if (rawValue === "") {
+        toValueInput.value = ""
+        return
+    }
+
+    const numericValue = Number(rawValue)
+
+    if (!Number.isFinite(numericValue)) {
+        toValueInput.value = ""
+        return
+    }
+
+    const type = getActiveConversionType()
+    const convertedValue = convertMetricValue(type, numericValue, fromUnitsSelect.value, toUnitsSelect.value)
+
+    toValueInput.value = formatConvertedValue(convertedValue)
 }
 
 function populateMetricUnitSelects(type) {
@@ -84,6 +168,8 @@ function populateMetricUnitSelects(type) {
     if (units.length > 1) {
         toUnitsSelect.selectedIndex = 1
     }
+
+    updateMetricConversion()
 }
 
 function setActiveConversionType(button) {
@@ -102,6 +188,27 @@ const initiallySelectedButton = document.querySelector("#metric .smcont .grid bu
 
 if (initiallySelectedButton) {
     setActiveConversionType(initiallySelectedButton)
+}
+
+if (swapMetricsButton && fromUnitsSelect && toUnitsSelect) {
+    swapMetricsButton.addEventListener("click", () => {
+        const fromUnit = fromUnitsSelect.value
+        fromUnitsSelect.value = toUnitsSelect.value
+        toUnitsSelect.value = fromUnit
+        updateMetricConversion()
+    })
+}
+
+if (fromValueInput) {
+    fromValueInput.addEventListener("input", updateMetricConversion)
+}
+
+if (fromUnitsSelect) {
+    fromUnitsSelect.addEventListener("change", updateMetricConversion)
+}
+
+if (toUnitsSelect) {
+    toUnitsSelect.addEventListener("change", updateMetricConversion)
 }
 
 buttons.forEach(btn => {
