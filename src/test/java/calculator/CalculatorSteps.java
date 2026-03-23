@@ -15,6 +15,7 @@ public class CalculatorSteps {
 	private ArrayList<Expression> params;
 	private Operation op;
 	private Calculator c;
+	private Expression expression;
 
 	@Before
     public void resetMemoryBeforeEachScenario() {
@@ -70,6 +71,16 @@ public class CalculatorSteps {
 		    params.add(new MyNumber(n2));
 		    op = new Plus(params);}
 		catch(IllegalConstruction _) { fail(); }
+	}
+
+	@Given("the expression {string}")
+	public void givenTheExpression(String s) {
+		expression = c.read(s);
+	}
+
+	@Then("its value is {int}")
+	public void thenItsValueIs(int expected) {
+		assertEquals(expected, c.eval(expression));
 	}
 
 	@Then("^its (.*) notation is (.*)$")
