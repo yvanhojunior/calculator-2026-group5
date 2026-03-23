@@ -11,8 +11,58 @@ modeSelect.addEventListener("change", () => {
 
 })
 
-const display = document.querySelectorAll(".display")
+const standardDisplay = document.querySelector("#standard .display")
+const scientificDisplay = document.querySelector("#scientific .display")
 const buttons = document.querySelectorAll(".grid button")
+
+function getActiveDisplay() {
+    if (modeSelect.value === "scientific" && scientificDisplay) {
+        return scientificDisplay
+    }
+
+    return standardDisplay
+}
+
+function handleScientificButton(fn, activeDisplay) {
+    switch (fn) {
+        case "sin":
+            break
+        case "cos":
+            break
+        case "tan":
+            break
+        case "pi":
+            break
+        case "delete":
+            break
+        case "log":
+            break
+        case "ln":
+            break
+        case "factorial":
+            break
+        case "inv":
+            break
+        case "pow10":
+            break
+        case "exp":
+            break
+        case "leftParen":
+            break
+        case "rightParen":
+            break
+        case "modulo":
+            break
+        case "power2":
+            break
+        case "sqrt":
+            break
+        case "powerY":
+            break
+        default:
+            break
+    }
+}
 
 const CONVERSIONS = {
     "length": {
@@ -214,12 +264,17 @@ if (toUnitsSelect) {
 buttons.forEach(btn => {
 
     btn.addEventListener("click", () => {
+        const activeDisplay = getActiveDisplay()
+
+        if (!activeDisplay) {
+            return
+        }
 
         const value = btn.innerText
 
         if(value === "="){
             console.log('Calcul en cours...')
-            console.log(`Expression à évaluer: ${display[0].innerText}`)
+            console.log(`Expression à evaluer: ${activeDisplay.innerText}`)
             // Make API call there
             // Exceptions to handle:
             // - Invalid expressions (e.g., "5++2", "3*/4")
@@ -227,23 +282,26 @@ buttons.forEach(btn => {
             // - Syntax errors (e.g., "2(3+4)", "5..2")
             
             // Replace the op symbols with their JavaScript equivalents
-            display[0].innerText = display[0].innerText.replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-")
-            console.log(display[0].innerText)
-            display[0].innerText = eval(display[0].innerText)
+            activeDisplay.innerText = activeDisplay.innerText.replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-")
+            console.log(activeDisplay.innerText)
+            activeDisplay.innerText = eval(activeDisplay.innerText)
         }
         else if (btn.classList.contains("digit") || btn.classList.contains("op") || value === "."){
-            display[0].innerText = display[0].innerText !== "0" ? display[0].innerText + value : value
+            activeDisplay.innerText = activeDisplay.innerText !== "0" ? activeDisplay.innerText + value : value
+        }
+        else if (btn.classList.contains("sct")) {
+            handleScientificButton(btn.dataset.fn, activeDisplay)
         }
         else if (btn.classList.contains("light")){
             switch (btn.dataset.fn) {
                 case "clear":
-                    display[0].innerText = "0"
+                    activeDisplay.innerText = "0"
                     break
                 case "opposite":
-                    display[0].innerText = parseFloat(display[0].innerText) * -1
+                    activeDisplay.innerText = parseFloat(activeDisplay.innerText) * -1
                     break
                 case "percent":
-                    display[0].innerText = parseFloat(display[0].innerText) / 100
+                    activeDisplay.innerText = parseFloat(activeDisplay.innerText) / 100
                     break
             }
         }
