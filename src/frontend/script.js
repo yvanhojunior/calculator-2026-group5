@@ -108,6 +108,9 @@ const CONVERSIONS = {
     }
 }
 
+const PI_VALUE = Math.PI
+const E_VALUE = Math.E
+
 const conversionTypeButtons = document.querySelectorAll("#metric .smcont .grid button[data-fn]")
 const fromUnitsSelect = document.getElementById("fromUnits")
 const toUnitsSelect = document.getElementById("toUnits")
@@ -270,7 +273,7 @@ buttons.forEach(btn => {
             return
         }
 
-        const value = btn.innerText
+        const value = btn.value || btn.innerText
 
         if(value === "="){
             console.log('Calcul en cours...')
@@ -283,6 +286,9 @@ buttons.forEach(btn => {
             
             // Replace the op symbols with their JavaScript equivalents
             activeDisplay.innerText = activeDisplay.innerText.replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-")
+
+            // Handle scientific functions and constants here?
+
             console.log(activeDisplay.innerText)
             activeDisplay.innerText = eval(activeDisplay.innerText)
         }
@@ -290,7 +296,8 @@ buttons.forEach(btn => {
             activeDisplay.innerText = activeDisplay.innerText !== "0" ? activeDisplay.innerText + value : value
         }
         else if (btn.classList.contains("sct")) {
-            handleScientificButton(btn.dataset.fn, activeDisplay)
+            //handleScientificButton(btn.dataset.fn, activeDisplay)
+            activeDisplay.innerText = activeDisplay.innerText !== "0" ? activeDisplay.innerText + btn.value : btn.value
         }
         else if (btn.classList.contains("light")){
             switch (btn.dataset.fn) {
@@ -302,6 +309,9 @@ buttons.forEach(btn => {
                     break
                 case "percent":
                     activeDisplay.innerText = parseFloat(activeDisplay.innerText) / 100
+                    break
+                case "delete":
+                    activeDisplay.innerText = activeDisplay.innerText.slice(0, -1) || "0"
                     break
             }
         }
