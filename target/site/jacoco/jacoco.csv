@@ -1,6 +1,7 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 Calculator with JUnit5 and Cucumber tests,calculator,Divides,0,35,0,2,0,9,0,4,0,3
 Calculator with JUnit5 and Cucumber tests,calculator,IntegerValue,6,83,3,5,0,18,3,10,0,9
+Calculator with JUnit5 and Cucumber tests,calculator,ComplexValue,22,189,4,14,3,25,7,12,3,7
 Calculator with JUnit5 and Cucumber tests,calculator,ExpressionParser,89,464,5,26,24,96,10,21,5,10
 Calculator with JUnit5 and Cucumber tests,calculator,ExpressionParser.MultiplicationExprContext,22,23,5,1,6,5,6,4,3,4
 Calculator with JUnit5 and Cucumber tests,calculator,Plus,0,23,0,0,0,7,0,3,0,3
@@ -12,6 +13,8 @@ Calculator with JUnit5 and Cucumber tests,calculator,MyNumber,14,43,1,5,6,12,5,8
 Calculator with JUnit5 and Cucumber tests,calculator,IllegalConstruction,0,3,0,0,0,1,0,1,0,1
 Calculator with JUnit5 and Cucumber tests,calculator,Operation,7,119,1,11,3,31,2,13,1,8
 Calculator with JUnit5 and Cucumber tests,calculator,ExpressionParser.AdditionExprContext,22,23,5,1,6,5,6,4,3,4
+Calculator with JUnit5 and Cucumber tests,calculator,RationalValue,22,184,4,16,3,26,7,14,3,8
+Calculator with JUnit5 and Cucumber tests,calculator,RealValue,13,77,3,5,2,16,5,8,2,7
 Calculator with JUnit5 and Cucumber tests,calculator,Minus,0,23,0,0,0,7,0,3,0,3
 Calculator with JUnit5 and Cucumber tests,calculator,Notation,0,21,0,0,0,4,0,1,0,1
 Calculator with JUnit5 and Cucumber tests,calculator,ExpressionParser.AtomContext,22,24,5,1,6,5,6,4,3,4
