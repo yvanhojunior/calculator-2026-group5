@@ -2,28 +2,52 @@ package calculator;
 
 import calculator.ExpressionBaseVisitor;
 
-public class ExpressionAstBuilder extends  ExpressionBaseVisitor<Expression>{
+public class ExpressionAstBuilder extends ExpressionBaseVisitor<Expression> {
 
     /**
      * Convertit un noeud 'atom' de l'arbre de parse en un objet Expression.
-     * Si c'esst un entier, retourne un MyNumber. Sinon, visite l'expression imbriqué.
+     * Supporte maintenant: INT, REAL, RATIONAL, COMPLEX
      * @param ctx the parse tree
-     * @return
+     * @return Expression correspondante
      */
     @Override
     public Expression visitAtom(calculator.ExpressionParser.AtomContext ctx) {
         if (ctx.INT() != null) {
-            return new MyNumber(Integer.parseInt(ctx.INT().getText()));
+            return new MyNumber(new IntegerValue(Integer.parseInt(ctx.INT().getText())));
+        }
+        if (ctx.REAL() != null) {
+            return new MyNumber(new RealValue(Double.parseDouble(ctx.REAL().getText())));
+        }
+        if (ctx.RATIONAL() != null) {
+            String[] parts = ctx.RATIONAL().getText().split("/");
+            return new MyNumber(new RationalValue(Long.parseLong(parts[0]), Long.parseLong(parts[1])));
+        }
+        if (ctx.COMPLEX() != null) {
+            return parseComplex(ctx.COMPLEX().getText());
         }
         return visit(ctx.expression());
     }
 
+    /**
+     * Parse une chaîne complexe comme "2+3i", "3i", "2.0+3.0i"
+     */
+    private MyNumber parseComplex(String text) {
+        if (!text.contains("+") && !text.contains("-")) {
+            double imaginary = Double.parseDouble(text.replace("i", ""));
+            return new MyNumber(new ComplexValue(0, imaginary));
+        }
+        int splitIndex = text.lastIndexOf('+');
+        if (splitIndex <= 0) splitIndex = text.lastIndexOf('-');
+        double real = Double.parseDouble(text.substring(0, splitIndex));
+        double imaginary = Double.parseDouble(text.substring(splitIndex, text.length() - 1));
+        return new MyNumber(new ComplexValue(real, imaginary));
+    }
 
     /**
      * Visit one expression of multiplication/division (e.g: "2 * 3 / 4").
      * Build one AST tree chaining operations left to right.
      * Manage the operators '*' et '/' by creating objects Times or Divides.
-     * @param ctx
+     * @param ctx the parse tree
      * @return null in case of construction error.
      */
     @Override
@@ -50,7 +74,6 @@ public class ExpressionAstBuilder extends  ExpressionBaseVisitor<Expression>{
 
         return result;
     }
-
 
     @Override
     public Expression visitAdditionExpr(calculator.ExpressionParser.AdditionExprContext ctx) {
