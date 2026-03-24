@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<title>Calculatrice</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="calculator">
+        
+        <div class="header">
+            <h2>Calculator</h2>
+
+            <div class="modeSelector">
+                <select id="mode">
+                    <option value="standard">Standard</option>
+                    <option value="scientific">Scientific</option>
+                    <option value="metric">Metric Conversion</option>
+                </select>
+            </div>
+
+        </div>
+
+        <!-- Standard Mode -->
+        <div id="standard" class="scene active">
+            <div class="display">0</div>
+
+            <div class="grid">
+                <button class="light" data-fn="clear">C</button><button class="light" data-fn="opposite">+/-</button><button class="light" data-fn="percent">%</button><button class="op" value="/">÷</button>
+                <button class="digit" value="7">7</button><button class="digit" value="8">8</button><button class="digit" value="9">9</button><button class="op" value="*">×</button>
+                <button class="digit" value="4">4</button><button class="digit" value="5">5</button><button class="digit" value="6">6</button><button class="op" value="-">−</button>
+                <button class="digit" value="1">1</button><button class="digit" value="2">2</button><button class="digit" value="3">3</button><button class="op" value="+">+</button>
+                <button class="wide digit" value="0">0</button><button class="op" value=".">.</button><button class="op" value="=">=</button>
+            </div>
+
+        </div>
+
+        <!-- Scientific Mode -->
+        <div id="scientific" class="scene">
+            <div class="display">0</div>
+
+            <div class="grid sct">
+
+                <button class="sct" data-fn="sin" value="sin">sin</button>
+                <button class="sct" data-fn="cos" value="cos">cos</button>
+                <button class="sct" data-fn="tan" value="tan">tan</button>
+                <button class="sct" data-fn="pi" value="pi">π</button>
+                <button class="light" data-fn="delete" value="delete">⌫</button>
+
+                <button class="sct" data-fn="log" value="log">log</button>
+                <button class="sct" data-fn="ln" value="ln">ln</button>
+                <button class="sct" data-fn="factorial" value="x!">x<span style="font-style: normal;">!</span></button>
+                <button class="sct" data-fn="inv" value="x^-1">x⁻¹</button>
+                <button class="light" data-fn="clear" value="clear">C</button>
+
+                
+                <button class="sct" data-fn="pow10" value="10^">10ˣ</button>
+                <button class="sct" data-fn="exp" value="e^">eˣ</button>
+                <button class="sct" data-fn="leftParen" value="(">(</button>
+                <button class="sct" data-fn="rightParen" value=")">)</button>
+                <button class="op" value="/">÷</button>
+
+                
+                <button class="sct" data-fn="modulo" value="mod">mod</button>
+                <button class="digit" value="7">7</button>
+                <button class="digit" value="8">8</button>
+                <button class="digit" value="9">9</button>
+                <button class="op" value="*">×</button>
+
+                <button class="sct" data-fn="power2" value="^2">x²</button>
+                <button class="digit" value="4">4</button>
+                <button class="digit" value="5">5</button>
+                <button class="digit" value="6">6</button>
+                <button class="op" value="-">−</button>
+
+                <button class="sct" data-fn="sqrt" value="sqrt">√</button>
+                <button class="digit" value="1">1</button>
+                <button class="digit" value="2">2</button>
+                <button class="digit" value="3">3</button>
+                <button class="op" value="+">+</button>
+
+                <button class="sct" data-fn="powerY" value="^">xʸ</button>
+                <button class="light" data-fn="opposite" value="opposite">+/-</button>
+                <button class="digit" value="0">0</button>
+                <button class="op" value=".">.</button>
+                <button class="op" value="=">=</button>
+
+            </div>
+
+        </div>
+
+        <!-- Metric Conversion -->
+        <div id="metric" class="scene">
+
+            <div class="container"></div>
+                <div class="smcont">
+                    <p class="small">Conversion Type</p>
+                    <div class="grid">
+                        <button class="selected" data-fn="length">Length</button>
+                        <button data-fn="weight">Weight</button>
+                        <button data-fn="temperature">Temperature</button>
+                        <button data-fn="volume">Volume</button>
+                    </div>
+                </div>
+                <div class="smcont">
+                    <p class="small">From</p>
+                    <select id="fromUnits" class="small">
+                        <option>Option 1</option>
+                        <option>Option 2</option>
+                        <option>Option 3</option>
+                        <option>Option 4</option>
+                    </select>
+                    <input id="fromValue" type="text" value="1">
+                </div>
+
+                <button data-fn="switchMetrics" class="swap">↑↓ Swap</button>
+                
+                <div class="smcont">
+                    <p class="small">To</p>
+                    <select id="toUnits" class="small">
+                        <option>Option 1</option>
+                        <option>Option 2</option>
+                        <option>Option 3</option>
+                        <option>Option 4</option>
+                    </select>
+                    <input id="toValue" type="text" value="1" readonly>
+                </div>
+            
+        </div>
+
+    </div>
+</div>
+<script src="script.js"></script>
+
+</body>
+</html>

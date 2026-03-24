@@ -34,9 +34,9 @@ public class TestAntlrParser {
         Calculator calc = new Calculator();
 
         Expression expr = calc.read("2 + 3 * 4");
-        int result = calc.eval(expr);
+        NumberValue result = calc.eval(expr);
 
-        assertEquals(14, result);
+        assertEquals(new IntegerValue(14), result);
     }
 
     /**
@@ -50,9 +50,9 @@ public class TestAntlrParser {
         Calculator calc = new Calculator();
 
         Expression expr = calc.read("(2 + 3) * 4");
-        int result = calc.eval(expr);
+        NumberValue result = calc.eval(expr);
 
-        assertEquals(20, result);
+        assertEquals(new IntegerValue(20), result);
     }
 
     @Test
@@ -66,9 +66,9 @@ public class TestAntlrParser {
         Calculator calc = new Calculator();
 
         Expression expr = calc.read("10 - 2 * 3 + 4");
-        int result = calc.eval(expr);
+        NumberValue result = calc.eval(expr);
 
-        assertEquals(8, result);
+        assertEquals(new IntegerValue(8), result);
     }
 
 

@@ -5,7 +5,6 @@ import visitor.NotationVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Operation is an abstract class that represents arithmetic operations,
@@ -18,7 +17,7 @@ public abstract class Operation implements Expression {
 	/**
 	 * The list of expressions passed as an argument to the arithmetic operation
 	 */
-	public List<Expression> args;
+	private List<Expression> args;
 
 	/**
 	 * The character used to represent the arithmetic operation (e.g. "+", "*")
@@ -28,13 +27,13 @@ public abstract class Operation implements Expression {
 	/**
 	 * The neutral element of the operation (e.g. 1 for *, 0 for +)
 	 */
-	protected int neutral;
+	protected NumberValue neutral;
 
 	/**
 	 * The notation used to render operations as strings.
 	 * By default, the infix notation will be used.
 	 */
-	public Notation notation = Notation.INFIX;
+	private Notation notation = Notation.INFIX;
 
 	/** It is not allowed to construct an operation with a null list of expressions.
 	 * Note that it is allowed to have an EMPTY list of arguments.
@@ -81,7 +80,7 @@ public abstract class Operation implements Expression {
 	 * @param r	second argument of the binary operation
 	 * @return	result of computing the binary operation
 	 */
-	public abstract int op(int l, int r);
+	public abstract NumberValue op(NumberValue l, NumberValue r);
 	// the operation itself is specified in the subclasses
 
 	/** Add more parameters to the existing list of parameters
@@ -146,7 +145,7 @@ public abstract class Operation implements Expression {
 	{
 		int result = 5;
 		int prime = 31;
-		result = prime * result + neutral;
+		result = prime * result + neutral.hashCode();
 		result = prime * result + symbol.hashCode();
 		result = prime * result + args.hashCode();
 		return result;
@@ -155,5 +154,26 @@ public abstract class Operation implements Expression {
 	public String getSymbol() {
 		return symbol;
 	}
+
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
+	}
+
+	public NumberValue getNeutral() {
+		return neutral;
+	}
+
+	public void setNeutral(NumberValue neutral) {
+		this.neutral = neutral;
+	}
+
+	public Notation getNotation() {
+		return notation;
+	}
+
+	public void setNotation(Notation notation) {
+		this.notation = notation;
+	}
+
 
 }
