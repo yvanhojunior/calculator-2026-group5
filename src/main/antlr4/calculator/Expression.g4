@@ -1,7 +1,4 @@
 grammar Expression;
-@header {
-package calculator;
-}
 
 expression : additionExpr ;
 

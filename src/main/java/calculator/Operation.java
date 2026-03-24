@@ -159,11 +159,11 @@ public abstract class Operation implements Expression {
 		this.symbol = symbol;
 	}
 
-	public int getNeutral() {
+	public NumberValue getNeutral() {
 		return neutral;
 	}
 
-	public void setNeutral(int neutral) {
+	public void setNeutral(NumberValue neutral) {
 		this.neutral = neutral;
 	}
 
