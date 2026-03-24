@@ -12,23 +12,23 @@
     <artifactId>calculator-cucumber</artifactId>
     <version>0.5.0</version>
     <name>Calculator with JUnit5 and Cucumber tests</name>
-
+    
     <properties>
         <project.encoding>UTF-8</project.encoding>
         <project.build.sourceEncoding>${project.encoding}</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${project.encoding}</project.reporting.outputEncoding>
         <start-class>calculator.CalculatorApplication</start-class>
-
+        
         <slf4j.version>2.0.16</slf4j.version>
-        <java.version>25</java.version>
+        <java.version>25</java.version> 
         <junit-jupiter.version>5.11.4</junit-jupiter.version>
         <junit-platform-suite.version>1.11.4</junit-platform-suite.version>
-        <cucumber.version>7.34.3</cucumber.version>
+        <cucumber.version>7.21.1</cucumber.version>
         <jacoco.version>0.8.14</jacoco.version>
         <javadoc.version>3.12.0</javadoc.version>
         <sonar.organization>tommens</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-
+        
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.version>3.15.0</maven.compiler.version>
@@ -36,31 +36,14 @@
         <maven.surefire.version>3.5.5</maven.surefire.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>3.4.3</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
+    
     <dependencies>
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
             <version>4.13.1</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
+        
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -85,8 +68,8 @@
             <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- Spring Boot Web sans Logback -->
+        
+        <!-- Spring Boot Web without Logback (using Log4j2 instead) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -97,13 +80,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!-- Log4j2 à la place de Logback -->
+        
+        <!-- Log4j2 instead of Logback -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
-
+        
         <!-- Spring Boot Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -116,7 +99,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        
         <!-- RestAssured -->
         <dependency>
             <groupId>io.rest-assured</groupId>
@@ -124,7 +107,7 @@
             <version>5.3.2</version>
             <scope>test</scope>
         </dependency>
-
+        
         <!-- Cucumber Spring pour démarrer le contexte Spring dans les tests -->
         <dependency>
             <groupId>io.cucumber</groupId>
@@ -133,7 +116,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+    
     <repositories>
         <repository>
             <id>spring-snapshots</id>
@@ -144,7 +127,7 @@
             </snapshots>
         </repository>
     </repositories>
-
+    
     <pluginRepositories>
         <pluginRepository>
             <id>spring-snapshots</id>
@@ -155,10 +138,10 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
+    
     <build>
         <plugins>
-
+            
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
@@ -174,16 +157,7 @@
                     <visitor>true</visitor>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.4.3</version>
-                <configuration>
-                    <mainClass>calculator.WebApp</mainClass>
-                </configuration>
-            </plugin>
-
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -194,8 +168,8 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-
-            <!-- Surefire : exclut les tests REST API -->
+            
+            <!-- Surefire: Run Unit Tests (exclude Rest API integration tests) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -211,8 +185,8 @@
                     </properties>
                 </configuration>
             </plugin>
-
-            <!-- Failsafe : exécute les tests REST API en integration-test -->
+            
+            <!-- Failsafe: Run Integration Tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -235,16 +209,17 @@
                     </execution>
                 </executions>
             </plugin>
-
+            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.6.3</version>
                 <configuration>
-                    <mainClass>calculator.Main</mainClass>
+                    <mainClass>calculator.CalculatorApplication</mainClass>
                 </configuration>
             </plugin>
-
+            
+            <!-- JaCoCo Coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -269,7 +244,7 @@
                     </excludes>
                 </configuration>
             </plugin>
-
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -287,8 +262,8 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- Spring Boot : démarre/arrête le serveur pour les tests d'intégration -->
+            
+            <!-- Spring Boot Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -309,8 +284,7 @@
                     </execution>
                 </executions>
             </plugin>
-
+            
         </plugins>
     </build>
-
 </project>
