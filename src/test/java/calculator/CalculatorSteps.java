@@ -80,7 +80,7 @@ public class CalculatorSteps {
 
 	@Then("its value is {int}")
 	public void thenItsValueIs(int expected) {
-		assertEquals(expected, c.eval(expression));
+		assertEquals(new IntegerValue(expected), c.eval(expression));
 	}
 
 	@Then("^its (.*) notation is (.*)$")
@@ -112,7 +112,7 @@ public class CalculatorSteps {
 				case "difference"	->	op = new Minus(params);
 				default -> fail();
 			}
-			assertEquals(val, c.eval(op));
+			assertEquals(new IntegerValue(val), c.eval(op));
 		} catch (IllegalConstruction _) {
 			fail();
 		}
@@ -120,7 +120,7 @@ public class CalculatorSteps {
 
 	@Then("the operation evaluates to {int}")
 	public void thenTheOperationEvaluatesTo(int val) {
-		assertEquals(val, c.eval(op));
+		assertEquals(new IntegerValue(val), c.eval(op));
 	}
 
 }

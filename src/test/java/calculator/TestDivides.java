@@ -79,7 +79,7 @@ class TestDivides {
 	@Test
 	void testDivisionByZero() throws IllegalConstruction {
 		Divides divides = new Divides(params);
-		assertThrows(ArithmeticException.class, () -> divides.op(value1, 0));
+		assertThrows(ArithmeticException.class, () -> divides.op(new IntegerValue(value1), new IntegerValue(0)));
 	}
 
 }

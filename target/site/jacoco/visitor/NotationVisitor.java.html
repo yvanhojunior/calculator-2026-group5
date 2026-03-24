@@ -27,7 +27,7 @@ public class NotationVisitor extends Visitor {
      */
     @Override
     public void visit(MyNumber n) {
-<span class="fc" id="L30">        stack.push(Integer.toString(n.getValue()));</span>
+<span class="fc" id="L30">        stack.push(n.getValue().toString());</span>
 <span class="fc" id="L31">    }</span>
 
     @Override

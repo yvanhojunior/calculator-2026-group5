@@ -45,6 +45,19 @@ public class IntegerValue implements NumberValue {
             return new IntegerValue(this.value / o.value);
         }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (!(o instanceof IntegerValue)) return false;
+        return this.value == ((IntegerValue) o).value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(value);
+    }
+
         @Override
         public String toString() {
             return Integer.toString(value);

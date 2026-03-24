@@ -10,50 +10,50 @@ public class ExpressionParser {
 
 
     public static Expression parse(String expression) throws Exception {
-<span class="nc" id="L13">        expression = expression.trim();</span>
+<span class="fc" id="L13">        expression = expression.trim();</span>
 
-<span class="nc bnc" id="L15" title="All 2 branches missed.">        if (expression.isEmpty()) {</span>
+<span class="pc bpc" id="L15" title="1 of 2 branches missed.">        if (expression.isEmpty()) {</span>
 <span class="nc" id="L16">            throw new Exception(&quot;Empty expression&quot;);</span>
         }
 
-<span class="nc" id="L19">        int pos = findMainOperator(expression);</span>
+<span class="fc" id="L19">        int pos = findMainOperator(expression);</span>
 
-<span class="nc bnc" id="L21" title="All 2 branches missed.">        if (pos == -1) {</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        if (pos == -1) {</span>
             // Pas d'opérateur = c'est un nombre
             try {
-<span class="nc" id="L24">                return new MyNumber(Integer.parseInt(expression));</span>
-<span class="nc" id="L25">            } catch (NumberFormatException e) {</span>
-<span class="nc" id="L26">                throw new Exception(&quot;Invalid number: &quot; + expression);</span>
+<span class="fc" id="L24">                return new MyNumber(Integer.parseInt(expression));</span>
+<span class="fc" id="L25">            } catch (NumberFormatException e) {</span>
+<span class="fc" id="L26">                throw new Exception(&quot;Invalid number: &quot; + expression);</span>
             }
         }
 
-<span class="nc" id="L30">        char op = expression.charAt(pos);</span>
-<span class="nc" id="L31">        String left = expression.substring(0, pos).trim();</span>
-<span class="nc" id="L32">        String right = expression.substring(pos + 1).trim();</span>
+<span class="fc" id="L30">        char op = expression.charAt(pos);</span>
+<span class="fc" id="L31">        String left = expression.substring(0, pos).trim();</span>
+<span class="fc" id="L32">        String right = expression.substring(pos + 1).trim();</span>
 
-<span class="nc" id="L34">        Expression leftExpr = parse(left);</span>
-<span class="nc" id="L35">        Expression rightExpr = parse(right);</span>
+<span class="fc" id="L34">        Expression leftExpr = parse(left);</span>
+<span class="fc" id="L35">        Expression rightExpr = parse(right);</span>
 
-<span class="nc bnc" id="L37" title="All 5 branches missed.">        return switch (op) {</span>
-<span class="nc" id="L38">            case '+' -&gt; new Plus(Arrays.asList(leftExpr, rightExpr));</span>
-<span class="nc" id="L39">            case '-' -&gt; new Minus(Arrays.asList(leftExpr, rightExpr));</span>
-<span class="nc" id="L40">            case '*' -&gt; new Times(Arrays.asList(leftExpr, rightExpr));</span>
-<span class="nc" id="L41">            case '/' -&gt; new Divides(Arrays.asList(leftExpr, rightExpr));</span>
+<span class="pc bpc" id="L37" title="1 of 5 branches missed.">        return switch (op) {</span>
+<span class="fc" id="L38">            case '+' -&gt; new Plus(Arrays.asList(leftExpr, rightExpr));</span>
+<span class="fc" id="L39">            case '-' -&gt; new Minus(Arrays.asList(leftExpr, rightExpr));</span>
+<span class="fc" id="L40">            case '*' -&gt; new Times(Arrays.asList(leftExpr, rightExpr));</span>
+<span class="fc" id="L41">            case '/' -&gt; new Divides(Arrays.asList(leftExpr, rightExpr));</span>
 <span class="nc" id="L42">            default -&gt; throw new Exception(&quot;Unknown operator: &quot; + op);</span>
         };
     }
 
     private static int findMainOperator(String expr) {
-<span class="nc" id="L47">        int depth = 0;</span>
-<span class="nc" id="L48">        int pos = -1;</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        for (int i = 0; i &lt; expr.length(); i++) {</span>
-<span class="nc" id="L50">            char c = expr.charAt(i);</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">            if (c == '(') depth++;</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">            else if (c == ')') depth--;</span>
-<span class="nc bnc" id="L53" title="All 6 branches missed.">            else if (depth == 0 &amp;&amp; (c == '+' || c == '-')) pos = i;</span>
-<span class="nc bnc" id="L54" title="All 8 branches missed.">            else if (depth == 0 &amp;&amp; (c == '*' || c == '/') &amp;&amp; pos == -1) pos = i;</span>
+<span class="fc" id="L47">        int depth = 0;</span>
+<span class="fc" id="L48">        int pos = -1;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (int i = 0; i &lt; expr.length(); i++) {</span>
+<span class="fc" id="L50">            char c = expr.charAt(i);</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">            if (c == '(') depth++;</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">            else if (c == ')') depth--;</span>
+<span class="pc bpc" id="L53" title="1 of 6 branches missed.">            else if (depth == 0 &amp;&amp; (c == '+' || c == '-')) pos = i;</span>
+<span class="pc bpc" id="L54" title="2 of 8 branches missed.">            else if (depth == 0 &amp;&amp; (c == '*' || c == '/') &amp;&amp; pos == -1) pos = i;</span>
         }
-<span class="nc" id="L56">        return pos;</span>
+<span class="fc" id="L56">        return pos;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -36,7 +36,7 @@ public final class Divides extends Operation {
 	public Divides(List&lt;Expression&gt; elist, Notation n) throws IllegalConstruction {
 <span class="fc" id="L37">		super(elist,n);</span>
 <span class="fc" id="L38">		symbol = &quot;/&quot;;</span>
-<span class="fc" id="L39">		neutral = 1;</span>
+<span class="fc" id="L39">		neutral = new IntegerValue(1);</span>
 <span class="fc" id="L40">	}</span>
 
 	/**
@@ -46,12 +46,12 @@ public final class Divides extends Operation {
 	 * @return The integer that is the result of the division
 	 * @throws ArithmeticException If the second integer is zero, as division by zero is not allowed
 	 */
-	public int op(int l, int r) throws ArithmeticException {
+	public NumberValue op(NumberValue l, NumberValue r) throws ArithmeticException {
 	//Don't use == but use .equals() to compare the second integer with zero, as it is an Integer object and not a primitive int. 
-<span class="fc bfc" id="L51" title="All 2 branches covered.">	if (Integer.valueOf(r).equals(0)) {</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">	if (r.equals(new IntegerValue(0))) {</span>
 <span class="fc" id="L52">		throw new ArithmeticException(&quot;Division by zero is not allowed.&quot;);</span>
 	}
-<span class="fc" id="L54">		return l/r;</span>
+<span class="fc" id="L54">		return l.div(r);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

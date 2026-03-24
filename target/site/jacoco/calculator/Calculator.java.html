@@ -3,6 +3,9 @@
 import visitor.Evaluator;
 import visitor.CountingVisitor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class represents the core logic of a Calculator.
  * It can be used to print and evaluate artihmetic expressions.
@@ -12,12 +15,12 @@ import visitor.CountingVisitor;
 public class Calculator {
 
 
-<span class="fc" id="L15">    public Calculator() {</span>
+<span class="fc" id="L18">    public Calculator() {</span>
         /**
          * Default constructor of the class.
          * Does nothing since the class does not have any variables that need to be initialised.
          **/
-<span class="fc" id="L20">    }</span>
+<span class="fc" id="L23">    }</span>
 
     /*
      For the moment the calculator only contains a print method and an eval method
@@ -34,10 +37,10 @@ public class Calculator {
      * @see #printExpressionDetails(Expression) 
      */
     public void print(Expression e) {
-<span class="nc" id="L37">        System.out.println(&quot;The result of evaluating expression &quot; + e);</span>
-<span class="nc" id="L38">        System.out.println(&quot;is: &quot; + eval(e) + &quot;.&quot;);</span>
-<span class="nc" id="L39">        System.out.println();</span>
-<span class="nc" id="L40">    }</span>
+<span class="nc" id="L40">        System.out.println(&quot;The result of evaluating expression &quot; + e);</span>
+<span class="nc" id="L41">        System.out.println(&quot;is: &quot; + eval(e) + &quot;.&quot;);</span>
+<span class="nc" id="L42">        System.out.println();</span>
+<span class="nc" id="L43">    }</span>
 
     /**
      * Prints verbose details of an arithmetic expression provided as input parameter.
@@ -45,27 +48,45 @@ public class Calculator {
      * @see #print(Expression)
      */
     public void printExpressionDetails(Expression e) {
-<span class="nc" id="L48">        print(e);</span>
-<span class="nc" id="L49">        CountingVisitor cv = new visitor.CountingVisitor();</span>
-<span class="nc" id="L50">        e.accept(cv);</span>
-<span class="nc" id="L51">        System.out.print(&quot;It contains &quot; + cv.getDepth() + &quot; levels of nested expressions, &quot;);</span>
-<span class="nc" id="L52">        System.out.print(cv.getOps() + &quot; operations&quot;);</span>
-<span class="nc" id="L53">        System.out.println(&quot; and &quot; + cv.getNbs() + &quot; numbers.&quot;);</span>
-<span class="nc" id="L54">        System.out.println();</span>
-<span class="nc" id="L55">    }</span>
+<span class="nc" id="L51">        print(e);</span>
+<span class="nc" id="L52">        CountingVisitor cv = new visitor.CountingVisitor();</span>
+<span class="nc" id="L53">        e.accept(cv);</span>
+<span class="nc" id="L54">        System.out.print(&quot;It contains &quot; + cv.getDepth() + &quot; levels of nested expressions, &quot;);</span>
+<span class="nc" id="L55">        System.out.print(cv.getOps() + &quot; operations&quot;);</span>
+<span class="nc" id="L56">        System.out.println(&quot; and &quot; + cv.getNbs() + &quot; numbers.&quot;);</span>
+<span class="nc" id="L57">        System.out.println();</span>
+<span class="nc" id="L58">    }</span>
 
     /**
      * Evaluates an arithmetic expression and returns its result
      * @param e the arithmetic Expression to be evaluated
      * @return The result of the evaluation
      */
-    public int eval(Expression e) {
+    public NumberValue eval(Expression e) {
         // create a new visitor to evaluate expressions
-<span class="fc" id="L64">        Evaluator v = new Evaluator();</span>
+<span class="fc" id="L67">        Evaluator v = new Evaluator();</span>
         // and ask the expression to accept this visitor to start the evaluation process
-<span class="fc" id="L66">        e.accept(v);</span>
+<span class="fc" id="L69">        e.accept(v);</span>
         // and return the result of the evaluation at the end of the process
-<span class="fc" id="L68">        return v.getResult();</span>
+<span class="fc" id="L71">        return v.getResult();</span>
+    }
+
+    /**
+     * converts a string representation of an arithmetic eexpression
+     * into an Expression object (AST)
+     *
+     * @param s the string containing the arithmetic expression
+     * @return the corresponding Expression tree
+     */
+    public Expression read(String s) {
+<span class="fc" id="L82">        calculator.ExpressionLexer lexer = new calculator.ExpressionLexer(org.antlr.v4.runtime.CharStreams.fromString(s));</span>
+<span class="fc" id="L83">        org.antlr.v4.runtime.CommonTokenStream tokens = new org.antlr.v4.runtime.CommonTokenStream(lexer);</span>
+<span class="fc" id="L84">        calculator.ExpressionParser parser = new calculator.ExpressionParser(tokens);</span>
+
+<span class="fc" id="L86">        calculator.ExpressionParser.ExpressionContext tree = parser.expression();</span>
+
+<span class="fc" id="L88">        ExpressionAstBuilder builder = new ExpressionAstBuilder();</span>
+<span class="fc" id="L89">        return builder.visit(tree);</span>
     }
 
     /*

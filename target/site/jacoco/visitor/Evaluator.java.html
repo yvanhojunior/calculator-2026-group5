@@ -2,6 +2,7 @@
 
 import calculator.Expression;
 import calculator.MyNumber;
+import calculator.NumberValue;
 import calculator.Operation;
 
 import java.util.ArrayList;
@@ -11,47 +12,47 @@ import java.util.ArrayList;
  */
 public class Evaluator extends Visitor {
 
-<span class="fc" id="L14">     public Evaluator() {</span>
+<span class="fc" id="L15">     public Evaluator() {</span>
          //Default constructor of the class. Does not initialise anything.
-<span class="fc" id="L16">     }</span>
+<span class="fc" id="L17">     }</span>
 
     /** The result of the evaluation will be stored in this private variable */
-    private int computedValue;
+    private NumberValue computedValue;
 
     /** getter method to obtain the result of the evaluation
      *
      * @return an Integer object containing the result of the evaluation
      */
-<span class="fc" id="L25">    public Integer getResult() { return computedValue; }</span>
+<span class="fc" id="L26">    public NumberValue getResult() { return computedValue; }</span>
 
     /** Use the visitor design pattern to visit a number.
      *
      * @param n The number being visited
      */
     public void visit(MyNumber n) {
-<span class="fc" id="L32">        computedValue = n.getValue();</span>
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L33">        computedValue = n.getValue();</span>
+<span class="fc" id="L34">    }</span>
 
     /** Use the visitor design pattern to visit an operation
      *
      * @param o The operation being visited
      */
     public void visit(Operation o) {
-<span class="fc" id="L40">        ArrayList&lt;Integer&gt; evaluatedArgs = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L41">        ArrayList&lt;NumberValue&gt; evaluatedArgs = new ArrayList&lt;&gt;();</span>
         //first loop to recursively evaluate each subexpression
-<span class="fc bfc" id="L42" title="All 2 branches covered.">        for(Expression a:o.args) {</span>
-<span class="fc" id="L43">            a.accept(this);</span>
-<span class="fc" id="L44">            evaluatedArgs.add(computedValue);</span>
-<span class="fc" id="L45">        }</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        for(Expression a:o.args) {</span>
+<span class="fc" id="L44">            a.accept(this);</span>
+<span class="fc" id="L45">            evaluatedArgs.add(computedValue);</span>
+<span class="fc" id="L46">        }</span>
         //second loop to accumulate all the evaluated subresults
-<span class="fc" id="L47">        int temp = evaluatedArgs.get(0);</span>
-<span class="fc" id="L48">        int max = evaluatedArgs.size();</span>
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        for(int counter=1; counter&lt;max; counter++) {</span>
-<span class="fc" id="L50">            temp = o.op(temp,evaluatedArgs.get(counter));</span>
+<span class="fc" id="L48">        NumberValue temp = evaluatedArgs.get(0);</span>
+<span class="fc" id="L49">        int max = evaluatedArgs.size();</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        for(int counter=1; counter&lt;max; counter++) {</span>
+<span class="fc" id="L51">            temp = o.op(temp,evaluatedArgs.get(counter));</span>
         }
         // store the accumulated result
-<span class="fc" id="L53">        computedValue = temp;</span>
-<span class="fc" id="L54">    }</span>
+<span class="fc" id="L54">        computedValue = temp;</span>
+<span class="fc" id="L55">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

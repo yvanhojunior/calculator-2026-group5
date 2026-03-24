@@ -28,7 +28,7 @@ public abstract class Operation implements Expression {
 	/**
 	 * The neutral element of the operation (e.g. 1 for *, 0 for +)
 	 */
-	protected int neutral;
+	protected NumberValue neutral;
 
 	/**
 	 * The notation used to render operations as strings.
@@ -81,7 +81,7 @@ public abstract class Operation implements Expression {
 	 * @param r	second argument of the binary operation
 	 * @return	result of computing the binary operation
 	 */
-	public abstract int op(int l, int r);
+	public abstract NumberValue op(NumberValue l, NumberValue r);
 	// the operation itself is specified in the subclasses
 
 	/** Add more parameters to the existing list of parameters
@@ -146,7 +146,7 @@ public abstract class Operation implements Expression {
 	{
 		int result = 5;
 		int prime = 31;
-		result = prime * result + neutral;
+		result = prime * result + neutral.hashCode();
 		result = prime * result + symbol.hashCode();
 		result = prime * result + args.hashCode();
 		return result;
