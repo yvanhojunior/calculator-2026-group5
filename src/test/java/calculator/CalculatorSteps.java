@@ -78,10 +78,6 @@ public class CalculatorSteps {
 		expression = c.read(s);
 	}
 
-	@Then("its value is {int}")
-	public void thenItsValueIs(int expected) {
-		assertEquals(new IntegerValue(expected), c.eval(expression));
-	}
 
 	@Then("^its (.*) notation is (.*)$")
 	public void thenItsNotationIs(String notation, String s) {
@@ -122,5 +118,12 @@ public class CalculatorSteps {
 	public void thenTheOperationEvaluatesTo(int val) {
 		assertEquals(new IntegerValue(val), c.eval(op));
 	}
+
+	@Then("its value is {string}")
+	public void thenItsValueIsString(String expected) {
+		NumberValue result = c.eval(expression);
+		assertEquals(expected, result.toString());
+	}
+
 
 }
