@@ -5,7 +5,6 @@ import visitor.NotationVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Operation is an abstract class that represents arithmetic operations,
@@ -18,7 +17,7 @@ public abstract class Operation implements Expression {
 	/**
 	 * The list of expressions passed as an argument to the arithmetic operation
 	 */
-	public List<Expression> args;
+	private List<Expression> args;
 
 	/**
 	 * The character used to represent the arithmetic operation (e.g. "+", "*")
@@ -34,7 +33,7 @@ public abstract class Operation implements Expression {
 	 * The notation used to render operations as strings.
 	 * By default, the infix notation will be used.
 	 */
-	public Notation notation = Notation.INFIX;
+	private Notation notation = Notation.INFIX;
 
 	/** It is not allowed to construct an operation with a null list of expressions.
 	 * Note that it is allowed to have an EMPTY list of arguments.
@@ -155,5 +154,26 @@ public abstract class Operation implements Expression {
 	public String getSymbol() {
 		return symbol;
 	}
+
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
+	}
+
+	public int getNeutral() {
+		return neutral;
+	}
+
+	public void setNeutral(int neutral) {
+		this.neutral = neutral;
+	}
+
+	public Notation getNotation() {
+		return notation;
+	}
+
+	public void setNotation(Notation notation) {
+		this.notation = notation;
+	}
+
 
 }

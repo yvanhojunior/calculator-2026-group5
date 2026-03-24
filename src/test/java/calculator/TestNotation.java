@@ -20,7 +20,7 @@ class TestNotation {
 		NotationVisitor v = new NotationVisitor(n);
 		o.accept(v);
 		assertEquals(s, v.getResult());
-		o.notation = n;
+		o.setNotation(n);
 		assertEquals(s, o.toString());
 	}
 

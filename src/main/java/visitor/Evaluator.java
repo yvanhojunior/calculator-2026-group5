@@ -12,10 +12,6 @@ import java.util.ArrayList;
  */
 public class Evaluator extends Visitor {
 
-     public Evaluator() {
-         //Default constructor of the class. Does not initialise anything.
-     }
-
     /** The result of the evaluation will be stored in this private variable */
     private NumberValue computedValue;
 
@@ -40,7 +36,7 @@ public class Evaluator extends Visitor {
     public void visit(Operation o) {
         ArrayList<NumberValue> evaluatedArgs = new ArrayList<>();
         //first loop to recursively evaluate each subexpression
-        for(Expression a:o.args) {
+        for(Expression a:o.getArgs()) {
             a.accept(this);
             evaluatedArgs.add(computedValue);
         }
