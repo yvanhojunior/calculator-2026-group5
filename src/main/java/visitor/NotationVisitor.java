@@ -27,7 +27,7 @@ public class NotationVisitor extends Visitor {
      */
     @Override
     public void visit(MyNumber n) {
-        stack.push(Integer.toString(n.getValue()));
+        stack.push(n.getValue().toString());
     }
 
     @Override

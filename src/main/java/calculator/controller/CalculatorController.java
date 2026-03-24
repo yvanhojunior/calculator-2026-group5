@@ -2,6 +2,7 @@ package calculator.controller;
 
 import calculator.Calculator;
 import calculator.Expression;
+import calculator.NumberValue;
 import calculator.parser.ExpressionParser;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class CalculatorController {
             expression = expression.replace("%2A", "*");
             expression = expression.replace("%2D", "-");
             Expression expr = ExpressionParser.parse(expression);
-            int result = calculator.eval(expr);
-            return ResponseEntity.ok(Map.of("result", result));
+            NumberValue result = calculator.eval(expr);
+            return ResponseEntity.ok(Map.of("result", result.toString()));
         } catch (ArithmeticException e) {
             return ResponseEntity
                     .badRequest()
