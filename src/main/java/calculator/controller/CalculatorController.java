@@ -1,4 +1,6 @@
 package calculator.controller;
+import calculator.LinearEquationSolver;
+import java.util.List;
 
 import calculator.Calculator;
 import calculator.Expression;
@@ -37,6 +39,79 @@ public class CalculatorController {
             return ResponseEntity
                     .badRequest()
                     .body(Map.of("error", "Invalid expression: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/solve")
+    public ResponseEntity<Map<String, Object>> solve(@RequestBody Map<String, Object> body) {
+        try {
+            String equation = (String) body.get("equation");
+
+            if (equation == null || equation.isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Missing 'equation' field"));
+            }
+
+            LinearEquationSolver.Result result = LinearEquationSolver.solve(equation);
+
+            return switch (result.getType()) {
+                case UNIQUE -> ResponseEntity.ok(Map.of(
+                        "type", "UNIQUE",
+                        "solutions", result.getSolutions()
+                ));
+                case NO_SOLUTION -> ResponseEntity.ok(Map.of(
+                        "type", "NO_SOLUTION",
+                        "message", result.getErrorMessage()
+                ));
+                case INFINITE_SOLUTIONS -> ResponseEntity.ok(Map.of(
+                        "type", "INFINITE_SOLUTIONS",
+                        "message", result.getErrorMessage()
+                ));
+                case SYNTAX_ERROR -> ResponseEntity.badRequest().body(Map.of(
+                        "type", "SYNTAX_ERROR",
+                        "error", result.getErrorMessage()
+                ));
+            };
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Invalid request: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/solve/system")
+    public ResponseEntity<Map<String, Object>> solveSystem(@RequestBody Map<String, Object> body) {
+        try {
+            @SuppressWarnings("unchecked")
+            List<String> equations = (List<String>) body.get("equations");
+
+            if (equations == null || equations.isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Missing 'equations' field"));
+            }
+
+            LinearEquationSolver.Result result = LinearEquationSolver.solveSystem(equations);
+
+            return switch (result.getType()) {
+                case UNIQUE -> ResponseEntity.ok(Map.of(
+                        "type", "UNIQUE",
+                        "solutions", result.getSolutions()
+                ));
+                case NO_SOLUTION -> ResponseEntity.ok(Map.of(
+                        "type", "NO_SOLUTION",
+                        "message", result.getErrorMessage()
+                ));
+                case INFINITE_SOLUTIONS -> ResponseEntity.ok(Map.of(
+                        "type", "INFINITE_SOLUTIONS",
+                        "message", result.getErrorMessage()
+                ));
+                case SYNTAX_ERROR -> ResponseEntity.badRequest().body(Map.of(
+                        "type", "SYNTAX_ERROR",
+                        "error", result.getErrorMessage()
+                ));
+            };
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Invalid request: " + e.getMessage()));
         }
     }
 }
