@@ -189,13 +189,13 @@ p.small{
 
 /* Metric mode uses the same dark palette feeling as scientific mode */
 #metric .smcont{
-    background: var(--tertiary);
-    color: var(--text-light);
+    background: var(--button-text-light);
+    color: var(--text-dark);
     border: 1px solid rgba(255,255,255,0.08);
 }
 
 #metric .small{
-    color: var(--text-light);
+    color: var(--text-dark);
 }
 
 div.smcont .grid{
@@ -219,8 +219,8 @@ div.smcont select{
     width: 100%;
     border-radius: 6px;
     font-size: 16px;
-    background: var(--secondary);
-    color: var(--text-light);
+    background: var(--panel);
+    color: var(--text-dark);
     border-color: #aaaaaa;
 }
 
@@ -229,8 +229,8 @@ div.smcont input{
     border-radius: 6px;
     font-size: 20px;
     border-width: 2px;
-    background: var(--secondary);
-    color: var(--text-light);
+    background: var(--panel);
+    color: var(--text-dark);
     border-color: #aaaaaa;
     box-sizing: border-box;
 }
