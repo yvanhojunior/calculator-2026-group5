@@ -1,33 +1,28 @@
 :root{
     /* Light-theme */
-    --primary: #0b132b;
-    --secondary: #1c2541;
+    --primary: #0081a7;
+    --secondary: #00afb9;
     --tertiary: #3a506b;
-    --functions: #f07819;
-    --scientific: #f0a830;
-    --light-button: #e7e6da;
+    --functions: #f07167;
+    --scientific: #fed9b7;
+    --light-button: #fdfcdc;
     --text-light: #f9fafb;
     --text-dark: #111827;
-    --swap: #2b7fff;
-    --swap-hover: #155dfc;
-    --panel: #f0f4fc;
-    --panel2: #dbeafe;
     --button-text-light: #faf4d3;
     --button-text-dark: #000814;
 
     /* Dark-theme */
-    --primary-alt: #05070f;
-    --secondary-alt: #111827;
-    --tertiary-alt: #1f2937;
-    --functions-alt: #fb923c;
-    --scientific-alt: #f59e0b;
-    --text-light-alt: #f9fafb;
-    --text-dark-alt: #e5e7eb;
-    --swap-alt: #38bdf8;
-    --swap-hover-alt: #0ea5e9;
-    --panel-alt: #1f2937;
-    --panel2-alt: #374151;
-    --muted-alt: #9ca3af;
+    --primary-alt: #00b4d8;
+    --secondary-alt: #48cae4;
+    --tertiary-alt: #1b263b;
+    --functions-alt: #ff6b6b;
+    --scientific-alt: #ffd166;
+    --light-button-alt: #2a2a2a;
+    --text-light-alt: #e5e7eb;
+    --text-dark-alt: #0b0f14;
+    --button-text-light-alt: #f1f5f9;
+    --button-text-dark-alt: #020617;
+    
 }
 
 .dark-theme{
@@ -36,13 +31,11 @@
     --tertiary: var(--tertiary-alt);
     --functions: var(--functions-alt);
     --scientific: var(--scientific-alt);
-    --swap: var(--swap-alt);
-    --swap-hover: var(--swap-hover-alt);
-    --panel: var(--panel-alt);
-    --panel2: var(--panel2-alt);
+    --light-button: var(--light-button-alt);
     --text-light: var(--text-light-alt);
     --text-dark: var(--text-dark-alt);
-    --muted: var(--muted-alt);
+    --button-text-light: var(--button-text-light-alt);
+    --button-text-dark: var(--button-text-dark-alt);
 }
 
 body{
@@ -77,7 +70,7 @@ body{
 }
 
 .header{
-    background:var(--tertiary);
+    background:var(--primary);
     padding:16px;
 }
 
@@ -90,17 +83,20 @@ body{
     width:100%;
     padding:16px;
     border-radius:8px;
-    border:1px solid var(--swap);
+    border:1px solid var(--text-light);
     background:#1e2f45;
     color:var(--text-light);
     font-size: large;
 }
 
 .display{
-    padding:20px;
+    margin: 15px;
     font-size:40px;
     text-align:right;
     color:var(--text-light);
+    border: 2px solid var(--text-light);
+    border-radius: 8px;
+    padding: 10px 10px;
 }
 
 .display.conversion{
@@ -142,15 +138,17 @@ div.container button:hover{
 
 button.sct{
     background:var(--scientific);
+    color: var(--text-dark);
     font-style: italic;
+    font-weight: bold;
 }
 
 button.swap{
-    background: var(--scientific);
+    background: var(--functions);
 }
 
 button.swap:hover{
-    background: var(--scientific-alt);
+    background: var(--functions-alt);
     color: var(--text-light);
 }
 
@@ -161,11 +159,14 @@ button.swap:hover{
 
 .op{
     background:var(--functions);
+    color: var(--text-dark);
+    font-weight: bold;
 }
 
 .light{
     background:var(--light-button);
     color:var(--text-dark);
+    font-weight: bold;
 }
 
 .scene{
@@ -185,6 +186,7 @@ select,input{
 p.small{
     font-size: 16px;
     margin: 0px 0px 8px;
+    font-weight: 700;
 }
 
 /* Metric mode uses the same dark palette feeling as scientific mode */
