@@ -111,6 +111,10 @@ const CONVERSIONS = {
 const PI_VALUE = Math.PI
 const E_VALUE = Math.E
 
+/* 
+CONVERSIONS STRUCTURE:
+*/
+
 const conversionTypeButtons = document.querySelectorAll("#metric .smcont .grid button[data-fn]")
 const fromUnitsSelect = document.getElementById("fromUnits")
 const toUnitsSelect = document.getElementById("toUnits")
@@ -264,6 +268,10 @@ if (toUnitsSelect) {
     toUnitsSelect.addEventListener("change", updateMetricConversion)
 }
 
+/*
+DIGIT AND OPERATOR BUTTONS LOGIC FOR BOTH STANDARD AND SCIENTIFIC MODES
+*/
+
 buttons.forEach(btn => {
 
     btn.addEventListener("click", () => {
@@ -285,11 +293,11 @@ buttons.forEach(btn => {
             // - Syntax errors (e.g., "2(3+4)", "5..2")
             
             // Replace the op symbols with their JavaScript equivalents
-            activeDisplay.innerText = activeDisplay.innerText.replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-")
+            activeDisplay.innerText = activeDisplay.innerText.replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-").replace(/√/g, "Math.sqrt").replace(/π/g, PI_VALUE).replace(/e/g, E_VALUE)
 
             // Handle scientific functions and constants here?
 
-            console.log(activeDisplay.innerText)
+            console.log(`Evaluating: ${activeDisplay.innerText}`)
             activeDisplay.innerText = eval(activeDisplay.innerText)
         }
         else if (btn.classList.contains("digit") || btn.classList.contains("op") || value === "."){
