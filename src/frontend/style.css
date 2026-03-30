@@ -1,7 +1,54 @@
+:root{
+    /* Light-theme */
+    --primary: #0b132b;
+    --secondary: #1c2541;
+    --tertiary: #3a506b;
+    --functions: #f07819;
+    --scientific: #f0a830;
+    --light-button: #e7e6da;
+    --text-light: #f9fafb;
+    --text-dark: #111827;
+    --swap: #2b7fff;
+    --swap-hover: #155dfc;
+    --panel: #f0f4fc;
+    --panel2: #dbeafe;
+    --button-text-light: #faf4d3;
+    --button-text-dark: #000814;
+
+    /* Dark-theme */
+    --primary-alt: #05070f;
+    --secondary-alt: #111827;
+    --tertiary-alt: #1f2937;
+    --functions-alt: #fb923c;
+    --scientific-alt: #f59e0b;
+    --text-light-alt: #f9fafb;
+    --text-dark-alt: #e5e7eb;
+    --swap-alt: #38bdf8;
+    --swap-hover-alt: #0ea5e9;
+    --panel-alt: #1f2937;
+    --panel2-alt: #374151;
+    --muted-alt: #9ca3af;
+}
+
+.dark-theme{
+    --primary: var(--primary-alt);
+    --secondary: var(--secondary-alt);
+    --tertiary: var(--tertiary-alt);
+    --functions: var(--functions-alt);
+    --scientific: var(--scientific-alt);
+    --swap: var(--swap-alt);
+    --swap-hover: var(--swap-hover-alt);
+    --panel: var(--panel-alt);
+    --panel2: var(--panel2-alt);
+    --text-light: var(--text-light-alt);
+    --text-dark: var(--text-dark-alt);
+    --muted: var(--muted-alt);
+}
+
 body{
     margin: 0;
     font-family:Arial, Helvetica, sans-serif;
-    background:#152a46;
+    background:var(--primary);
     height:100vh;
     display:flex;
     justify-content:center;
@@ -13,8 +60,8 @@ body{
 }
 
 .smcont{
-    background:#f0f4fc;
-    color:black;
+    background:var(--panel);
+    color:var(--text-dark);
     padding:10px;
     border-radius:8px;
     margin:10px 20px;
@@ -22,7 +69,7 @@ body{
 }
 
 .calculator{
-    background:#24364d;
+    background:var(--secondary);
     border-radius:14px;
     overflow: hidden;
     width:480px;
@@ -30,22 +77,22 @@ body{
 }
 
 .header{
-    background:#3e4c61;
+    background:var(--tertiary);
     padding:16px;
 }
 
 .header h2{
     margin:0 0 10px 0;
-    color:white;
+    color:var(--text-light);
 }
 
 .header select{
     width:100%;
     padding:16px;
     border-radius:8px;
-    border:1px solid #2d6cdf;
+    border:1px solid var(--swap);
     background:#1e2f45;
-    color:white;
+    color:var(--text-light);
     font-size: large;
 }
 
@@ -53,12 +100,12 @@ body{
     padding:20px;
     font-size:40px;
     text-align:right;
-    color:white;
+    color:var(--text-light);
 }
 
 .display.conversion{
     font-size:40px;
-    color:#c5c8cf;
+    color:var(--muted);
     text-align: left;
 }
 
@@ -80,8 +127,8 @@ button{
     font-size:18px;
     border:none;
     border-radius:10px;
-    background:#556274;
-    color:white;
+    background:var(--tertiary);
+    color:var(--text-light);
     cursor:pointer;
 }
 
@@ -94,26 +141,31 @@ div.container button:hover{
 }
 
 button.sct{
-    background:#EA00FF;
+    background:var(--scientific);
     font-style: italic;
 }
 
 button.swap{
-    background: #2b7fff;
+    background: var(--scientific);
 }
 
 button.swap:hover{
-    background: #155dfc;
-    color: white;
+    background: var(--scientific-alt);
+    color: var(--text-light);
+}
+
+.digit{
+    background:var(--tertiary);
+    color:var(--text-light);
 }
 
 .op{
-    background:#ff6a00;
+    background:var(--functions);
 }
 
 .light{
-    background:#c5c8cf;
-    color:black;
+    background:var(--light-button);
+    color:var(--text-dark);
 }
 
 .scene{
@@ -135,29 +187,40 @@ p.small{
     margin: 0px 0px 8px;
 }
 
+/* Metric mode uses the same dark palette feeling as scientific mode */
+#metric .smcont{
+    background: var(--tertiary);
+    color: var(--text-light);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+#metric .small{
+    color: var(--text-light);
+}
+
 div.smcont .grid{
     grid-template-columns:repeat(2,1fr);
     gap:6px;
     padding:0;
 }
 
-div.smcont button{
-    background-color: #FFF;
-    color: #000;
-    font-size: medium;
+#metric div.smcont button{
+    background: var(--scientific);
+    color: var(--button-text-dark);
+    font-weight: 600;
 }
 
-div.smcont button.selected{
-    background: #2b7fff;
-    color: white;
+#metric div.smcont button.selected{
+    background: var(--functions);
+    color: var(--text-light);
 }
 
 div.smcont select{
     width: 100%;
     border-radius: 6px;
     font-size: 16px;
-    background: white;
-    color: black;
+    background: var(--secondary);
+    color: var(--text-light);
     border-color: #aaaaaa;
 }
 
@@ -166,11 +229,13 @@ div.smcont input{
     border-radius: 6px;
     font-size: 20px;
     border-width: 2px;
+    background: var(--secondary);
+    color: var(--text-light);
     border-color: #aaaaaa;
     box-sizing: border-box;
 }
 
 div.smcont input:focus{
     outline: none;
-    border-color: #2b7fff;
+    border-color: var(--swap);
 }
