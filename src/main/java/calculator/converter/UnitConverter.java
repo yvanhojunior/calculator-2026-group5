@@ -4,7 +4,7 @@ public class UnitConverter {
 
     /**
      * Converts a value from one unit to another.
-     * Automatically detects the category (length, weight, temperature, area).
+     * Automatically detects the category (length, weight, temperature, area, volume).
      */
     public static ConversionResult convert(double value, String from, String to) {
         String fromNorm = from.toLowerCase().replace(" ", "");
@@ -30,11 +30,17 @@ public class UnitConverter {
             return AreaConverter.convert(value, fromNorm, toNorm);
         }
 
+        // Volume
+        if (VolumeConverter.supports(fromNorm) && VolumeConverter.supports(toNorm)) {
+            return VolumeConverter.convert(value, fromNorm, toNorm);
+        }
+
         // Unsupported unit
         if (!LengthConverter.supports(fromNorm)
                 && !WeightConverter.supports(fromNorm)
                 && !TemperatureConverter.supports(fromNorm)
-                && !AreaConverter.supports(fromNorm)) {
+                && !AreaConverter.supports(fromNorm)
+                && !VolumeConverter.supports(fromNorm)) {
             return new ConversionResult(
                     ConversionStatus.UNSUPPORTED_UNIT,
                     0,
