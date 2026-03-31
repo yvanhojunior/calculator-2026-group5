@@ -74,4 +74,14 @@ class TestRationalValue {
         assertEquals(new RationalValue(1, 2), new RationalValue(2, 4));
         assertNotEquals(new RationalValue(1, 2), new RationalValue(1, 3));
     }
+
+    @Test
+    void testToStringMixedNumber() {
+        // 3/2 doit afficher "1 1/2"
+        assertEquals("1 1/2", new RationalValue(3, 2).toString());
+        // 7/3 doit afficher "2 1/3"
+        assertEquals("2 1/3", new RationalValue(7, 3).toString());
+        // 18/12 réduit à 3/2 doit afficher "1 1/2"
+        assertEquals("1 1/2", new RationalValue(18, 12).toString());
+    }
 }
