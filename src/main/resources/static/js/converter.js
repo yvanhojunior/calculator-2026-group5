@@ -5,15 +5,20 @@ const units = {
     temperature: ["celsius", "fahrenheit", "kelvin"]
 };
 
-function updateUnits() {
-    const category = document.getElementById('category').value;
+let currentCategory = 'length';
+
+function updateUnits(category) {
+    currentCategory = category || currentCategory;
+
     const fromSelect = document.getElementById('from-unit');
     const toSelect   = document.getElementById('to-unit');
+
+    if (!fromSelect || !toSelect) return;
 
     fromSelect.innerHTML = '';
     toSelect.innerHTML   = '';
 
-    units[category].forEach(unit => {
+    units[currentCategory].forEach(unit => {
         fromSelect.innerHTML += `<option value="${unit}">${unit}</option>`;
         toSelect.innerHTML   += `<option value="${unit}">${unit}</option>`;
     });
@@ -22,32 +27,38 @@ function updateUnits() {
     if (toSelect.options.length > 1) {
         toSelect.selectedIndex = 1;
     }
+
+    // Clear results when category changes
+    const errorDiv    = document.getElementById('converter-error');
+    const resultInput = document.getElementById('converter-result');
+    if (errorDiv)    { errorDiv.className = 'eq-result'; errorDiv.innerHTML = ''; }
+    if (resultInput) { resultInput.value = ''; }
 }
 
 function switchUnits() {
-    const fromSelect = document.getElementById('from-unit');
-    const toSelect   = document.getElementById('to-unit');
-    const fromValue  = document.getElementById('converter-value').value;
-    const toValue    = document.getElementById('converter-result').value;
+    const fromSelect  = document.getElementById('from-unit');
+    const toSelect    = document.getElementById('to-unit');
+    const fromValue   = document.getElementById('converter-value').value;
+    const toValue     = document.getElementById('converter-result').value;
 
-    const tempFrom = fromSelect.value;
-    fromSelect.value = toSelect.value;
-    toSelect.value   = tempFrom;
+    const tempFrom    = fromSelect.value;
+    fromSelect.value  = toSelect.value;
+    toSelect.value    = tempFrom;
 
     document.getElementById('converter-value').value  = toValue;
     document.getElementById('converter-result').value = fromValue;
 }
 
 async function convertUnits() {
-    const value = parseFloat(document.getElementById('converter-value').value);
-    const from = document.getElementById('from-unit').value;
-    const to = document.getElementById('to-unit').value;
-    const errorDiv = document.getElementById('converter-error');
+    const value       = parseFloat(document.getElementById('converter-value').value);
+    const from        = document.getElementById('from-unit').value;
+    const to          = document.getElementById('to-unit').value;
+    const errorDiv    = document.getElementById('converter-error');
     const resultInput = document.getElementById('converter-result');
 
     errorDiv.className = 'eq-result';
     errorDiv.innerHTML = '';
-    resultInput.value = '';
+    resultInput.value  = '';
 
     if (isNaN(value)) {
         errorDiv.className = 'eq-result eq-error';
@@ -57,15 +68,15 @@ async function convertUnits() {
 
     try {
         const response = await fetch('/api/convert', {
-            method: 'POST',
+            method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value, from, to })
+            body:    JSON.stringify({ value, from, to })
         });
 
         const data = await response.json();
 
         if (response.ok && data.status === 'SUCCESS') {
-            resultInput.value = data.value;
+            resultInput.value  = data.value;
             errorDiv.className = 'eq-result eq-success';
             errorDiv.innerHTML = `✅ ${value} ${from} = ${data.value} ${to}`;
         } else {
@@ -79,4 +90,4 @@ async function convertUnits() {
 }
 
 // Initialize units on page load
-document.addEventListener('DOMContentLoaded', updateUnits);
+document.addEventListener('DOMContentLoaded', () => updateUnits('length'));
