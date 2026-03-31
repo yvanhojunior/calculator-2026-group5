@@ -24,3 +24,16 @@ Feature: Support for different types of numbers
   Scenario: Evaluating a rational number multiplication
     Given the expression "2/3 * 3/4"
     Then its value is "1/2"
+
+  # Complex numbers
+  Scenario: Adding two complex numbers
+    Given the expression "2+3i"
+    Then its value is "2.0 + 3.0i"
+
+  Scenario: Complex number with zero imaginary part
+    Given the expression "2+0i"
+    Then its value is "2.0"
+
+  Scenario: Pure imaginary number
+    Given the expression "3i"
+    Then its value is "3.0i"
