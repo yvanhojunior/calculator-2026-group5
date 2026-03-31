@@ -14,7 +14,10 @@
     <div class="tabs">
         <button class="tab active" onclick="showTab('calculator', event)">Calculator</button>
         <button class="tab" onclick="showTab('equations', event)">Linear Equations</button>
+        <button class="tab" onclick="showTab('converter', event)">Unit Converter</button>
+
     </div>
+
 
     <!-- Calculator Tab -->
     <div id="tab-calculator">
@@ -87,9 +90,54 @@
 
     </div>
 
+    <!-- Unit Converter Tab -->
+    <div id="tab-converter" style="display:none">
+
+        <div class="equation-section">
+            <h2>Unit Converter</h2>
+
+            <!-- Category selector -->
+            <p class="hint">Select a category :</p>
+            <select id="category" onchange="updateUnits()" class="converter-select">
+                <option value="length">Length</option>
+                <option value="weight">Weight</option>
+                <option value="temperature">Temperature</option>
+            </select>
+
+            <!-- From -->
+            <p class="hint">From :</p>
+            <div class="input-row">
+                <input type="number" id="converter-value" placeholder="Enter value" />
+                <select id="from-unit" class="converter-select">
+                </select>
+            </div>
+
+            <!-- Switch button -->
+            <button class="btn btn-secondary" onclick="switchUnits()" style="width:100%; margin: 0.5rem 0">
+                ⇅ Switch
+            </button>
+
+            <!-- To -->
+            <p class="hint">To :</p>
+            <div class="input-row">
+                <input type="number" id="converter-result" placeholder="Result" readonly />
+                <select id="to-unit" class="converter-select">
+                </select>
+            </div>
+
+            <button class="btn btn-secondary" onclick="convertUnits()" style="width:100%; margin-top: 0.5rem">
+                Convert
+            </button>
+
+            <div id="converter-error" class="eq-result" style="margin-top:0.5rem"></div>
+        </div>
+
+    </div>
+
 </div>
 
 <script src="js/app.js"></script>
 <script src="js/equations.js"></script>
+<script src="js/converter.js"></script>
 </body>
 </html>

@@ -2,9 +2,8 @@ package calculator.controller;
 import calculator.LinearEquationSolver;
 import java.util.List;
 
-import calculator.Calculator;
-import calculator.Expression;
-import calculator.NumberValue;
+import calculator.*;
+import calculator.converter.UnitConverter;
 import calculator.parser.ExpressionParser;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -106,6 +105,43 @@ public class CalculatorController {
                 ));
                 case SYNTAX_ERROR -> ResponseEntity.badRequest().body(Map.of(
                         "type", "SYNTAX_ERROR",
+                        "error", result.getErrorMessage()
+                ));
+            };
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Invalid request: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/convert")
+    public ResponseEntity<Map<String, Object>> convert(@RequestBody Map<String, Object> body) {
+        try {
+            double value = ((Number) body.get("value")).doubleValue();
+            String from  = (String) body.get("from");
+            String to    = (String) body.get("to");
+
+            if (from == null || to == null) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Missing 'from' or 'to' field"));
+            }
+
+            calculator.converter.ConversionResult result =
+                    UnitConverter.convert(value, from, to);
+
+            return switch (result.getStatus()) {
+                case SUCCESS -> ResponseEntity.ok(Map.of(
+                        "status", "SUCCESS",
+                        "value", result.getValue(),
+                        "from", from,
+                        "to", to
+                ));
+                case UNSUPPORTED_UNIT -> ResponseEntity.badRequest().body(Map.of(
+                        "status", "UNSUPPORTED_UNIT",
+                        "error", result.getErrorMessage()
+                ));
+                case INCOMPATIBLE_UNITS -> ResponseEntity.badRequest().body(Map.of(
+                        "status", "INCOMPATIBLE_UNITS",
                         "error", result.getErrorMessage()
                 ));
             };
