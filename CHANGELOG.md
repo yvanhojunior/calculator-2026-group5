@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.3] - 2026-03-31
+
+### Fixed
+- Fixed GitHub Actions release-report workflow permissions.
+- Added the required permission to publish Surefire reports in the workflow UI.
+- Fixed JavaDoc generation in the release-report workflow.
+- Ensured required report artifacts are generated before validation and upload.
+
 ## [1.2.2] - 2026-03-31
 
 ### Fixed

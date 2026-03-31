@@ -30,8 +30,8 @@ jobs:
       # Your JavaDoc is bound to "package", but verify already includes package.
       # So apidocs should already exist after verify.
       # (Optional explicit call if you want to be extra strict)
-      # - name: Generate JavaDoc (explicit)
-      #   run: mvn -B -DskipTests javadoc:javadoc --file pom.xml
+      - name: Generate JavaDoc (explicit)
+        run: mvn -B -DskipTests javadoc:javadoc --file pom.xml
 
       - name: Publish test report (workflow UI)
         if: ${{ always() }}
