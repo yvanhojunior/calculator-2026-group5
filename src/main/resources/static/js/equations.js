@@ -1,8 +1,20 @@
-function showTab(tab) {
+function showTab(tab, event) {
+    // Afficher / cacher les sections
     document.getElementById('tab-calculator').style.display = tab === 'calculator' ? 'block' : 'none';
     document.getElementById('tab-equations').style.display  = tab === 'equations'  ? 'block' : 'none';
+    document.getElementById('tab-converter').style.display  = tab === 'converter'  ? 'block' : 'none';
+
+    // Gestion du bouton actif
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
+
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
+
+    // Initialiser les unités quand on ouvre le converter
+    if (tab === 'converter' && typeof updateUnits === 'function') {
+        updateUnits();
+    }
 }
 
 async function solveEquation() {
