@@ -1,57 +1,110 @@
 const units = {
     length: ["meters", "kilometers", "centimeters", "decimeters",
-             "millimeters", "feet", "inches", "miles", "yards", "nauticalmiles"],
-    weight: ["kilograms", "grams", "milligrams", "pounds", "ounces", "tonnes"],
-    temperature: ["celsius", "fahrenheit", "kelvin"]
+        "millimeters", "feet", "inches", "miles", "yards", "nauticalmiles"],
+    weight:["kilograms", "grams", "milligrams", "pounds", "ounces", "tonnes"],
+    temperature: ["celsius", "fahrenheit", "kelvin"],
+    area: ["square_meter", "square_kilometer", "square_centimeter", "square_millimeter","square_mile", "square_yard", "square_foot", "square_inch"]
 };
 
 let currentCategory = 'length';
 
+/**
+ * Format a unit name for display.
+ * Example: square_meter -> Square Meter
+ */
+function formatUnitLabel(unit) {
+    return unit
+        .replaceAll('_', ' ')
+        .replace(/\b\w/g, char => char.toUpperCase());
+}
+
+/**
+ * Update the unit dropdowns according to the selected category.
+ */
 function updateUnits(category) {
     currentCategory = category || currentCategory;
 
     const fromSelect = document.getElementById('from-unit');
-    const toSelect   = document.getElementById('to-unit');
+    const toSelect = document.getElementById('to-unit');
 
     if (!fromSelect || !toSelect) return;
+    if (!units[currentCategory]) return;
 
     fromSelect.innerHTML = '';
-    toSelect.innerHTML   = '';
+    toSelect.innerHTML = '';
 
     units[currentCategory].forEach(unit => {
-        fromSelect.innerHTML += `<option value="${unit}">${unit}</option>`;
-        toSelect.innerHTML   += `<option value="${unit}">${unit}</option>`;
+        const fromOption = document.createElement('option');
+        fromOption.value = unit;
+        fromOption.textContent = formatUnitLabel(unit);
+        fromSelect.appendChild(fromOption);
+
+        const toOption = document.createElement('option');
+        toOption.value = unit;
+        toOption.textContent = formatUnitLabel(unit);
+        toSelect.appendChild(toOption);
     });
 
-    // Select different default units
     if (toSelect.options.length > 1) {
         toSelect.selectedIndex = 1;
     }
 
-    // Clear results when category changes
-    const errorDiv    = document.getElementById('converter-error');
+    // Clear fields and messages when category changes
+    const errorDiv = document.getElementById('converter-error');
+    const valueInput = document.getElementById('converter-value');
     const resultInput = document.getElementById('converter-result');
-    if (errorDiv)    { errorDiv.className = 'eq-result'; errorDiv.innerHTML = ''; }
-    if (resultInput) { resultInput.value = ''; }
+
+    if (errorDiv) {
+        errorDiv.className = 'eq-result';
+        errorDiv.innerHTML = '';
+    }
+
+    if (valueInput) valueInput.value = '';
+    if (resultInput) resultInput.value = '';
 }
 
+/**
+ * Handle category selection from category buttons.
+ */
+function selectCategory(category, button) {
+    currentCategory = category;
+    updateUnits(category);
+
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+
+    if (button) {
+        button.classList.add('active');
+    }
+}
+
+/**
+ * Swap units and values.
+ */
 function switchUnits() {
-    const fromSelect  = document.getElementById('from-unit');
-    const toSelect    = document.getElementById('to-unit');
-    const fromValue   = document.getElementById('converter-value').value;
-    const toValue     = document.getElementById('converter-result').value;
+    const fromSelect = document.getElementById('from-unit');
+    const toSelect = document.getElementById('to-unit');
+    const valueInput = document.getElementById('converter-value');
+    const resultInput = document.getElementById('converter-result');
 
-    const tempFrom    = fromSelect.value;
-    fromSelect.value  = toSelect.value;
-    toSelect.value    = tempFrom;
+    if (!fromSelect || !toSelect || !valueInput || !resultInput) return;
 
-    document.getElementById('converter-value').value  = toValue;
-    document.getElementById('converter-result').value = fromValue;
+    const tempUnit = fromSelect.value;
+    fromSelect.value = toSelect.value;
+    toSelect.value = tempUnit;
+
+    const tempValue = valueInput.value;
+    valueInput.value = resultInput.value;
+    resultInput.value = tempValue;
 }
 
+/**
+ * Convert units in both directions depending on the filled field.
+ */
 async function convertUnits() {
-    const fromValue = document.getElementById('converter-value').value;
-    const toValue = document.getElementById('converter-result').value;
+    const fromValue = document.getElementById('converter-value').value.trim();
+    const toValue = document.getElementById('converter-result').value.trim();
 
     const fromUnit = document.getElementById('from-unit').value;
     const toUnit = document.getElementById('to-unit').value;
@@ -63,23 +116,26 @@ async function convertUnits() {
     errorDiv.className = 'eq-result';
     errorDiv.innerHTML = '';
 
-    let value, from, to, targetField;
+    let value;
+    let from;
+    let to;
+    let targetField;
 
-    // Cas 1 : aucun champ rempli
+    // No field filled
     if (!fromValue && !toValue) {
         errorDiv.className = 'eq-result eq-error';
         errorDiv.innerHTML = 'Enter a value in one field';
         return;
     }
 
-    // Cas 2 : les deux champs remplis
+    // Both fields filled
     if (fromValue && toValue) {
         errorDiv.className = 'eq-result eq-error';
-        errorDiv.innerHTML = ' Fill only one field';
+        errorDiv.innerHTML = 'Fill only one field';
         return;
     }
 
-    // Cas normal : conversion dans le bon sens
+    // Determine conversion direction
     if (fromValue) {
         value = parseFloat(fromValue);
         from = fromUnit;
@@ -94,7 +150,15 @@ async function convertUnits() {
 
     if (isNaN(value)) {
         errorDiv.className = 'eq-result eq-error';
-        errorDiv.innerHTML = ' Invalid number';
+        errorDiv.innerHTML = 'Invalid number';
+        return;
+    }
+
+    // Same unit: no API call needed
+    if (from === to) {
+        targetField.value = value;
+        errorDiv.className = 'eq-result eq-success';
+        errorDiv.innerHTML = 'Conversion successful';
         return;
     }
 
@@ -110,16 +174,20 @@ async function convertUnits() {
         if (response.ok && data.status === 'SUCCESS') {
             targetField.value = data.value;
             errorDiv.className = 'eq-result eq-success';
-            errorDiv.innerHTML = `Conversion successful`;
+            errorDiv.innerHTML = 'Conversion successful';
         } else {
             errorDiv.className = 'eq-result eq-error';
-            errorDiv.innerHTML =   (data.error || 'Conversion failed');
+            errorDiv.innerHTML = data.error || 'Conversion failed';
         }
     } catch (error) {
         errorDiv.className = 'eq-result eq-error';
-        errorDiv.innerHTML =  error.message;
+        errorDiv.innerHTML = error.message;
     }
 }
 
-// Initialize units on page load
-document.addEventListener('DOMContentLoaded', () => updateUnits('length'));
+/**
+ * Initialize converter on page load.
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    updateUnits('length');
+});
