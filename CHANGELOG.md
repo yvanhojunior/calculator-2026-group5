@@ -65,5 +65,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Closes
 - #17 Support for real numbers
 
+## [1.2.6] - 2026-03-31
+
+### Changed
+- `RationalValue.toString()` now displays mixed numbers (e.g. 3/2 → 1 1/2)
+
+### Added
+- Tests for mixed number representation
+
+### Closes
+- #18 Support for rational numbers
 
 ## [1.0.0] - 2026-03-12
