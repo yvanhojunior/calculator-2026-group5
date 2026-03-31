@@ -78,14 +78,14 @@ async function convertUnits() {
         if (response.ok && data.status === 'SUCCESS') {
             resultInput.value  = data.value;
             errorDiv.className = 'eq-result eq-success';
-            errorDiv.innerHTML = `✅ ${value} ${from} = ${data.value} ${to}`;
+            errorDiv.innerHTML +=  ${value} ${from} = ${data.value} ${to};
         } else {
             errorDiv.className = 'eq-result eq-error';
-            errorDiv.innerHTML = '❌ ' + (data.error || 'Conversion failed');
+            errorDiv.innerHTML +=   (data.error || 'Conversion failed');
         }
     } catch (error) {
         errorDiv.className = 'eq-result eq-error';
-        errorDiv.innerHTML = '❌ Error: ' + error.message;
+        errorDiv.innerHTML = ' Error: ' + error.message;
     }
 }
 
