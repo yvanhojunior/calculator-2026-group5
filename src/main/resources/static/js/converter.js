@@ -5,6 +5,7 @@ const units = {
     temperature: ["celsius", "fahrenheit", "kelvin"],
     area: ["square_meter", "square_kilometer", "square_centimeter", "square_millimeter","square_mile", "square_yard", "square_foot", "square_inch"],
     volume: ["liter", "milliliter", "cubic_meter", "cubic_centimeter", "cubic_millimeter", "gallon", "quart", "pint", "cup", "fluid_ounce"],
+    speed: ["meter_per_second", "kilometer_per_hour", "mile_per_hour", "feet_per_second", "knot"]
 };
 
 let currentCategory = 'length';

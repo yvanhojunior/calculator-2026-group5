@@ -35,12 +35,18 @@ public class UnitConverter {
             return VolumeConverter.convert(value, fromNorm, toNorm);
         }
 
+        // Speed
+        if (SpeedConverter.supports(fromNorm) && SpeedConverter.supports(toNorm)) {
+            return SpeedConverter.convert(value, fromNorm, toNorm);
+        }
+
         // Unsupported unit
         if (!LengthConverter.supports(fromNorm)
                 && !WeightConverter.supports(fromNorm)
                 && !TemperatureConverter.supports(fromNorm)
                 && !AreaConverter.supports(fromNorm)
-                && !VolumeConverter.supports(fromNorm)) {
+                && !VolumeConverter.supports(fromNorm)
+                && !SpeedConverter.supports(fromNorm)) {
             return new ConversionResult(
                     ConversionStatus.UNSUPPORTED_UNIT,
                     0,
