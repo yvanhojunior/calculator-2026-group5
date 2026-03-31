@@ -77,6 +77,14 @@ public class RationalValue implements NumberValue {
     @Override
     public String toString() {
         if (denominator == 1) return Long.toString(numerator);
+        // Forme mixte: si |numérateur| > dénominateur, afficher "a b/c"
+        long absNumerator = Math.abs(numerator);
+        if (absNumerator > denominator) {
+            long wholePart = numerator / denominator;
+            long remainder = Math.abs(numerator % denominator);
+            if (remainder == 0) return Long.toString(wholePart);
+            return wholePart + " " + remainder + "/" + denominator;
+        }
         return numerator + "/" + denominator;
     }
 
