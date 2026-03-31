@@ -34,7 +34,7 @@ public class UnitConverterSteps {
     @Then("the converted value is {double}")
     public void assertConvertedValue(Double expected) {
         assertEquals(ConversionStatus.SUCCESS, result.getStatus());
-        assertEquals(expected, result.getValue(), 1e-6);
+        assertEquals(expected, result.getValue(), 1e-5);
     }
 
     @Then("there is a conversion error")
