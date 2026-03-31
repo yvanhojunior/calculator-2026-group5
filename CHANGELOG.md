@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2] - 2026-03-31
+
+### Fixed
+- Fixed the GitHub Actions release-report workflow permissions.
+- Added the required `checks: write` permission so the Surefire test report can be published in the GitHub Actions UI.
+- Fixed release report publication for published GitHub releases.
+
+## [1.2.0] - 2026-03-31
+
+### Added
+- `LinearEquationSolver` class to solve single linear equations (e.g. `2x + 3 = 7`)
+- `LinearEquationSolver.solveSystem()` to solve systems of two equations (e.g. `2x + y = 5`, `x - y = 1`)
+- `SolutionType` enum with `UNIQUE`, `NO_SOLUTION`, `INFINITE_SOLUTIONS`, `SYNTAX_ERROR` states
+- REST API endpoint `POST /api/solve` to solve a single equation
+- REST API endpoint `POST /api/solve/system` to solve a system of two equations
+- Visual interface with a dedicated "Linear Equations" tab in the calculator UI
+- Cucumber BDD scenarios covering all solution cases
+
+### Changed
+- Calculator UI redesigned with a sidebar navigation layout
+- Split UI logic into separate JS files (`main.js`, `equations.js`)
+
 ## [1.1.0] - 2026-03-24
 
 ### Added
@@ -24,4 +46,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Operation.op()` now works with `NumberValue` instead of `int`
 
 ## [1.0.0] - 2026-03-12
-
