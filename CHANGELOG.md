@@ -23,5 +23,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Calculator.eval()` now returns `NumberValue` instead of `int`
 - `Operation.op()` now works with `NumberValue` instead of `int`
 
-## [1.0.0] - 2026-03-12
+## [1.2.1] - 2026-03-31
+
+### Changed
+- Replaced `double` with `BigDecimal` in `RealValue` for arbitrary precision
+- Added configurable precision via `MathContext` (default: 10 significant digits)
+- Added special constants: `NaN`, `+Infinity`, `-Infinity`, `Pi`, `E`
+- Proper handling of special cases in all arithmetic operations
+- Fixed `toString()` to always display decimal point for real numbers
+
+### Closes
+- #17 Support for real numbers
 
