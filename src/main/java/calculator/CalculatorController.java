@@ -69,7 +69,7 @@ public class CalculatorController {
 
             NumberValue result = calculator.eval(expr);
             return ResponseEntity.ok(Map.of(
-                    "result",     result,
+                    "result",     result.toString(),
                     "expression", expr.toString()
             ));
 

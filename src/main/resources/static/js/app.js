@@ -50,6 +50,27 @@ const app = (() => {
             `<span class="hist-result">= ${result}</span>`;
         historyEl.prepend(li);
     }
+    
+    /** Normalize API result payload to a user-friendly string. */
+    function formatApiResult(result) {
+        if (result === null || result === undefined) {
+            return '';
+        }
+
+        if (typeof result === 'object') {
+            if ('value' in result) {
+                return String(result.value);
+            }
+
+            try {
+                return JSON.stringify(result);
+            } catch {
+                return String(result);
+            }
+        }
+
+        return String(result);
+    }
 
     // ── public API ─────────────────────────────────────────────────────────
 
@@ -102,9 +123,10 @@ const app = (() => {
                 return;
             }
 
-            resultEl.textContent = data.result;
+            const displayResult = formatApiResult(data.result);     // We handle various result formats (to avoid showing [object Object])
+            resultEl.textContent = displayResult;
             expressionEl.textContent = data.expression;
-            addHistory(data.expression, data.result);
+            addHistory(data.expression, displayResult);
 
             // Reset for next expression
             numbers   = [];
