@@ -7,7 +7,8 @@
 const app = (() => {
     // ── state ──────────────────────────────────────────────────────────────
     let numbers   = [];
-    let operation = null;
+    let operators = [];
+    let pendingOperation = null;
 
     // ── DOM helpers ────────────────────────────────────────────────────────
     const expressionEl = document.getElementById('expression');
@@ -22,11 +23,24 @@ const app = (() => {
         setTimeout(() => { errorEl.textContent = ''; }, 3000);
     }
 
-    /** Update the expression display based on current numbers and operation. */
+    /** Update the expression display based on entered numbers and operators. */
     function updateDisplay() {
         const opSymbols = { plus: '+', minus: '−', times: '×', divides: '÷' };
-        const sep = operation ? ` ${opSymbols[operation]} ` : ' , ';
-        expressionEl.textContent = numbers.length ? numbers.join(sep) : '';
+        if (!numbers.length) {
+            expressionEl.textContent = '';
+            return;
+        }
+
+        let expression = String(numbers[0]);
+        for (let i = 0; i < operators.length; i += 1) {
+            expression += ` ${opSymbols[operators[i]]} ${numbers[i + 1]}`;
+        }
+
+        if (pendingOperation) {
+            expression += ` ${opSymbols[pendingOperation]}`;
+        }
+
+        expressionEl.textContent = expression;
     }
 
     /** Highlight the active operation button. */
@@ -72,6 +86,18 @@ const app = (() => {
         return String(result);
     }
 
+    /** Build an expression string using parser-friendly operator symbols. */
+    function buildExpressionForApi() {
+        const opSymbols = { plus: '+', minus: '-', times: '*', divides: '/' };
+        let expression = String(numbers[0]);
+
+        for (let i = 0; i < operators.length; i += 1) {
+            expression += `${opSymbols[operators[i]]}${numbers[i + 1]}`;
+        }
+
+        return expression;
+    }
+
     // ── public API ─────────────────────────────────────────────────────────
 
     /** Add the current input value to the numbers list. */
@@ -81,15 +107,31 @@ const app = (() => {
             showError('Please enter a valid integer (no decimals).');
             return;
         }
+
+        if (numbers.length > 0) {
+            if (!pendingOperation) {
+                showError('Select an operator before adding another number.');
+                return;
+            }
+            operators.push(pendingOperation);
+        }
+
         numbers.push(parseInt(raw, 10));
+        pendingOperation = null;
+        highlightOp(null);
         numberInput.value = '';
         numberInput.focus();
         updateDisplay();
     }
 
-    /** Set the arithmetic operation. */
+    /** Set (or replace) the next arithmetic operation. */
     function setOperation(op) {
-        operation = op;
+        if (!numbers.length) {
+            showError('Add a number first.');
+            return;
+        }
+
+        pendingOperation = op;
         highlightOp(op);
         updateDisplay();
     }
@@ -100,21 +142,18 @@ const app = (() => {
             showError('Add at least one number first.');
             return;
         }
-        if (!operation) {
-            showError('Select an operation first.');
-            return;
-        }
         if (numbers.length < 2) {
             showError('Add at least two numbers to compute an expression.');
             return;
         }
+        if (pendingOperation) {
+            showError('Add the next number to complete the expression.');
+            return;
+        }
 
         try {
-            const response = await fetch('/api/calculate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ operation, numbers }),
-            });
+            const expression = buildExpressionForApi();
+            const response = await fetch(`/api/calculate?expression=${encodeURIComponent(expression)}`);
 
             const data = await response.json();
 
@@ -125,12 +164,13 @@ const app = (() => {
 
             const displayResult = formatApiResult(data.result);     // We handle various result formats (to avoid showing [object Object])
             resultEl.textContent = displayResult;
-            expressionEl.textContent = data.expression;
-            addHistory(data.expression, displayResult);
+            expressionEl.textContent = expression;
+            addHistory(expression, displayResult);
 
             // Reset for next expression
             numbers   = [];
-            operation = null;
+            operators = [];
+            pendingOperation = null;
             highlightOp(null);
         } catch (err) {
             showError('Network error – is the server running?');
@@ -141,7 +181,8 @@ const app = (() => {
     /** Clear the current expression and reset the UI. */
     function clear() {
         numbers   = [];
-        operation = null;
+        operators = [];
+        pendingOperation = null;
         numberInput.value     = '';
         expressionEl.textContent = '';
         resultEl.textContent  = '0';
