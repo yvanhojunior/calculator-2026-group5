@@ -35,7 +35,7 @@ public final class Times extends Operation {
 	public Times(List<Expression> elist, Notation n) throws IllegalConstruction {
 		super(elist,n);
 		symbol = "*";
-		neutral = 1;
+		neutral = new IntegerValue(1);
 	}
 
 	/**
@@ -44,7 +44,7 @@ public final class Times extends Operation {
 	 * @param r The second integer that should be multiplied with the first
 	 * @return The integer that is the result of the multiplication
 	 */
-	public int op(int l, int r) {
-		return l*r;
+	public NumberValue op(NumberValue l, NumberValue r) {
+		return l.mul(r);
 	}
 }

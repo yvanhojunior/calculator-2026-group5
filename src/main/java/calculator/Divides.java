@@ -36,7 +36,7 @@ public final class Divides extends Operation {
 	public Divides(List<Expression> elist, Notation n) throws IllegalConstruction {
 		super(elist,n);
 		symbol = "/";
-		neutral = 1;
+		neutral = new IntegerValue(1);
 	}
 
 	/**
@@ -46,11 +46,11 @@ public final class Divides extends Operation {
 	 * @return The integer that is the result of the division
 	 * @throws ArithmeticException If the second integer is zero, as division by zero is not allowed
 	 */
-	public int op(int l, int r) throws ArithmeticException {
+	public NumberValue op(NumberValue l, NumberValue r) throws ArithmeticException {
 	//Don't use == but use .equals() to compare the second integer with zero, as it is an Integer object and not a primitive int. 
-	if (Integer.valueOf(r).equals(0)) {
+	if (r.equals(new IntegerValue(0))) {
 		throw new ArithmeticException("Division by zero is not allowed.");
 	}
-		return l/r;
+		return l.div(r);
 	}
 }

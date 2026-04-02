@@ -1,7 +1,9 @@
 package calculator.controller;
+import calculator.LinearEquationSolver;
+import java.util.List;
 
-import calculator.Calculator;
-import calculator.Expression;
+import calculator.*;
+import calculator.converter.UnitConverter;
 import calculator.parser.ExpressionParser;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +28,8 @@ public class CalculatorController {
             expression = expression.replace("%2A", "*");
             expression = expression.replace("%2D", "-");
             Expression expr = ExpressionParser.parse(expression);
-            int result = calculator.eval(expr);
-            return ResponseEntity.ok(Map.of("result", result));
+            NumberValue result = calculator.eval(expr);
+            return ResponseEntity.ok(Map.of("result", result.toString()));
         } catch (ArithmeticException e) {
             return ResponseEntity
                     .badRequest()
@@ -36,6 +38,116 @@ public class CalculatorController {
             return ResponseEntity
                     .badRequest()
                     .body(Map.of("error", "Invalid expression: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/solve")
+    public ResponseEntity<Map<String, Object>> solve(@RequestBody Map<String, Object> body) {
+        try {
+            String equation = (String) body.get("equation");
+
+            if (equation == null || equation.isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Missing 'equation' field"));
+            }
+
+            LinearEquationSolver.Result result = LinearEquationSolver.solve(equation);
+
+            return switch (result.getType()) {
+                case UNIQUE -> ResponseEntity.ok(Map.of(
+                        "type", "UNIQUE",
+                        "solutions", result.getSolutions()
+                ));
+                case NO_SOLUTION -> ResponseEntity.ok(Map.of(
+                        "type", "NO_SOLUTION",
+                        "message", result.getErrorMessage()
+                ));
+                case INFINITE_SOLUTIONS -> ResponseEntity.ok(Map.of(
+                        "type", "INFINITE_SOLUTIONS",
+                        "message", result.getErrorMessage()
+                ));
+                case SYNTAX_ERROR -> ResponseEntity.badRequest().body(Map.of(
+                        "type", "SYNTAX_ERROR",
+                        "error", result.getErrorMessage()
+                ));
+            };
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Invalid request: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/solve/system")
+    public ResponseEntity<Map<String, Object>> solveSystem(@RequestBody Map<String, Object> body) {
+        try {
+            @SuppressWarnings("unchecked")
+            List<String> equations = (List<String>) body.get("equations");
+
+            if (equations == null || equations.isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Missing 'equations' field"));
+            }
+
+            LinearEquationSolver.Result result = LinearEquationSolver.solveSystem(equations);
+
+            return switch (result.getType()) {
+                case UNIQUE -> ResponseEntity.ok(Map.of(
+                        "type", "UNIQUE",
+                        "solutions", result.getSolutions()
+                ));
+                case NO_SOLUTION -> ResponseEntity.ok(Map.of(
+                        "type", "NO_SOLUTION",
+                        "message", result.getErrorMessage()
+                ));
+                case INFINITE_SOLUTIONS -> ResponseEntity.ok(Map.of(
+                        "type", "INFINITE_SOLUTIONS",
+                        "message", result.getErrorMessage()
+                ));
+                case SYNTAX_ERROR -> ResponseEntity.badRequest().body(Map.of(
+                        "type", "SYNTAX_ERROR",
+                        "error", result.getErrorMessage()
+                ));
+            };
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Invalid request: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/convert")
+    public ResponseEntity<Map<String, Object>> convert(@RequestBody Map<String, Object> body) {
+        try {
+            double value = ((Number) body.get("value")).doubleValue();
+            String from  = (String) body.get("from");
+            String to    = (String) body.get("to");
+
+            if (from == null || to == null) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Missing 'from' or 'to' field"));
+            }
+
+            calculator.converter.ConversionResult result =
+                    UnitConverter.convert(value, from, to);
+
+            return switch (result.getStatus()) {
+                case SUCCESS -> ResponseEntity.ok(Map.of(
+                        "status", "SUCCESS",
+                        "value", result.getValue(),
+                        "from", from,
+                        "to", to
+                ));
+                case UNSUPPORTED_UNIT -> ResponseEntity.badRequest().body(Map.of(
+                        "status", "UNSUPPORTED_UNIT",
+                        "error", result.getErrorMessage()
+                ));
+                case INCOMPATIBLE_UNITS -> ResponseEntity.badRequest().body(Map.of(
+                        "status", "INCOMPATIBLE_UNITS",
+                        "error", result.getErrorMessage()
+                ));
+            };
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Invalid request: " + e.getMessage()));
         }
     }
 }

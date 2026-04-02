@@ -3,56 +3,148 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calculator</title>
+    <title>Calculator Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-    <div class="calculator">
-        <h1>Calculator</h1>
 
-        <!-- Display -->
-        <div class="display">
-            <div id="expression" class="expression" aria-live="polite"></div>
-            <div id="result" class="result" aria-live="polite">0</div>
+<div class="app-container">
+
+<!-- Sidebar -->
+<nav class="sidebar">
+    <div class="sidebar-logo">UMONS<span>Calc</span></div>
+
+    <button class="nav-item active" onclick="showPage('calculator', this)">
+        <span class="nav-icon">🧮</span>
+        Calculator
+    </button>
+
+    <button class="nav-item" onclick="showPage('equations', this)">
+        <span class="nav-icon">📐</span>
+        Linear Equations
+    </button>
+
+    <button class="nav-item" onclick="showPage('converter', this)">
+        <span class="nav-icon">⚖️</span>
+        Unit Converter
+    </button>
+</nav>
+
+<!-- Main content -->
+<main class="main">
+
+    <!-- Calculator Page -->
+    <div id="page-calculator" class="page active">
+        <div class="page-header">
+            <div class="page-title">Calculator</div>
+            <div class="page-subtitle">Evaluate arithmetic expressions</div>
         </div>
 
-        <!-- Number input area -->
-        <div class="input-row">
-            <input
-                type="number"
-                id="numberInput"
-                placeholder="Enter a number"
-                aria-label="Number input"
-            />
-            <button class="btn btn-secondary" onclick="app.addNumber()" aria-label="Add number to expression">
-                Add
-            </button>
-        </div>
+        <div class="card">
+            <div class="display">
+                <div id="expression" class="expression" aria-live="polite"></div>
+                <div id="result" class="result" aria-live="polite">0</div>
+            </div>
 
-        <!-- Operation buttons -->
-        <div class="operations" role="group" aria-label="Operations">
-            <button class="btn btn-op" onclick="app.setOperation('plus')"    aria-label="Addition">+</button>
-            <button class="btn btn-op" onclick="app.setOperation('minus')"   aria-label="Subtraction">−</button>
-            <button class="btn btn-op" onclick="app.setOperation('times')"   aria-label="Multiplication">×</button>
-            <button class="btn btn-op" onclick="app.setOperation('divides')" aria-label="Division">÷</button>
-        </div>
+            <div class="input-row">
+                <input type="number" id="numberInput" placeholder="Enter a number" aria-label="Number input" />
+                <button class="btn btn-secondary" onclick="app.addNumber()">Add</button>
+            </div>
 
-        <!-- Action buttons -->
-        <div class="actions">
-            <button class="btn btn-primary" onclick="app.calculate()" aria-label="Calculate result">=</button>
-            <button class="btn btn-danger"  onclick="app.clear()"     aria-label="Clear">C</button>
-        </div>
+            <div class="operations" role="group">
+                <button class="btn btn-op" onclick="app.setOperation('plus')">+</button>
+                <button class="btn btn-op" onclick="app.setOperation('minus')">−</button>
+                <button class="btn btn-op" onclick="app.setOperation('times')">×</button>
+                <button class="btn btn-op" onclick="app.setOperation('divides')">÷</button>
+            </div>
 
-        <!-- Error message -->
-        <div id="error" class="error" role="alert" aria-live="assertive"></div>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="app.calculate()">=</button>
+                <button class="btn btn-danger"  onclick="app.clear()">C</button>
+            </div>
 
-        <!-- History -->
-        <div class="history-section">
-            <h2>History</h2>
-            <ul id="history" class="history" aria-label="Calculation history"></ul>
+            <div id="error" class="error" role="alert"></div>
+
+            <div class="history-section">
+                <div class="history-title">History</div>
+                <ul id="history" class="history"></ul>
+            </div>
         </div>
     </div>
 
-    <script src="js/app.js"></script>
+    <!-- Linear Equations Page -->
+    <div id="page-equations" class="page">
+        <div class="page-header">
+            <div class="page-title">Linear Equations</div>
+            <div class="page-subtitle">Solve equations and systems</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Single Equation</div>
+            <p class="hint">Example: <code>2x + 3 = 7</code></p>
+            <div class="input-row">
+                <input type="text" id="equation" placeholder="e.g. 2x + 3 = 7" />
+                <button class="btn btn-secondary" onclick="solveEquation()">Solve</button>
+            </div>
+            <div id="result-single" class="eq-result"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">System of Two Equations</div>
+            <p class="hint">Example: <code>2x + y = 5</code> and <code>x - y = 1</code></p>
+            <input type="text" id="eq1" placeholder="First equation: e.g. 2x + y = 5" style="margin-bottom: 0.5rem" />
+            <input type="text" id="eq2" placeholder="Second equation: e.g. x - y = 1" />
+            <button class="btn btn-secondary btn-full" onclick="solveSystem()">Solve System</button>
+            <div id="result-system" class="eq-result"></div>
+        </div>
+    </div>
+
+    <!-- Unit Converter Page -->
+    <div id="page-converter" class="page">
+        <div class="page-header">
+            <div class="page-title">Unit Converter</div>
+            <div class="page-subtitle">Convert between units of measurement</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Category</div>
+            <div class="category-tabs">
+                <button class="cat-tab active" onclick="selectCategory('length', this)">📏 Length</button>
+                <button class="cat-tab" onclick="selectCategory('weight', this)">⚖️ Weight</button>
+                <button class="cat-tab" onclick="selectCategory('temperature', this)">🌡️ Temperature</button>
+                <button class="cat-tab" onclick="selectCategory('area', this)">⬛ Area</button>
+                <button class="cat-tab" onclick="selectCategory('volume', this)">🧪 Volume</button>
+                <button class="cat-tab" onclick="selectCategory('speed', this)">🚗 Speed</button>
+            </div>
+
+            <div class="converter-grid">
+                <div>
+                    <div class="converter-label">From</div>
+                    <input type="number" id="converter-value" placeholder="Enter value" />
+                    <select id="from-unit"></select>
+                </div>
+
+                <button class="switch-btn" onclick="switchUnits()">⇄</button>
+
+                <div>
+                    <div class="converter-label">To</div>
+                    <input type="number" id="converter-result" placeholder="Enter value" />
+                    <select id="to-unit"></select>
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-full" onclick="convertUnits()">Convert</button>
+            <div id="converter-error" class="eq-result" style="margin-top:0.8rem"></div>
+        </div>
+    </div>
+
+</main>
+
+<script src="js/app.js"></script>
+<script src="js/equations.js"></script>
+<script src="js/converter.js"></script>
+<script src="js/main.js"></script>
+</div>
 </body>
 </html>

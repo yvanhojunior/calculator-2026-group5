@@ -67,9 +67,9 @@ public class CalculatorController {
                 default -> throw new IllegalArgumentException("Unknown operation: " + operation);
             };
 
-            int result = calculator.eval(expr);
+            NumberValue result = calculator.eval(expr);
             return ResponseEntity.ok(Map.of(
-                    "result",     result,
+                    "result",     result.toString(),
                     "expression", expr.toString()
             ));
 
