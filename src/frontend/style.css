@@ -4,7 +4,7 @@
     --secondary: #00afb9;
     --tertiary: #3a506b;
     --functions: #f07167;
-    --scientific: #f7b267;
+    --scientific: #ecc94b;
     --light-button: #fdfcdc;
     --text-light: #f9fafb;
     --text-dark: #111827;
@@ -42,7 +42,7 @@ body{
     margin: 0;
     font-family:Arial, Helvetica, sans-serif;
     background:var(--primary);
-    height:100vh;
+    height:90vh;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -99,6 +99,16 @@ body{
     padding: 10px 10px;
 }
 
+row{
+    display: contents;
+}
+
+.display .display-value{
+    display: block;
+    width: 100%;
+    min-height: 1em;
+}
+
 .display.conversion{
     font-size:40px;
     color:var(--muted);
@@ -136,13 +146,6 @@ div.container button:hover{
     grid-column:span 2;
 }
 
-button.sct{
-    background:var(--scientific);
-    color: var(--text-dark);
-    font-style: italic;
-    font-weight: bold;
-}
-
 button.swap{
     background: var(--functions);
 }
@@ -166,6 +169,13 @@ button.swap:hover{
 .light{
     background:var(--light-button);
     color:var(--text-dark);
+    font-weight: bold;
+}
+
+button.sct{
+    background:var(--scientific);
+    color: var(--text-dark);
+    font-style: italic;
     font-weight: bold;
 }
 
