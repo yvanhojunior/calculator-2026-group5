@@ -15,52 +15,59 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-	/**
-	 * This is the main method of the application.
-	 * It provides examples of how to use it to construct and evaluate arithmetic expressions.
-	 *
-	 * @param args	Command-line parameters are not used in this version
-	 */
-	public static void main(String[] args) {
+    /**
+     * This is the main method of the application.
+     * It provides examples of how to use it to construct and evaluate arithmetic expressions,
+     * or launches the interactive CLI/REPL if the "--cli" argument is provided.
+     *
+     * @param args Command-line parameters: use "--cli" to start the interactive REPL
+     */
+    public static void main(String[] args) {
 
-	Expression e;
-	Calculator c = new Calculator();
-	Logger logger = Logger.getLogger(Main.class.getName());
+        // Launch the CLI/REPL if --cli argument is provided
+        if (args.length > 0 && args[0].equalsIgnoreCase("--cli")) {
+            new CLI().start();
+            return;
+        }
 
-	try{
+        // Default behaviour: demonstration of arithmetic expressions
+        Expression e;
+        Calculator c = new Calculator();
+        Logger logger = Logger.getLogger(Main.class.getName());
 
-		e = new MyNumber(8);
-		c.print(e);
-		c.eval(e);
+        try {
 
-	    List<Expression> params = new ArrayList<>();
-	    Collections.addAll(params, new MyNumber(3), new MyNumber(4), new MyNumber(5));
-	    e = new Plus(params, Notation.PREFIX);
-		c.printExpressionDetails(e);
-		c.eval(e);
-	
-		List<Expression> params2 = new ArrayList<>();
-		Collections.addAll(params2, new MyNumber(5), new MyNumber(3));
-		e = new Minus(params2, Notation.INFIX);
-		c.print(e);
-		c.eval(e);
+            e = new MyNumber(8);
+            c.print(e);
+            c.eval(e);
 
-		List<Expression> params3 = new ArrayList<>();
-		Collections.addAll(params3, new Plus(params), new Minus(params2));
-		e = new Times(params3);
-		c.printExpressionDetails(e);
-		c.eval(e);
+            List<Expression> params = new ArrayList<>();
+            Collections.addAll(params, new MyNumber(3), new MyNumber(4), new MyNumber(5));
+            e = new Plus(params, Notation.PREFIX);
+            c.printExpressionDetails(e);
+            c.eval(e);
 
-		List<Expression> params4 = new ArrayList<>();
-		Collections.addAll(params4, new Plus(params), new Minus(params2), new MyNumber(5));
-		e = new Divides(params4, Notation.POSTFIX);
-		c.print(e);
-		c.eval(e);
-	}
+            List<Expression> params2 = new ArrayList<>();
+            Collections.addAll(params2, new MyNumber(5), new MyNumber(3));
+            e = new Minus(params2, Notation.INFIX);
+            c.print(e);
+            c.eval(e);
 
-	catch(IllegalConstruction _) {
-		logger.info("cannot create operations without parameters");
-		}
- 	}
+            List<Expression> params3 = new ArrayList<>();
+            Collections.addAll(params3, new Plus(params), new Minus(params2));
+            e = new Times(params3);
+            c.printExpressionDetails(e);
+            c.eval(e);
+
+            List<Expression> params4 = new ArrayList<>();
+            Collections.addAll(params4, new Plus(params), new Minus(params2), new MyNumber(5));
+            e = new Divides(params4, Notation.POSTFIX);
+            c.print(e);
+            c.eval(e);
+
+        } catch (IllegalConstruction _) {
+            logger.info("cannot create operations without parameters");
+        }
+    }
 
 }
