@@ -35,6 +35,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Calculator UI redesigned with a sidebar navigation layout
 - Split UI logic into separate JS files (`main.js`, `equations.js`)
 
+## [1.2.9] - 2026-04-01
+
+### Added
+- Unit Converter feature integrated into calculator UI
+- Support for multiple categories:
+    - Length
+    - Weight
+    - Temperature
+    - Area
+    - Volume
+    - Speed
+- Bidirectional conversion support (input in either field)
+- REST API endpoint `/api/convert`
+
+### Improved
+- UI navigation with category tabs
+- Input handling and validation
+- Error handling for unsupported and incompatible units
+
+### Tests
+- Added Cucumber scenarios for all supported categories
+- Improved tolerance for floating-point comparisons
 ## [1.1.0] - 2026-03-24
 
 ### Added
@@ -75,5 +97,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Closes
 - #18 Support for rational numbers
-
-## [1.0.0] - 2026-03-12
