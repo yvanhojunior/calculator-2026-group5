@@ -13,22 +13,49 @@
 
 <!-- Sidebar -->
 <nav class="sidebar">
-    <div class="sidebar-logo">UMONS<span>Calc</span></div>
-
-    <button class="nav-item active" onclick="showPage('calculator', this)">
-        <span class="nav-icon">🧮</span>
-        Calculator
-    </button>
-
-    <button class="nav-item" onclick="showPage('equations', this)">
-        <span class="nav-icon">📐</span>
-        Linear Equations
-    </button>
-
-    <button class="nav-item" onclick="showPage('converter', this)">
-        <span class="nav-icon">⚖️</span>
-        Unit Converter
-    </button>
+    <header>
+        <div class="sidebar-logo">
+            UMONS<span>Calc</span>
+        </div>
+    </header>
+    <body>
+        <button class="nav-item active" onclick="showPage('calculator', this)">
+            <span class="nav-icon">🧮</span>
+            Calculator
+        </button>
+        <button class="nav-item" onclick="showPage('scientific', this)">
+            <span class="nav-icon">🔬</span>
+            Scientific
+        </button>
+        <button class="nav-item" onclick="showPage('equations', this)">
+            <span class="nav-icon">📐</span>
+            Linear Equations
+        </button>
+        <button class="nav-item" onclick="showPage('programmer', this)">
+            <span class="nav-icon">💻</span>
+            Programmer
+        </button>
+        <button class="nav-item" onclick="showPage('converter', this)">
+            <span class="nav-icon">⚖️</span>
+            Unit Converter
+        </button>
+        <button class="nav-item" onclick="showPage('currency', this)">
+            <span class="nav-icon">💱</span>
+            Currency Converter
+        </button>
+        <button class="nav-item" onclick="showPage('about', this)">
+            <span class="nav-icon">ℹ️</span>
+            About
+        </button>
+    </body>
+    <footer>
+        <button id="night-mode-toggle" onclick="toggleNightMode()">
+        <span id="night-mode-icon">🌙</span>
+        </button>
+        <button id="language-toggle" onclick="toggleLanguage()">
+            <span id="translate-icon" value="en">🌐</span>
+        </button>
+    </footer>
 </nav>
 
 <!-- Main content -->
@@ -41,27 +68,44 @@
             <div class="page-subtitle">Evaluate arithmetic expressions</div>
         </div>
 
+        <!-- Display Screen -->
         <div class="card">
             <div class="display">
                 <div id="expression" class="expression" aria-live="polite"></div>
                 <div id="result" class="result" aria-live="polite">0</div>
             </div>
 
-            <div class="input-row">
-                <input type="number" id="numberInput" placeholder="Enter a number" aria-label="Number input" />
-                <button class="btn btn-secondary" onclick="app.addNumber()">Add</button>
-            </div>
-
-            <div class="operations" role="group">
-                <button class="btn btn-op" onclick="app.setOperation('plus')">+</button>
-                <button class="btn btn-op" onclick="app.setOperation('minus')">−</button>
-                <button class="btn btn-op" onclick="app.setOperation('times')">×</button>
-                <button class="btn btn-op" onclick="app.setOperation('divides')">÷</button>
-            </div>
-
-            <div class="actions">
-                <button class="btn btn-primary" onclick="app.calculate()">=</button>
-                <button class="btn btn-danger"  onclick="app.clear()">C</button>
+            <!-- Standard calculator buttons -->
+            <div class="grid">
+                <row>
+                    <button class="light" data-fn="clear">C</button>
+                    <button class="light" data-fn="opposite">+/-</button>
+                    <button class="light" data-fn="percent">%</button>
+                    <button class="op" value="/">÷</button>
+                </row>
+                <row>
+                    <button class="digit" value="7">7</button>
+                    <button class="digit" value="8">8</button>
+                    <button class="digit" value="9">9</button>
+                    <button class="op" value="*">×</button>
+                </row>
+                <row>
+                    <button class="digit" value="4">4</button>
+                    <button class="digit" value="5">5</button>
+                    <button class="digit" value="6">6</button>
+                    <button class="op" value="-">−</button>
+                </row>
+                <row>
+                    <button class="digit" value="1">1</button>
+                    <button class="digit" value="2">2</button>
+                    <button class="digit" value="3">3</button>
+                    <button class="op" value="+">+</button>
+                </row>
+                <row>
+                    <button class="digit" value="0" style="grid-column: span 2">0</button>
+                    <button class="digit" value=".">.</button>
+                    <button class="op" data-fn="equals">=</button>
+                </row>
             </div>
 
             <div id="error" class="error" role="alert"></div>
@@ -73,11 +117,90 @@
         </div>
     </div>
 
+    <!-- Scientific Calculator Page -->
+    <div id="page-scientific" class="page">
+        <div class="page-header">
+            <div class="page-title">Scientific Calculator</div>
+            <div class="page-subtitle">Evaluate advanced mathematical expressions</div>
+        </div>
+
+
+        <div class="card">
+
+            <!-- Display Screen -->
+            <div class="display">
+                <div id="expression" class="expression" aria-live="polite"></div>
+                <div id="result" class="result" aria-live="polite">0</div>
+            </div>
+
+            <!-- Scientific calculator buttons -->
+            <div class="grid sct">
+                <row>
+                    <button class="sct" data-fn="sin" value="sin">sin</button>
+                    <button class="sct" data-fn="cos" value="cos">cos</button>
+                    <button class="sct" data-fn="tan" value="tan">tan</button>
+                    <button class="sct" data-fn="pi" value="pi">π</button>
+                    <button class="light" data-fn="delete" value="delete">⌫</button>
+                </row>
+                <row>
+                    <button class="sct" data-fn="log" value="log">log</button>
+                    <button class="sct" data-fn="ln" value="ln">ln</button>
+                    <button class="sct" data-fn="factorial" value="x!">x<span style="font-style: normal;">!</span></button>
+                    <button class="sct" data-fn="inv" value="x^-1">x⁻¹</button>
+                    <button class="light" data-fn="clear" value="clear">C</button>
+                </row>
+                <row>
+                    <button class="sct" data-fn="pow10" value="10^">10ˣ</button>
+                    <button class="sct" data-fn="exp" value="e^">eˣ</button>
+                    <button class="sct" data-fn="leftParen" value="(">(</button>
+                    <button class="sct" data-fn="rightParen" value=")">)</button>
+                    <button class="op" value="/">÷</button>
+                </row>
+                <row>
+                    <button class="sct" data-fn="modulo" value="mod">mod</button>
+                    <button class="digit" value="7">7</button>
+                    <button class="digit" value="8">8</button>
+                    <button class="digit" value="9">9</button>
+                    <button class="op" value="*">×</button>
+                </row>
+                <row>
+                    <button class="sct" data-fn="power2" value="^2">x²</button>
+                    <button class="digit" value="4">4</button>
+                    <button class="digit" value="5">5</button>
+                    <button class="digit" value="6">6</button>
+                    <button class="op" value="-">−</button>
+                </row>
+                <row>
+                    <button class="sct" data-fn="sqrt" value="sqrt">√</button>
+                    <button class="digit" value="1">1</button>
+                    <button class="digit" value="2">2</button>
+                    <button class="digit" value="3">3</button>
+                    <button class="op" value="+">+</button>
+                </row>
+                <row>
+                    <button class="sct" data-fn="powerY" value="^">xʸ</button>
+                    <button class="light" data-fn="opposite" value="opposite">+/-</button>
+                    <button class="digit" value="0">0</button>
+                    <button class="op" value=".">.</button>
+                    <button class="op" value="=">=</button>
+                </row>
+            </div>
+
+            <div id="error" class="error" role="alert"></div>
+
+            <div class="history-section">
+                <div class="history-title">History</div>
+                <ul id="history" class="history"></ul>
+            </div>
+        </div>
+            
+    </div>
+    
     <!-- Linear Equations Page -->
     <div id="page-equations" class="page">
         <div class="page-header">
             <div class="page-title">Linear Equations</div>
-            <div class="page-subtitle">Solve equations and systems</div>
+            <div class="page-subtitle">Solve first-degree equations and systems</div>
         </div>
 
         <div class="card">
@@ -93,8 +216,10 @@
         <div class="card">
             <div class="card-title">System of Two Equations</div>
             <p class="hint">Example: <code>2x + y = 5</code> and <code>x - y = 1</code></p>
-            <input type="text" id="eq1" placeholder="First equation: e.g. 2x + y = 5" style="margin-bottom: 0.5rem" />
-            <input type="text" id="eq2" placeholder="Second equation: e.g. x - y = 1" />
+            <div class="input-row">
+                <input type="text" id="eq1" placeholder="First equation: e.g. 2x + y = 5" />
+                <input type="text" id="eq2" placeholder="Second equation: e.g. x - y = 1" />
+            </div>
             <button class="btn btn-secondary btn-full" onclick="solveSystem()">Solve System</button>
             <div id="result-system" class="eq-result"></div>
         </div>
@@ -121,7 +246,7 @@
             <div class="converter-grid">
                 <div>
                     <div class="converter-label">From</div>
-                    <input type="number" id="converter-value" placeholder="Enter value" />
+                    <input type="text" id="converter-value" placeholder="Enter value" />
                     <select id="from-unit"></select>
                 </div>
 
@@ -129,7 +254,7 @@
 
                 <div>
                     <div class="converter-label">To</div>
-                    <input type="number" id="converter-result" placeholder="Enter value" />
+                    <input readonly type="text" id="converter-result"/>
                     <select id="to-unit"></select>
                 </div>
             </div>
@@ -137,6 +262,21 @@
             <button class="btn btn-primary btn-full" onclick="convertUnits()">Convert</button>
             <div id="converter-error" class="eq-result" style="margin-top:0.8rem"></div>
         </div>
+    </div>
+
+    <!-- Programmer Calculator Page -->
+    <div id="page-programmer" class="page">
+        Programmer Calculator coming soon!
+    </div>
+
+    <!-- Currency Converter Page -->
+    <div id="page-currency" class="page">
+        Currency Converter coming soon!
+    </div>
+
+    <!-- About Page -->
+    <div id="page-about" class="page">
+        Built-in help and documentation coming soon!
     </div>
 
 </main>
