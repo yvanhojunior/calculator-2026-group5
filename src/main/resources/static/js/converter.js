@@ -1,11 +1,13 @@
 const units = {
-    length: ["meters", "kilometers", "centimeters", "decimeters",
-        "millimeters", "feet", "inches", "miles", "yards", "nauticalmiles"],
-    weight:["kilograms", "grams", "milligrams", "pounds", "ounces", "tonnes"],
-    temperature: ["celsius", "fahrenheit", "kelvin"],
-    area: ["square_meter", "square_kilometer", "square_centimeter", "square_millimeter","square_mile", "square_yard", "square_foot", "square_inch"],
-    volume: ["liter", "milliliter", "cubic_meter", "cubic_centimeter", "cubic_millimeter", "gallon", "quart", "pint", "cup", "fluid_ounce"],
-    speed: ["meter_per_second", "kilometer_per_hour", "mile_per_hour", "feet_per_second", "knot"]
+    length: ["meters", "kilometers", "centimeters", "decimeters","millimeters", "feet", "inches", "miles", "yards", "nauticalmiles"
+    ],weight: ["kilograms", "grams", "milligrams", "pounds", "ounces", "tonnes"],
+    temperature: [
+        "celsius", "fahrenheit", "kelvin"
+    ],
+    area: ["square_meter", "square_kilometer", "square_centimeter", "square_millimeter","square_mile", "square_yard", "square_foot", "square_inch"
+    ],volume: ["liter", "milliliter", "cubic_meter", "cubic_centimeter",   "cubic_millimeter", "gallon", "quart", "pint", "cup", "fluid_ounce"
+    ],speed: [
+        "meter_per_second", "kilometer_per_hour", "mile_per_hour", "foot_per_second", "knot"]
 };
 
 let currentCategory = 'length';
@@ -51,7 +53,6 @@ function updateUnits(category) {
         toSelect.selectedIndex = 1;
     }
 
-    // Clear fields and messages when category changes
     const errorDiv = document.getElementById('converter-error');
     const valueInput = document.getElementById('converter-value');
     const resultInput = document.getElementById('converter-result');
@@ -123,21 +124,18 @@ async function convertUnits() {
     let to;
     let targetField;
 
-    // No field filled
     if (!fromValue && !toValue) {
         errorDiv.className = 'eq-result eq-error';
         errorDiv.innerHTML = 'Enter a value in one field';
         return;
     }
 
-    // Both fields filled
     if (fromValue && toValue) {
         errorDiv.className = 'eq-result eq-error';
         errorDiv.innerHTML = 'Fill only one field';
         return;
     }
 
-    // Determine conversion direction
     if (fromValue) {
         value = parseFloat(fromValue);
         from = fromUnit;
@@ -156,7 +154,6 @@ async function convertUnits() {
         return;
     }
 
-    // Same unit: no API call needed
     if (from === to) {
         targetField.value = value;
         errorDiv.className = 'eq-result eq-success';

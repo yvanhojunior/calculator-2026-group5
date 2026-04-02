@@ -10,10 +10,6 @@ public class TemperatureConverter {
         return SUPPORTED.contains(unit.toLowerCase());
     }
 
-    public static Set<String> getSupportedUnits() {
-        return SUPPORTED;
-    }
-
     public static ConversionResult convert(double value, String from, String to) {
         String fromNorm = from.toLowerCase();
         String toNorm   = to.toLowerCase();
