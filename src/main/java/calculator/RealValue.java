@@ -57,28 +57,28 @@ public class RealValue implements NumberValue {
 
     @Override
     public NumberValue add(NumberValue other) {
-        RealValue o = (RealValue) other;
+        RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return handleSpecialAdd(o);
         return new RealValue(value.add(o.value), precision);
     }
 
     @Override
     public NumberValue sub(NumberValue other) {
-        RealValue o = (RealValue) other;
+        RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return handleSpecialSub(o);
         return new RealValue(value.subtract(o.value), precision);
     }
 
     @Override
     public NumberValue mul(NumberValue other) {
-        RealValue o = (RealValue) other;
+        RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return handleSpecialMul(o);
         return new RealValue(value.multiply(o.value, precision), precision);
     }
 
     @Override
     public NumberValue div(NumberValue other) {
-        RealValue o = (RealValue) other;
+        RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return handleSpecialDiv(o);
         if (o.value.compareTo(BigDecimal.ZERO) == 0) {
             // Comme en réel: 1/0 = +Inf, -1/0 = -Inf, 0/0 = NaN
@@ -155,5 +155,12 @@ public class RealValue implements NumberValue {
     public int hashCode() {
         if (isSpecial()) return specialValue.hashCode();
         return value.stripTrailingZeros().hashCode();
+    }
+
+    private RealValue toReal(NumberValue other) {
+        if (other instanceof RealValue) return (RealValue) other;
+        if (other instanceof IntegerValue)
+            return new RealValue(((IntegerValue) other).getValue());
+        throw new IllegalArgumentException("Cannot convert " + other.getClass() + " to RealValue");
     }
 }

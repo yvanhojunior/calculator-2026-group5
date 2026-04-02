@@ -103,8 +103,8 @@ const app = (() => {
     /** Add the current input value to the numbers list. */
     function addNumber() {
         const raw = numberInput.value.trim();
-        if (raw === '' || !/^-?\d+$/.test(raw)) {
-            showError('Please enter a valid integer (no decimals).');
+        if (raw === '' || !/^-?\d+(\.\d+)?$/.test(raw)) {
+            showError('Please enter a valid number.');
             return;
         }
 
@@ -116,7 +116,7 @@ const app = (() => {
             operators.push(pendingOperation);
         }
 
-        numbers.push(parseInt(raw, 10));
+        numbers.push(parseFloat(raw));
         pendingOperation = null;
         highlightOp(null);
         numberInput.value = '';
