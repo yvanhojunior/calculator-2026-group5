@@ -21,7 +21,11 @@ public class ExpressionParser {
         if (pos == -1) {
             // Pas d'opérateur = c'est un nombre
             try {
-                return new MyNumber(Integer.parseInt(expression));
+                if (expression.contains(".")) {
+                    return new MyNumber(new RealValue(Double.parseDouble(expression)));
+                } else {
+                    return new MyNumber(Integer.parseInt(expression));
+                }
             } catch (NumberFormatException e) {
                 throw new Exception("Invalid number: " + expression);
             }
