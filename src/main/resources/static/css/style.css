@@ -217,7 +217,8 @@ row{
 button{
     padding: 0.5em 1em;
     font-size:18px;
-    border:none;
+    border:2px solid;
+    border-color: transparent;
     border-radius:10px;
     background:var(--digit);
     color:var(--text);
@@ -227,6 +228,18 @@ button{
 .digit{
     background:var(--digit);
     color:var(--text);
+}
+
+.digit:hover, .op:hover, button.sct:hover {
+    filter: brightness(0.85);
+    transform: translateY(-2px);
+    border-color: var(--text);
+}
+
+.light:hover {
+    filter: brightness(0.85);
+    transform: translateY(-2px);
+    border-color: var(--functions);
 }
 
 .op{
