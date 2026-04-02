@@ -7,6 +7,7 @@ on:
 permissions:
   contents: write  # required to upload assets to the GitHub Release
   checks: write
+  statuses: write
 
 jobs:
   build-and-attach-report:
