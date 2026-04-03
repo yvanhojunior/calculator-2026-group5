@@ -41,7 +41,6 @@ function updateUnits(category) {
         toSelect.selectedIndex = 1;
     }
 
-    // Clear fields and messages when category changes
     const errorDiv = document.getElementById('converter-error');
     const valueInput = document.getElementById('converter-value');
     const resultInput = document.getElementById('converter-result');
@@ -113,23 +112,18 @@ async function convertUnits() {
     let to;
     let targetField;
 
-    // No field filled
     if (!fromValue && !toValue) {
         errorDiv.className = 'eq-result eq-error';
         errorDiv.innerHTML = 'Enter a value in the field';
         return;
     }
 
-    // Both fields filled
-    /*
     if (fromValue && toValue) {
         errorDiv.className = 'eq-result eq-error';
         errorDiv.innerHTML = 'Fill only one field';
         return;
     }
-        */
 
-    // Determine conversion direction
     if (fromValue) {
         value = parseFloat(fromValue);
         from = fromUnit;
@@ -148,7 +142,6 @@ async function convertUnits() {
         return;
     }
 
-    // Same unit: no API call needed
     if (from === to) {
         targetField.value = value;
         errorDiv.className = 'eq-result eq-success';
