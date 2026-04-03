@@ -83,37 +83,17 @@ const app = (() => {
 
             const value = btn.value
 
-            if (btn.classList.contains('light')) {
-                switch (btn.innerText) {
-                    case "+/-":
-
-                    break;
-                    case "%":
-
-                    break;
-                    case "⌫":
-
-                    break;
-                    case "C":
-                        break;
-                    default:
-                        console.warn(`Unhandled light button: ${btn.innerText}`);
-                }
-
-            } else {
-                if (btn.classList.contains('digit') || btn.classList.contains('op')) {
-                    expression_to_evaluate.push(value);
-                }
-                if (btn.classList.contains('sct')) {
-                    // Handle scientific calculator buttons (e.g., sin, cos, etc.)
-                    expression_to_evaluate.push(value+'('); // Assume scientific functions are followed by an opening parenthesis
-                    parenthesis_stack.push(')'); // Assume scientific functions require parentheses
-                }
-                expression = expression_to_evaluate.join('') + parenthesis_stack.join('');
-                activeResult.textContent = expression;
-                // activeResult.textContent = activeResult.textContent === '0' ? value : activeResult.textContent + value;
+            if (btn.classList.contains('digit') || btn.classList.contains('op')) {
+                expression_to_evaluate.push(value);
             }
-            
+            if (btn.classList.contains('sct')) {
+                // Handle scientific calculator buttons (e.g., sin, cos, etc.)
+                expression_to_evaluate.push(value+'('); // Assume scientific functions are followed by an opening parenthesis
+                parenthesis_stack.push(')'); // Assume scientific functions require parentheses
+            }
+            expression = expression_to_evaluate.join('') + parenthesis_stack.join('');
+            activeResult.textContent = expression;
+            // activeResult.textContent = activeResult.textContent === '0' ? value : activeResult.textContent + value;
         })
 
     })
@@ -172,17 +152,9 @@ const app = (() => {
 
     /** Send the expression to the backend and display the result. */
     async function calculate() {
-        /*
-        if (expression_to_evaluate.length === 0) {
-            return;
-        }
-        if (expression_to_evaluate.length < 2) {
-            showError('Add at least two numbers to compute an expression.');
-            return;
-        }
-        */
 
         try {
+            console.log(`Calculating expression: ${expression_to_evaluate.join('') + parenthesis_stack.join('')}`);
             const expression = buildExpressionForApi();
             const response = await fetch(`/api/calculate?expression=${encodeURIComponent(expression)}`);
 
@@ -207,8 +179,43 @@ const app = (() => {
         }
     }
 
+    function deleteLastEntry() {
+        if (expression_to_evaluate.length > 0) {
+            const lastToken = expression_to_evaluate.pop();
+            if (lastToken === '(') {
+                parenthesis_stack.pop(); // Remove corresponding ')' from stack
+            }
+            activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
+        }
+    }
 
-    return { calculate, clearDisplay };
+    function changeSign() {
+        // Handle sign change (e.g., toggle between positive and negative)
+        expression_to_evaluate = expression_to_evaluate[0] === '-'
+            ? expression_to_evaluate.slice(1) // Remove leading '-' if present
+            : ['-'].concat(expression_to_evaluate.length > 0 ? expression_to_evaluate.join('') : '0'); // Add leading '-' if not present
+        activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
+        // API cannot handle to have a '-' as the first token.
+    }
+
+    function percentage() {
+        // Handle percentage calculation (e.g., convert current expression to a percentage)
+        if (expression_to_evaluate.length > 0) {
+            // Get the last number from the expression, meaning the last sequence of digits before an operator
+            const lastNumberMatch = expression_to_evaluate.join('').match(/(\d+\.?\d*)$/);
+            if (lastNumberMatch) {
+                const lastNumber = lastNumberMatch[0];
+                const percentageValue = parseFloat(lastNumber) / 100;
+                expression_to_evaluate.splice(-lastNumber.length, lastNumber.length, String(percentageValue));
+                activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
+            }
+        }
+    }
+
+
+    // - Unit convertor mode: Allows the  user to convert between different units (e.g., length, weight, temperature) by selecting the desired conversion type and inputting the value to be converted.
+
+    return { calculate, clearDisplay, deleteLastEntry, changeSign, percentage};
 })();
 
 // Expose app globally for inline HTML onclick handlers.

@@ -79,8 +79,8 @@
             <div class="grid">
                 <row>
                     <button class="light" onclick="app.clearDisplay()">C</button>
-                    <button class="light" >+/-</button>
-                    <button class="light" >%</button>
+                    <button class="light" onclick="app.changeSign()">+/-</button>
+                    <button class="light" onclick="app.percentage()">%</button>
                     <button class="op" value="÷" >÷</button>
                 </row>
                 <row>
@@ -140,7 +140,7 @@
                     <button class="sct" data-fn="cos" value="cos">cos</button>
                     <button class="sct" data-fn="tan" value="tan">tan</button>
                     <button class="sct" data-fn="pi" value="Math.PI">π</button>
-                    <button class="light" data-fn="delete" value="delete">⌫</button>
+                    <button class="light" onclick="app.deleteLastEntry()">⌫</button>
                 </row>
                 <row>
                     <button class="sct" data-fn="log" value="log">log</button>
