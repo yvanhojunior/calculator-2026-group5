@@ -86,6 +86,13 @@ const app = (() => {
 
             const value = btn.value
 
+            if (btn.id === 'ans_button') {
+                const lastAnswer = app.getLastAnswer();
+                expression_to_evaluate.push(lastAnswer);
+                activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
+                return;
+            }
+
             if (btn.classList.contains('digit') || btn.classList.contains('op')) {
                 expression_to_evaluate.push(value);
             }
@@ -172,7 +179,7 @@ const app = (() => {
             activeResult.textContent = displayResult;
             activeExpression.textContent = expression;
             addHistory(expression, displayResult);
-            ans_button.disabled = false;
+            ans_button.disabled = false ? isScientific : true;
 
             // Reset for next expression
             expression_to_evaluate = [];
@@ -186,10 +193,14 @@ const app = (() => {
     function deleteLastEntry() {
         if (expression_to_evaluate.length > 0) {
             const lastToken = expression_to_evaluate.pop();
-            if (lastToken === '(') {
-                parenthesis_stack.pop(); // Remove corresponding ')' from stack
+            if (lastToken[lastToken.length - 1] === '(') {  // If the last token ends with '(', we also need to remove the corresponding ')' from the stack
+                parenthesis_stack.pop();
             }
-            activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
+            if (expression_to_evaluate.length === 0 && parenthesis_stack.length === 0) {
+                activeResult.textContent = '0';
+            } else {
+                activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('')
+            };
         }
     }
 
@@ -222,7 +233,6 @@ const app = (() => {
             if (lastResult) {
                 value = lastResult.textContent.replace('= ', '');
                 expression_to_evaluate.push(value);
-                activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
                 return value;
             }
         }
