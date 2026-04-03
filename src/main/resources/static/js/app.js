@@ -142,13 +142,19 @@ const app = (() => {
 
     /** Build an expression string using parser-friendly operator symbols. */
     function buildExpressionForApi() {
-        return expression_to_evaluate.map(token => {
+        result = expression_to_evaluate.map(token => {
             switch (token) {
                 case '×': return '*';
                 case '÷': return '/';
                 default: return token;
             }
         }).join('') + parenthesis_stack.join('');
+        if (result.startsWith('-')) {
+            result = '0' + result; // Prepend '0' to handle negative numbers at the start of the expression
+        } if (result.startsWith('*') || result.startsWith('/') || result.startsWith('+')) {
+            result = getLastAnswer() + result; // Prepend last answer to handle expressions starting with an operator
+        }
+        return result;
     }
 
     // ── public API ─────────────────────────────────────────────────────────
