@@ -66,50 +66,54 @@ function handleScientificButton(fn, activeDisplay) {
 
 const CONVERSIONS = {
     "length": {
-        "kilometers": 1000,
-        "meters": 1,
-        "centimeters": 0.01,
-        "millimeters": 0.001,
-        "inches": 0.0254,
-        "feet": 0.3048,
-        "yards": 0.9144,
-        "miles": 1609.34
+        "Kilometers (km)": 1000,
+        "Meters (m)": 1,
+        "Centimeters (cm)": 0.01,
+        "Millimeters (mm)": 0.001,
+        "Inches (in)": 0.0254,
+        "Feet (ft)": 0.3048,
+        "Yards (yd)": 0.9144,
+        "Miles (mi)": 1609.34
     },
     "weight": {
-        "kilograms": 1000,
-        "grams": 1,
-        "milligrams": 0.001,
-        "pounds": 453.592,
-        "ounces": 28.3495,
-        "tons": 907184.74
+        "Kilograms (kg)": 1000,
+        "Grams (g)": 1,
+        "Milligrams (mg)": 0.001,
+        "Pounds (lb)": 453.592,
+        "Ounces (oz)": 28.3495,
+        "Tons (ton)": 907184.74
     },
     "temperature": {
-        "celsius": {
+        "Celsius (°C)": {
             toKelvin: (c) => c + 273.15,
             toFahrenheit: (c) => (c * 9/5) + 32
         },
-        "fahrenheit": {
+        "Fahrenheit (°F)": {
             toCelsius: (f) => (f - 32) * 5/9,
             toKelvin: (f) => ((f - 32) * 5/9) + 273.15
         },
-        "kelvin": {
+        "Kelvin (K)": {
             toCelsius: (k) => k - 273.15,
             toFahrenheit: (k) => ((k - 273.15) * 9/5) + 32
         }
     },
     "volume": {
-        "liters": 1,
-        "milliliters": 0.001,
-        "gallons (US)": 3.78541,
-        "quarts": 0.946353,
-        "pints": 0.473176,
-        "cups": 0.24,
-        "cubic meters": 1000
+        "Liters (L)": 1,
+        "Milliliters (mL)": 0.001,
+        "Gallons (US) (gal)": 3.78541,
+        "Quarts (qt)": 0.946353,
+        "Pints (pt)": 0.473176,
+        "Cups (cup)": 0.24,
+        "Cubic Meters (m³)": 1000
     }
 }
 
 const PI_VALUE = Math.PI
 const E_VALUE = Math.E
+
+/* 
+CONVERSIONS STRUCTURE:
+*/
 
 const conversionTypeButtons = document.querySelectorAll("#metric .smcont .grid button[data-fn]")
 const fromUnitsSelect = document.getElementById("fromUnits")
@@ -264,6 +268,10 @@ if (toUnitsSelect) {
     toUnitsSelect.addEventListener("change", updateMetricConversion)
 }
 
+/*
+DIGIT AND OPERATOR BUTTONS LOGIC FOR BOTH STANDARD AND SCIENTIFIC MODES
+*/
+
 buttons.forEach(btn => {
 
     btn.addEventListener("click", () => {
@@ -283,13 +291,21 @@ buttons.forEach(btn => {
             // - Invalid expressions (e.g., "5++2", "3*/4")
             // - Division by zero (e.g., "10/0")
             // - Syntax errors (e.g., "2(3+4)", "5..2")
+
+            /* TODO:
+            - Round results to a reasonable number of decimal places (e.g., 6-10) to avoid long floating-point representations
+            - Add an opening parenthesis when a scientific function is clicked (e.g., "sin(") and ensure it is closed properly when evaluating
+            - Handle keyboard input for digits and basic operators.
+            - Add built-in support for scientific functions and constants for user experience (? button that lists available functions and constants with descriptions)
+
+            */
             
             // Replace the op symbols with their JavaScript equivalents
-            activeDisplay.innerText = activeDisplay.innerText.replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-")
+            activeDisplay.innerText = activeDisplay.innerText.replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-").replace(/√/g, "Math.sqrt").replace(/π/g, PI_VALUE).replace(/e/g, E_VALUE)
 
             // Handle scientific functions and constants here?
 
-            console.log(activeDisplay.innerText)
+            console.log(`Evaluating: ${activeDisplay.innerText}`)
             activeDisplay.innerText = eval(activeDisplay.innerText)
         }
         else if (btn.classList.contains("digit") || btn.classList.contains("op") || value === "."){

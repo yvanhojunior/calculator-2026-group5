@@ -1,8 +1,48 @@
+:root{
+    /* Light-theme */
+    --primary: #0081a7;
+    --secondary: #00afb9;
+    --tertiary: #3a506b;
+    --functions: #f07167;
+    --scientific: #ecc94b;
+    --light-button: #fdfcdc;
+    --text-light: #f9fafb;
+    --text-dark: #111827;
+    --button-text-light: #faf4d3;
+    --button-text-dark: #000814;
+
+    /* Dark-theme */
+    --primary-alt: #00b4d8;
+    --secondary-alt: #48cae4;
+    --tertiary-alt: #1b263b;
+    --functions-alt: #cb2114;
+    --scientific-alt: #d8760b;
+    --light-button-alt: #2a2a2a;
+    --text-light-alt: #e5e7eb;
+    --text-dark-alt: #0b0f14;
+    --button-text-light-alt: #f1f5f9;
+    --button-text-dark-alt: #020617;
+    
+}
+
+.dark-theme{
+    --primary: var(--primary-alt);
+    --secondary: var(--secondary-alt);
+    --tertiary: var(--tertiary-alt);
+    --functions: var(--functions-alt);
+    --scientific: var(--scientific-alt);
+    --light-button: var(--light-button-alt);
+    --text-light: var(--text-light-alt);
+    --text-dark: var(--text-dark-alt);
+    --button-text-light: var(--button-text-light-alt);
+    --button-text-dark: var(--button-text-dark-alt);
+}
+
 body{
     margin: 0;
     font-family:Arial, Helvetica, sans-serif;
-    background:#152a46;
-    height:100vh;
+    background:var(--primary);
+    height:90vh;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -13,8 +53,8 @@ body{
 }
 
 .smcont{
-    background:#f0f4fc;
-    color:black;
+    background:var(--panel);
+    color:var(--text-dark);
     padding:10px;
     border-radius:8px;
     margin:10px 20px;
@@ -22,7 +62,7 @@ body{
 }
 
 .calculator{
-    background:#24364d;
+    background:var(--secondary);
     border-radius:14px;
     overflow: hidden;
     width:480px;
@@ -30,35 +70,48 @@ body{
 }
 
 .header{
-    background:#3e4c61;
+    background:var(--primary);
     padding:16px;
 }
 
 .header h2{
     margin:0 0 10px 0;
-    color:white;
+    color:var(--text-light);
 }
 
 .header select{
     width:100%;
     padding:16px;
     border-radius:8px;
-    border:1px solid #2d6cdf;
+    border:1px solid var(--text-light);
     background:#1e2f45;
-    color:white;
+    color:var(--text-light);
     font-size: large;
 }
 
 .display{
-    padding:20px;
+    margin: 15px;
     font-size:40px;
     text-align:right;
-    color:white;
+    color:var(--text-light);
+    border: 2px solid var(--text-light);
+    border-radius: 8px;
+    padding: 10px 10px;
+}
+
+row{
+    display: contents;
+}
+
+.display .display-value{
+    display: block;
+    width: 100%;
+    min-height: 1em;
 }
 
 .display.conversion{
     font-size:40px;
-    color:#c5c8cf;
+    color:var(--muted);
     text-align: left;
 }
 
@@ -80,8 +133,8 @@ button{
     font-size:18px;
     border:none;
     border-radius:10px;
-    background:#556274;
-    color:white;
+    background:var(--tertiary);
+    color:var(--text-light);
     cursor:pointer;
 }
 
@@ -93,27 +146,37 @@ div.container button:hover{
     grid-column:span 2;
 }
 
-button.sct{
-    background:#EA00FF;
-    font-style: italic;
-}
-
 button.swap{
-    background: #2b7fff;
+    background: var(--functions);
 }
 
 button.swap:hover{
-    background: #155dfc;
-    color: white;
+    background: var(--functions-alt);
+    color: var(--text-light);
+}
+
+.digit{
+    background:var(--tertiary);
+    color:var(--text-light);
 }
 
 .op{
-    background:#ff6a00;
+    background:var(--functions);
+    color: var(--text-dark);
+    font-weight: bold;
 }
 
 .light{
-    background:#c5c8cf;
-    color:black;
+    background:var(--light-button);
+    color:var(--text-dark);
+    font-weight: bold;
+}
+
+button.sct{
+    background:var(--scientific);
+    color: var(--text-dark);
+    font-style: italic;
+    font-weight: bold;
 }
 
 .scene{
@@ -133,6 +196,18 @@ select,input{
 p.small{
     font-size: 16px;
     margin: 0px 0px 8px;
+    font-weight: 700;
+}
+
+/* Metric mode uses the same dark palette feeling as scientific mode */
+#metric .smcont{
+    background: var(--button-text-light);
+    color: var(--text-dark);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+#metric .small{
+    color: var(--text-dark);
 }
 
 div.smcont .grid{
@@ -141,23 +216,23 @@ div.smcont .grid{
     padding:0;
 }
 
-div.smcont button{
-    background-color: #FFF;
-    color: #000;
-    font-size: medium;
+#metric div.smcont button{
+    background: var(--scientific);
+    color: var(--button-text-dark);
+    font-weight: 600;
 }
 
-div.smcont button.selected{
-    background: #2b7fff;
-    color: white;
+#metric div.smcont button.selected{
+    background: var(--functions);
+    color: var(--text-light);
 }
 
 div.smcont select{
     width: 100%;
     border-radius: 6px;
     font-size: 16px;
-    background: white;
-    color: black;
+    background: var(--panel);
+    color: var(--text-dark);
     border-color: #aaaaaa;
 }
 
@@ -166,11 +241,13 @@ div.smcont input{
     border-radius: 6px;
     font-size: 20px;
     border-width: 2px;
+    background: var(--panel);
+    color: var(--text-dark);
     border-color: #aaaaaa;
     box-sizing: border-box;
 }
 
 div.smcont input:focus{
     outline: none;
-    border-color: #2b7fff;
+    border-color: var(--swap);
 }
