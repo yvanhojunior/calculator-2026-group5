@@ -223,6 +223,9 @@ button{
     background:var(--digit);
     color:var(--text);
     cursor:pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 .digit{
@@ -230,13 +233,17 @@ button{
     color:var(--text);
 }
 
-.digit:hover, .op:hover, button.sct:hover {
+.digit:hover, .op:hover, button.sct:not(:disabled):hover {
     filter: brightness(0.85);
     transform: translateY(-2px);
     border-color: var(--text);
 }
 
-.light:hover {
+.digit:focus, .op:focus, .light:focus, button.sct:focus {
+    outline: none;
+}
+
+.light:not(:disabled):hover {
     filter: brightness(0.85);
     transform: translateY(-2px);
     border-color: var(--functions);
@@ -277,6 +284,11 @@ input[type="text"] {
 }
 
 input:focus { border-color: var(--accent); }
+
+button:disabled {
+    filter: brightness(0.5);
+    
+}
 
 /* ── Buttons ── */
 .btn {
