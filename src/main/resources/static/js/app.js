@@ -6,9 +6,8 @@
  */
 const app = (() => {
     // ── state ──────────────────────────────────────────────────────────────
-    let numbers   = [];
-    let operators = [];
-    let pendingOperation = null;
+    let expression_to_evaluate = [];
+    let parenthesis_stack = [];
 
     // ── DOM helpers ────────────────────────────────────────────────────────
     const arithmeticButtons =  document.querySelectorAll('button.digit, button.op, button.sct, button.light');
@@ -71,6 +70,52 @@ const app = (() => {
         }
     });
 
+    /**
+     * Handle button clicks for digits, operators, and the equals sign.
+     */
+
+    arithmeticButtons.forEach(btn => {
+
+        btn.addEventListener("click", () => {
+
+            console.log(`Button clicked: ${btn.innerText}`)
+
+            const value = btn.value
+
+            if (btn.classList.contains('light')) {
+                switch (btn.innerText) {
+                    case "+/-":
+
+                    break;
+                    case "%":
+
+                    break;
+                    case "⌫":
+
+                    break;
+                    case "C":
+                        break;
+                    default:
+                        console.warn(`Unhandled light button: ${btn.innerText}`);
+                }
+
+            } else {
+                if (btn.classList.contains('digit') || btn.classList.contains('op')) {
+                    expression_to_evaluate.push(value);
+                }
+                if (btn.classList.contains('sct')) {
+                    // Handle scientific calculator buttons (e.g., sin, cos, etc.)
+                    expression_to_evaluate.push(value+'('); // Assume scientific functions are followed by an opening parenthesis
+                    parenthesis_stack.push(')'); // Assume scientific functions require parentheses
+                }
+                expression = expression_to_evaluate.join('') + parenthesis_stack.join('');
+                activeResult.textContent = expression;
+                // activeResult.textContent = activeResult.textContent === '0' ? value : activeResult.textContent + value;
+            }
+            
+        })
+
+    })
 
     /** Append an entry to the history list. */
     function addHistory(expression, result) {
@@ -106,68 +151,35 @@ const app = (() => {
 
     /** Build an expression string using parser-friendly operator symbols. */
     function buildExpressionForApi() {
-        const opSymbols = { plus: '+', minus: '-', times: '*', divides: '/' };
-        let expression = String(numbers[0]);
-
-        for (let i = 0; i < operators.length; i += 1) {
-            expression += `${opSymbols[operators[i]]}${numbers[i + 1]}`;
-        }
-
-        return expression;
+        return expression_to_evaluate.map(token => {
+            switch (token) {
+                case '×': return '*';
+                case '÷': return '/';
+                default: return token;
+            }
+        }).join('') + parenthesis_stack.join('');
     }
 
     // ── public API ─────────────────────────────────────────────────────────
 
-    /** Add the current input value to the numbers list. */
-    function addNumber() {
-        const raw = numberInput.value.trim();
-        if (raw === '' || !/^-?\d+$/.test(raw)) {
-            showError('Please enter a valid integer (no decimals).');
-            return;
-        }
-
-        if (numbers.length > 0) {
-            if (!pendingOperation) {
-                showError('Select an operator before adding another number.');
-                return;
-            }
-            operators.push(pendingOperation);
-        }
-
-        numbers.push(parseInt(raw, 10));
-        pendingOperation = null;
-        highlightOp(null);
-        numberInput.value = '';
-        numberInput.focus();
-        updateDisplay();
-    }
-
-    /** Set (or replace) the next arithmetic operation. */
-    function setOperation(op) {
-        if (!numbers.length) {
-            showError('Add a number first.');
-            return;
-        }
-
-        pendingOperation = op;
-        highlightOp(op);
-        updateDisplay();
+    function clearDisplay() {
+        activeExpression.textContent = '';
+        activeResult.textContent = "0";
+        expression_to_evaluate = [];
+        parenthesis_stack = [];
     }
 
     /** Send the expression to the backend and display the result. */
     async function calculate() {
-        if (numbers.length === 0) {
-            showError('Add at least one number first.');
+        /*
+        if (expression_to_evaluate.length === 0) {
             return;
         }
-        if (numbers.length < 2) {
+        if (expression_to_evaluate.length < 2) {
             showError('Add at least two numbers to compute an expression.');
             return;
         }
-        if (pendingOperation) {
-            showError('Add the next number to complete the expression.');
-            return;
-        }
+        */
 
         try {
             const expression = buildExpressionForApi();
@@ -186,34 +198,16 @@ const app = (() => {
             addHistory(expression, displayResult);
 
             // Reset for next expression
-            numbers   = [];
-            operators = [];
-            pendingOperation = null;
-            highlightOp(null);
+            expression_to_evaluate = [];
+            parenthesis_stack = [];
         } catch (err) {
             showError('Network error – is the server running?');
             console.error(err);
         }
     }
 
-    /** Clear the current expression and reset the UI. */
-    function clear() {
-        numbers   = [];
-        operators = [];
-        pendingOperation = null;
-        numberInput.value     = '';
-        expressionEl.textContent = '';
-        resultEl.textContent  = '0';
-        errorEl.textContent   = '';
-        highlightOp(null);
-    }
 
-    // Allow pressing Enter in the number input to add the number
-    numberInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') addNumber();
-    });
-
-    return { addNumber, setOperation, calculate, clear };
+    return { calculate, clearDisplay };
 })();
 
 // Expose app globally for inline HTML onclick handlers.
