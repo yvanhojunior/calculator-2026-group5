@@ -14,6 +14,7 @@ const app = (() => {
     const nightModeToggle = document.getElementById('night-mode-toggle');
     const languageToggle = document.getElementById('language-toggle');
     const ans_button = document.getElementById('ans_button');
+    let currentPage = 'calculator'; // Default page
     let activeExpression = document.getElementById('std_expression'); // Start with standard expression active
     let activeResult = document.getElementById('std_result'); // Start with standard result active
     let activeDisplay = document.getElementById('std_display'); // Start with standard display active
@@ -63,6 +64,7 @@ const app = (() => {
     // Update active references when the page changes
     window.addEventListener('pageChanged', (event) => {
         const page = event.detail?.page;
+        window.currentPage = page;
         if (page === 'calculator' || page === 'scientific') {
             syncActiveRefs(page);
             expression_to_evaluate = [];
@@ -71,6 +73,10 @@ const app = (() => {
             activeResult.textContent = '0';
         }
     });
+
+    function getCurrentPage() {
+        return window.currentPage;
+    }
 
     ans_button.disabled = true;
 
@@ -89,21 +95,21 @@ const app = (() => {
             if (btn.id === 'ans_button') {
                 const lastAnswer = app.getLastAnswer();
                 expression_to_evaluate.push(lastAnswer);
-                activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
-                return;
             }
 
             if (btn.classList.contains('digit') || btn.classList.contains('op')) {
                 expression_to_evaluate.push(value);
             }
             if (btn.classList.contains('sct')) {
-                // Handle scientific calculator buttons (e.g., sin, cos, etc.)
-                expression_to_evaluate.push(value+'('); // Assume scientific functions are followed by an opening parenthesis
-                parenthesis_stack.push(')'); // Assume scientific functions require parentheses
+                if (!btn.hasAttribute('data-fn')) {
+                    expression_to_evaluate.push(value);
+                } else {
+                    expression_to_evaluate.push(value+'(');
+                    parenthesis_stack.push(')');
+                }
             }
-            expression = expression_to_evaluate.join('') + parenthesis_stack.join('');
-            activeResult.textContent = expression;
-            // activeResult.textContent = activeResult.textContent === '0' ? value : activeResult.textContent + value;
+            activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
+            return;
         })
 
     })
@@ -190,7 +196,9 @@ const app = (() => {
             activeResult.textContent = displayResult;
             activeExpression.textContent = expression;
             addHistory(expression, displayResult);
-            ans_button.disabled = false ? isScientific : true;
+
+            const isScientific = getCurrentPage() === 'scientific';
+            ans_button.disabled = isScientific ? false : true;
 
             // Reset for next expression
             expression_to_evaluate = [];
@@ -217,11 +225,18 @@ const app = (() => {
 
     function changeSign() {
         // Handle sign change (e.g., toggle between positive and negative)
-        expression_to_evaluate = expression_to_evaluate[0] === '-'
-            ? expression_to_evaluate.slice(1) // Remove leading '-' if present
-            : ['-'].concat(expression_to_evaluate.length > 0 ? expression_to_evaluate.join('') : '0'); // Add leading '-' if not present
+        if (expression_to_evaluate.length === 0) {
+            expression_to_evaluate.push('-');
+            expression_to_evaluate.push(getLastAnswer());
+        } else {
+            if (expression_to_evaluate[0] === '-' && expression_to_evaluate.length > 1) {
+                expression_to_evaluate = expression_to_evaluate.slice(1); // Remove leading '-' if present
+            } else {
+                expression_to_evaluate.unshift('-'); // Add leading '-' if not present
+            }
+        }
+        console.log(`Expression after sign change: ${expression_to_evaluate.join('')}`);
         activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
-        // API cannot handle to have a '-' as the first token.
     }
 
     function percentage() {
@@ -242,8 +257,7 @@ const app = (() => {
         if (activeHistory && activeHistory.firstChild) {
             const lastResult = activeHistory.firstChild.querySelector('.hist-result');
             if (lastResult) {
-                value = lastResult.textContent.replace('= ', '');
-                expression_to_evaluate.push(value);
+                const value = lastResult.textContent.replace('= ', '');
                 return value;
             }
         }
