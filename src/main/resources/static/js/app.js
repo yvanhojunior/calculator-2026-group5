@@ -11,50 +11,66 @@ const app = (() => {
     let pendingOperation = null;
 
     // ── DOM helpers ────────────────────────────────────────────────────────
-    const expressionEl = document.getElementById('expression');
-    const resultEl     = document.getElementById('result');
-    const errorEl      = document.getElementById('error');
-    const historyEl    = document.getElementById('history');
-    const numberInput  = document.getElementById('numberInput');
+    const arithmeticButtons =  document.querySelectorAll('button.digit, button.op, button.sct, button.light');
+    const nightModeToggle = document.getElementById('night-mode-toggle');
+    const languageToggle = document.getElementById('language-toggle');
+    let activeExpression = document.getElementById('std_expression'); // Start with standard expression active
+    let activeResult = document.getElementById('std_result'); // Start with standard result active
+    let activeDisplay = document.getElementById('std_display'); // Start with standard display active
+    let activeHistory = document.getElementById('std_history'); // Start with standard history active
+    let activeError = document.getElementById('std_error'); // Start with standard error active
 
     /** Show an error message and clear it after 3 s. */
     function showError(msg) {
-        errorEl.textContent = msg;
-        setTimeout(() => { errorEl.textContent = ''; }, 3000);
-    }
-
-    /** Update the expression display based on entered numbers and operators. */
-    function updateDisplay() {
-        const opSymbols = { plus: '+', minus: '−', times: '×', divides: '÷' };
-        if (!numbers.length) {
-            expressionEl.textContent = '';
+        if (!activeError) {
             return;
         }
-
-        let expression = String(numbers[0]);
-        for (let i = 0; i < operators.length; i += 1) {
-            expression += ` ${opSymbols[operators[i]]} ${numbers[i + 1]}`;
-        }
-
-        if (pendingOperation) {
-            expression += ` ${opSymbols[pendingOperation]}`;
-        }
-
-        expressionEl.textContent = expression;
+        activeError.textContent = msg;
+        setTimeout(() => {
+            if (activeError) {
+                activeError.textContent = '';
+            }
+        }, 3000);
     }
 
-    /** Highlight the active operation button. */
-    function highlightOp(op) {
-        document.querySelectorAll('.btn-op').forEach(btn => btn.classList.remove('active'));
-        if (op) {
-            const opNames = { plus: '+', minus: '−', times: '×', divides: '÷' };
-            document.querySelectorAll('.btn-op').forEach(btn => {
-                if (btn.textContent.trim() === opNames[op]) {
-                    btn.classList.add('active');
-                }
-            });
-        }
+    /** Synchronize active references based on the current page. */
+    function syncActiveRefs(pageName) {
+        const isScientific = pageName === 'scientific';
+
+        activeDisplay = isScientific
+            ? document.getElementById('sct_display')
+            : document.getElementById('std_display');
+
+        activeExpression = isScientific
+            ? document.getElementById('sct_expression')
+            : document.getElementById('std_expression');
+
+        activeResult = isScientific
+            ? document.getElementById('sct_result')
+            : document.getElementById('std_result');
+
+        activeHistory = isScientific
+            ? document.getElementById('sct_history')
+            : document.getElementById('std_history');
+        activeError = isScientific
+            ? document.getElementById('sct_error')
+            : document.getElementById('std_error');
     }
+
+    // Initialize active references based on the default page
+    syncActiveRefs('calculator');
+
+    // Update active references when the page changes
+    window.addEventListener('pageChanged', (event) => {
+        const page = event.detail?.page;
+        if (page === 'calculator' || page === 'scientific') {
+            syncActiveRefs(page);
+            expression_to_evaluate = [];
+            activeExpression.textContent = '';
+            activeResult.textContent = '0';
+        }
+    });
+
 
     /** Append an entry to the history list. */
     function addHistory(expression, result) {
@@ -62,7 +78,9 @@ const app = (() => {
         li.innerHTML =
             `<span class="hist-expr">${expression}</span>` +
             `<span class="hist-result">= ${result}</span>`;
-        historyEl.prepend(li);
+        if (activeHistory) {
+            activeHistory.prepend(li);
+        }
     }
     
     /** Normalize API result payload to a user-friendly string. */
@@ -163,8 +181,8 @@ const app = (() => {
             }
 
             const displayResult = formatApiResult(data.result);     // We handle various result formats (to avoid showing [object Object])
-            resultEl.textContent = displayResult;
-            expressionEl.textContent = expression;
+            activeResult.textContent = displayResult;
+            activeExpression.textContent = expression;
             addHistory(expression, displayResult);
 
             // Reset for next expression
@@ -197,3 +215,6 @@ const app = (() => {
 
     return { addNumber, setOperation, calculate, clear };
 })();
+
+// Expose app globally for inline HTML onclick handlers.
+window.app = app;
