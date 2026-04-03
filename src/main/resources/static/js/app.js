@@ -170,7 +170,12 @@ const app = (() => {
     async function calculate() {
 
         try {
-            console.log(`Calculating expression: ${expression_to_evaluate.join('') + parenthesis_stack.join('')}`);
+            if (expression_to_evaluate.length === 0) {
+                showError('Please enter an expression to calculate.');
+                activeResult.textContent = '0';
+                return;
+            }
+
             const expression = buildExpressionForApi();
             const response = await fetch(`/api/calculate?expression=${encodeURIComponent(expression)}`);
 
