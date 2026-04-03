@@ -13,6 +13,7 @@ const app = (() => {
     const arithmeticButtons =  document.querySelectorAll('button.digit, button.op, button.sct, button.light');
     const nightModeToggle = document.getElementById('night-mode-toggle');
     const languageToggle = document.getElementById('language-toggle');
+    const ans_button = document.getElementById('ans_button');
     let activeExpression = document.getElementById('std_expression'); // Start with standard expression active
     let activeResult = document.getElementById('std_result'); // Start with standard result active
     let activeDisplay = document.getElementById('std_display'); // Start with standard display active
@@ -70,6 +71,8 @@ const app = (() => {
             activeResult.textContent = '0';
         }
     });
+
+    ans_button.disabled = true;
 
     /**
      * Handle button clicks for digits, operators, and the equals sign.
@@ -169,6 +172,7 @@ const app = (() => {
             activeResult.textContent = displayResult;
             activeExpression.textContent = expression;
             addHistory(expression, displayResult);
+            ans_button.disabled = false;
 
             // Reset for next expression
             expression_to_evaluate = [];
@@ -212,10 +216,23 @@ const app = (() => {
         }
     }
 
+    function getLastAnswer() {
+        if (activeHistory && activeHistory.firstChild) {
+            const lastResult = activeHistory.firstChild.querySelector('.hist-result');
+            if (lastResult) {
+                value = lastResult.textContent.replace('= ', '');
+                expression_to_evaluate.push(value);
+                activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
+                return value;
+            }
+        }
+        return '0';
+    }
+
 
     // - Unit convertor mode: Allows the  user to convert between different units (e.g., length, weight, temperature) by selecting the desired conversion type and inputting the value to be converted.
 
-    return { calculate, clearDisplay, deleteLastEntry, changeSign, percentage};
+    return { calculate, clearDisplay, deleteLastEntry, changeSign, percentage, getLastAnswer};
 })();
 
 // Expose app globally for inline HTML onclick handlers.
