@@ -65,6 +65,7 @@ const app = (() => {
         if (page === 'calculator' || page === 'scientific') {
             syncActiveRefs(page);
             expression_to_evaluate = [];
+            parenthesis_stack = [];
             activeExpression.textContent = '';
             activeResult.textContent = '0';
         }
