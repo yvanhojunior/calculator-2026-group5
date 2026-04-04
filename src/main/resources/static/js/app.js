@@ -155,10 +155,11 @@ const app = (() => {
                 default: return token;
             }
         }).join('') + parenthesis_stack.join('');
+        if (result.startsWith('*') || result.startsWith('/') || result.startsWith('+')) {
+            result = getLastAnswer() + result; // Prepend last answer to handle expressions starting with an operator
+        }
         if (result.startsWith('-')) {
             result = '0' + result; // Prepend '0' to handle negative numbers at the start of the expression
-        } if (result.startsWith('*') || result.startsWith('/') || result.startsWith('+')) {
-            result = getLastAnswer() + result; // Prepend last answer to handle expressions starting with an operator
         }
         return result;
     }
