@@ -97,3 +97,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Closes
 - #18 Support for rational numbers
+
+## [1.2.7] - 2026-03-31
+
+### Added
+- Cucumber BDD scenarios for complex numbers
+
+### Closes
+- #19 Support for complex numbers
