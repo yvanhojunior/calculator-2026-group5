@@ -113,9 +113,16 @@ public class CalculatorSteps {
 		}
 	}
 
-	@Then("the operation evaluates to {int}")
-	public void thenTheOperationEvaluatesTo(int val) {
-		assertEquals(new IntegerValue(val), c.eval(op));
+	@Then("the operation evaluates to {double}")
+	public void thenTheOperationEvaluatesToDouble(double val) {
+		NumberValue result = c.eval(op);
+		if (val == Math.floor(val)) {
+			// résultat entier attendu
+			assertEquals(new IntegerValue((int) val), result);
+		} else {
+			// résultat réel attendu
+			assertEquals(new RealValue(val), result);
+		}
 	}
 
 	@Then("its value is {string}")
