@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.11] - 2026-04-04
+### Fixed
+- Updated tests to reflect new real number division behavior
+- Unified Cucumber step `{double}` to handle both integer and real results
+- Fixed `TestEvaluator` division case to expect `RealValue` when division is not exact
+
+## [1.2.10] - 2026-04-04
+### Added
+- Real number support in the calculator frontend and backend
+### Fixed
+- `app.js`: regex updated to accept decimal input, `parseInt` replaced by `parseFloat`
+- `ExpressionParser`: detects `.` in number strings and creates `RealValue` accordingly
+- `RealValue`: added `toReal()` helper to convert `IntegerValue` before arithmetic operations
+- `IntegerValue`: mixed operations with `RealValue` now return `RealValue`
+- `IntegerValue.div`: returns `RealValue` when division is not exact (e.g. `7/5` → `1.4`)
+- `RealValue`: use `BigDecimal.valueOf` instead of `new BigDecimal` for better precision
+### Closes
+- #17 Support for real numbers
+
 ## [1.2.9] - 2026-04-01
 
 ### Added
