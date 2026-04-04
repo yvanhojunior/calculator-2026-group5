@@ -23,26 +23,57 @@ public class IntegerValue implements NumberValue {
 
         @Override
         public NumberValue add(NumberValue other) {
-            IntegerValue o = (IntegerValue) other;
-            return new IntegerValue(this.value + o.value);
+            if (other instanceof IntegerValue o) {
+                return new IntegerValue(this.value + o.value);
+            }
+            if (other instanceof RealValue) {
+                return new RealValue(java.math.BigDecimal.valueOf(this.value), RealValue.DEFAULT_PRECISION).add(other);
+            }
+            throw new IllegalArgumentException("Unsupported type: " + other.getClass());
         }
 
         @Override
         public NumberValue sub(NumberValue other) {
-            IntegerValue o = (IntegerValue) other;
-            return new IntegerValue(this.value - o.value);
+            if (other instanceof IntegerValue o) {
+                return new IntegerValue(this.value - o.value);
+            }
+            if (other instanceof RealValue) {
+                return new RealValue(java.math.BigDecimal.valueOf(this.value), RealValue.DEFAULT_PRECISION).sub(other);
+            }
+            throw new IllegalArgumentException("Unsupported type: " + other.getClass());
         }
 
         @Override
         public NumberValue mul(NumberValue other) {
-            IntegerValue o = (IntegerValue) other;
-            return new IntegerValue(this.value * o.value);
+            if (other instanceof IntegerValue o) {
+                return new IntegerValue(this.value * o.value);
+            }
+            if (other instanceof RealValue) {
+                return new RealValue(java.math.BigDecimal.valueOf(this.value), RealValue.DEFAULT_PRECISION).mul(other);
+            }
+            throw new IllegalArgumentException("Unsupported type: " + other.getClass());
         }
 
         @Override
         public NumberValue div(NumberValue other) {
-            IntegerValue o = (IntegerValue) other;
-            return new IntegerValue(this.value / o.value);
+            if (other instanceof IntegerValue o) {
+                if (o.value == 0) {
+                    if (this.value == 0) return RealValue.NAN;
+                    return this.value > 0 ? RealValue.POS_INF : RealValue.NEG_INF;
+                }
+
+                if (this.value % o.value == 0) {
+                    return new IntegerValue(this.value / o.value);
+                } else {
+                    return new RealValue((double) this.value / o.value);
+                }
+            }
+
+            if (other instanceof RealValue) {
+                return new RealValue(java.math.BigDecimal.valueOf(this.value), RealValue.DEFAULT_PRECISION).div(other);
+            }
+
+            throw new IllegalArgumentException("Unsupported type: " + other.getClass());
         }
 
     @Override

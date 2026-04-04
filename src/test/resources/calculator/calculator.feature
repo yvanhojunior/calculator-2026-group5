@@ -34,7 +34,7 @@ Feature: Integer Arithmetic Expressions
     Given an integer operation '/'
     When I provide a first number 7
     And I provide a second number 5
-    Then the operation evaluates to 1
+    Then the operation evaluates to 1.4
 
   Scenario: Printing the sum of two integer numbers
     Given the sum of two numbers 8 and 6
@@ -76,8 +76,8 @@ Feature: Integer Arithmetic Expressions
     Examples:
       |n1|n2|result|
       |35|5|7|
-      |7|5|1|
-      |5|7|0|
+      |7|5|1.4|
+      |5|7|0.7142857143|
 
   Scenario Outline: Evaluating arithmetic operations with two integer parameters
     Given an integer operation <op>
