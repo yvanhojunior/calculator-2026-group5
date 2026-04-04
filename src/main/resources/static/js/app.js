@@ -89,7 +89,6 @@ const app = (() => {
         setLanguage(next);
         await loadTranslations(next);
         updateContent();
-        console.log(`Language switched to ${next}`);
     });
 
 
@@ -123,15 +122,12 @@ const app = (() => {
                     case '(':
                         expression_to_evaluate.push('(');
                         parenthesis_stack.push(')');
-                        console.log(`Adding opening parenthesis. Current stack: ${parenthesis_stack}`);
                         break;
 
                     case ')':
-                        console.log(`Attempting to add closing parenthesis. Current stack: ${parenthesis_stack}`);
                         if (parenthesis_stack.length > 0) {
                             expression_to_evaluate.push(')');
                             parenthesis_stack.pop();
-                            console.log(`Added closing parenthesis if stack was not empty. Current stack: ${parenthesis_stack}`);
                         }
                         break;
 
@@ -196,7 +192,6 @@ const app = (() => {
             }
         }).join('') + parenthesis_stack.join('');
         let result = input;
-        console.log(`Expression after token mapping: ${input}`);
         if (input.startsWith('*') || input.startsWith('/') || input.startsWith('+')) {
             result = getLastAnswer() + input; // Prepend last answer to handle expressions starting with an operator
         } else if (input.startsWith('-')) {
@@ -226,9 +221,7 @@ const app = (() => {
                 return;
             }
 
-            console.log(`Raw expression tokens: ${expression_to_evaluate.join('')}`);
             const expression = buildExpressionForApi();
-            console.log(`Expression sent to API: ${expression}`);
             const response = await fetch(`/api/calculate?expression=${encodeURIComponent(expression)}`);
 
             const data = await response.json();
@@ -257,7 +250,6 @@ const app = (() => {
     }
 
 function deleteLastEntry() {
-    console.log(`Before deletion: ${expression_to_evaluate.join('')}, Parenthesis stack: ${parenthesis_stack}`);
 
     if (expression_to_evaluate.length > 0) {
         const lastToken = expression_to_evaluate.pop();
@@ -273,7 +265,6 @@ function deleteLastEntry() {
             activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
         }
     }
-    console.log(`After deletion: ${expression_to_evaluate.join('')}, Parenthesis stack: ${parenthesis_stack}`);
 }
 
     function changeSign() {
@@ -288,7 +279,6 @@ function deleteLastEntry() {
                 expression_to_evaluate.unshift('-'); // Add leading '-' if not present
             }
         }
-        console.log(`Expression after sign change: ${expression_to_evaluate.join('')}`);
         activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
     }
 
