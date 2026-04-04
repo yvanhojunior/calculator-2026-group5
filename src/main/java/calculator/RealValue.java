@@ -38,7 +38,7 @@ public class RealValue implements NumberValue {
 
     // Constructeur avec double (commodité)
     public RealValue(double value) {
-        this(new BigDecimal(value), DEFAULT_PRECISION);
+        this(BigDecimal.valueOf(value), DEFAULT_PRECISION);
     }
 
     // Constructeur pour valeurs spéciales (NaN, +Infinity, -Infinity)
