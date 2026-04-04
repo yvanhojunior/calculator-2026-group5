@@ -12,7 +12,6 @@ const app = (() => {
     // ── DOM helpers ────────────────────────────────────────────────────────
     const arithmeticButtons =  document.querySelectorAll('button.digit, button.op, button.sct, #ans_button');
     const nightModeToggle = document.getElementById('night-mode-toggle');
-    const languageToggle = document.getElementById('language-toggle');
     const ans_button = document.getElementById('ans_button');
     const close_paren = document.getElementById('close-paren');
     let hasCleared = false;
@@ -81,6 +80,21 @@ const app = (() => {
     }
 
     ans_button.disabled = true;
+
+    // ── Language and theme toggles ─────────────────────────────────────────────
+    document.getElementById("lang-toggle").addEventListener("click", async () => {
+        const current = getLanguage();
+        const next = current === "en" ? "fr" : "en";
+
+        setLanguage(next);
+        await loadTranslations(next);
+        updateContent();
+        console.log(`Language switched to ${next}`);
+    });
+
+
+
+
 
     /**
      * Handle button clicks for digits, operators, and the equals sign.
@@ -176,6 +190,8 @@ const app = (() => {
             switch (token) {
                 case '×': return '*';
                 case '÷': return '/';
+                case '^': return '^';
+                case '!': return '!';
                 default: return token;
             }
         }).join('') + parenthesis_stack.join('');
@@ -210,7 +226,9 @@ const app = (() => {
                 return;
             }
 
+            console.log(`Raw expression tokens: ${expression_to_evaluate.join('')}`);
             const expression = buildExpressionForApi();
+            console.log(`Expression sent to API: ${expression}`);
             const response = await fetch(`/api/calculate?expression=${encodeURIComponent(expression)}`);
 
             const data = await response.json();
@@ -239,6 +257,7 @@ const app = (() => {
     }
 
 function deleteLastEntry() {
+    console.log(`Before deletion: ${expression_to_evaluate.join('')}, Parenthesis stack: ${parenthesis_stack}`);
 
     if (expression_to_evaluate.length > 0) {
         const lastToken = expression_to_evaluate.pop();
@@ -254,6 +273,7 @@ function deleteLastEntry() {
             activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
         }
     }
+    console.log(`After deletion: ${expression_to_evaluate.join('')}, Parenthesis stack: ${parenthesis_stack}`);
 }
 
     function changeSign() {

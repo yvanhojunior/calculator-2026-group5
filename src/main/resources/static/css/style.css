@@ -110,9 +110,13 @@ body {
 }
 
 .nav-icon {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     width: 24px;
     text-align: center;
+}
+
+.nav-text {
+    font-size: 1.3em;
 }
 
 footer button {
@@ -126,10 +130,14 @@ footer button {
 }
 
 #night-mode-toggle,
-#language-toggle {
+#lang-toggle {
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+}
+
+#translate-icon {
+    font-size: 1.3rem;
 }
 
 /* ── Main ── */
