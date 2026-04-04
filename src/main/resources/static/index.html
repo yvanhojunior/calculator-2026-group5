@@ -43,9 +43,9 @@
             <span class="nav-icon">💱</span>
             Currency Converter
         </button>
-        <button class="nav-item" onclick="showPage('about', this)">
+        <button class="nav-item" onclick="showPage('help', this)">
             <span class="nav-icon">ℹ️</span>
-            About
+            Help
         </button>
     </body>
     <footer>
@@ -267,9 +267,77 @@
         Currency Converter coming soon!
     </div>
 
-    <!-- About Page -->
-    <div id="page-about" class="page">
-        Built-in help and documentation coming soon!
+    <!-- Help Page -->
+    <div id="page-help" class="page">
+        <div class="page-header">
+            <div class="page-title">How to Use the Calculator Suite</div>
+        </div>
+
+        <div class="card">
+            <div class="accordion open">
+                <button type="button" class="accordion-toggle" aria-expanded="true">
+                    <span>Standard Calculator</span>
+                    <span class="accordion-icon" aria-hidden="true"></span>
+                </button>
+                <ul class="accordion-panel">
+                    <li>Enter numbers and operations using the buttons.</li>
+                    <li>Press "=" to evaluate the expression.</li>
+                    <li>Your calculation history will be displayed below the calculator.</li>
+                </ul>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-toggle" aria-expanded="false">
+                    <span>Scientific Calculator</span>
+                    <span class="accordion-icon" aria-hidden="true"></span>
+                </button>
+                <ul class="accordion-panel">
+                    <li>Supports advanced functions like exponents, square roots, factorials, and complex numbers.</li>
+                    <li>Use parentheses to control the order of operations.</li>
+                    <li>The "Ans" button allows you to use the result of your last calculation in a new expression.</li>
+                </ul>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-toggle" aria-expanded="false">
+                    <span>Linear Equations</span>
+                    <span class="accordion-icon" aria-hidden="true"></span>
+                </button>
+                <ul class="accordion-panel">
+                    <li>Solve linear equations with one or two unknowns.</li>
+                    <li>Enter coefficients and constants to define your equation.</li>
+                </ul>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-toggle" aria-expanded="false">
+                    <span>Unit Converter</span>
+                    <span class="accordion-icon" aria-hidden="true"></span>
+                </button>
+                <ul class="accordion-panel">
+                    <li>Convert between different units of measurement.</li>
+                    <li>Enter a value and select the units you want to convert from.</li>
+                </ul>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-toggle" aria-expanded="false">
+                    <span>Currency Converter</span>
+                    <span class="accordion-icon" aria-hidden="true"></span>
+                </button>
+                <ul class="accordion-panel">
+                    <li>Convert between different currencies using daily updated exchange rates.</li>
+                    <li>Enter an amount and select the currencies you want to convert between.</li>
+                </ul>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-toggle" aria-expanded="false">
+                    <span>Programmer Calculator</span>
+                    <span class="accordion-icon" aria-hidden="true"></span>
+                </button>
+                <ul class="accordion-panel">
+                    <li>Perform calculations in different number systems (binary, octal, decimal, hexadecimal).</li>
+                </ul>
+            </div>
+
+
+        </div>
     </div>
 
 </main>
