@@ -21,38 +21,38 @@
     <body>
         <button class="nav-item active" onclick="showPage('calculator', this)">
             <span class="nav-icon">🧮</span>
-            Calculator
+            <span class="nav-text" data-i18n="calculator"></span>
         </button>
         <button class="nav-item" onclick="showPage('scientific', this)">
             <span class="nav-icon">🔬</span>
-            Scientific
+            <span class="nav-text" data-i18n="scientific"></span>
         </button>
         <button class="nav-item" onclick="showPage('equations', this)">
             <span class="nav-icon">📐</span>
-            Linear Equations
+            <span class="nav-text" data-i18n="equations"></span>
         </button>
         <button class="nav-item" onclick="showPage('programmer', this)">
             <span class="nav-icon">💻</span>
-            Programmer
+            <span class="nav-text" data-i18n="programmer"></span>
         </button>
         <button class="nav-item" onclick="showPage('converter', this)">
             <span class="nav-icon">⚖️</span>
-            Unit Converter
+            <span class="nav-text" data-i18n="unit_converter"></span>
         </button>
         <button class="nav-item" onclick="showPage('currency', this)">
             <span class="nav-icon">💱</span>
-            Currency Converter
+            <span class="nav-text" data-i18n="currency_converter"></span>
         </button>
         <button class="nav-item" onclick="showPage('help', this)">
             <span class="nav-icon">ℹ️</span>
-            Help
+            <span class="nav-text" data-i18n="help"></span>
         </button>
     </body>
     <footer>
         <button id="night-mode-toggle" onclick="toggleNightMode()">
         <span id="night-mode-icon">🌙</span>
         </button>
-        <button id="language-toggle" onclick="toggleLanguage()">
+        <button id="lang-toggle">
             <span id="translate-icon" value="en">🌐</span>
         </button>
     </footer>
@@ -64,8 +64,8 @@
     <!-- Calculator Page -->
     <div id="page-calculator" class="page active">
         <div class="page-header">
-            <div class="page-title">Calculator</div>
-            <div class="page-subtitle">Evaluate arithmetic expressions</div>
+            <div class="page-title" data-i18n="calculator"></div>
+            <div class="page-subtitle" data-i18n="calculator_subtitle"></div>
         </div>
 
         <!-- Display Screen -->
@@ -111,7 +111,7 @@
             <div id="std_error" class="error" role="alert"></div>
 
             <div class="history-section">
-                <div class="history-title">History</div>
+                <div class="history-title" data-i18n="history"></div>
                 <ul id="std_history" class="history"></ul>
             </div>
         </div>
@@ -120,10 +120,9 @@
     <!-- Scientific Calculator Page -->
     <div id="page-scientific" class="page">
         <div class="page-header">
-            <div class="page-title">Scientific Calculator</div>
-            <div class="page-subtitle">Evaluate advanced mathematical expressions</div>
+            <div class="page-title" data-i18n="scientific"></div>
+            <div class="page-subtitle" data-i18n="scientific_subtitle"></div>
         </div>
-
 
         <div class="card">
 
@@ -182,7 +181,7 @@
             <div id="sct_error" class="error" role="alert"></div>
 
             <div class="history-section">
-                <div class="history-title">History</div>
+                <div class="history-title" data-i18n="history"></div>
                 <ul id="sct_history" class="history"></ul>
             </div>
         </div>
@@ -192,28 +191,28 @@
     <!-- Linear Equations Page -->
     <div id="page-equations" class="page">
         <div class="page-header">
-            <div class="page-title">Linear Equations</div>
-            <div class="page-subtitle">Solve first-degree equations and systems</div>
+            <div class="page-title" data-i18n="equations"></div>
+            <div class="page-subtitle" data-i18n="equations_subtitle"></div>
         </div>
 
         <div class="card">
-            <div class="card-title">Single Equation</div>
-            <p class="hint">Example: <code>2x + 3 = 7</code></p>
+            <div class="card-title" data-i18n="single_equation"></div>
+            <p class="hint" data-i18n="equation_example"></p>
             <div class="input-row">
-                <input type="text" id="equation" placeholder="e.g. 2x + 3 = 7" />
-                <button class="btn btn-secondary" onclick="solveEquation()">Solve</button>
+                <input type="text" id="equation" placeholder="e.g. 2x + 3 = 7" data-i18n-placeholder="input.single_equation_placeholder"/>
+                <button class="btn btn-secondary" onclick="solveEquation()" data-i18n="solve"></button>
             </div>
             <div id="result-single" class="eq-result"></div>
         </div>
 
         <div class="card">
-            <div class="card-title">System of Two Equations</div>
-            <p class="hint">Example: <code>2x + y = 5</code> and <code>x - y = 1</code></p>
+            <div class="card-title" data-i18n="system_of_equations"></div>
+            <p class="hint" data-i18n="system_example"></p>
             <div class="input-row">
-                <input type="text" id="eq1" placeholder="First equation: e.g. 2x + y = 5" />
-                <input type="text" id="eq2" placeholder="Second equation: e.g. x - y = 1" />
+                <input type="text" id="eq1" placeholder="First equation: e.g. 2x + y = 5" data-i18n-placeholder="input.first_equation_placeholder"/>
+                <input type="text" id="eq2" placeholder="Second equation: e.g. x - y = 1" data-i18n-placeholder="input.second_equation_placeholder"/>
             </div>
-            <button class="btn btn-secondary btn-full" onclick="solveSystem()">Solve System</button>
+            <button class="btn btn-secondary btn-full" onclick="solveSystem()" data-i18n="solve_system"></button>
             <div id="result-system" class="eq-result"></div>
         </div>
     </div>
@@ -221,38 +220,38 @@
     <!-- Unit Converter Page -->
     <div id="page-converter" class="page">
         <div class="page-header">
-            <div class="page-title">Unit Converter</div>
-            <div class="page-subtitle">Convert between units of measurement</div>
+            <div class="page-title" data-i18n="unit_converter"></div>
+            <div class="page-subtitle" data-i18n="unit_converter_subtitle"></div>
         </div>
 
         <div class="card">
-            <div class="card-title">Category</div>
+            <div class="card-title" data-i18n="category"></div>
             <div class="category-tabs">
-                <button class="cat-tab active" onclick="selectCategory('length', this)">📏 Length</button>
-                <button class="cat-tab" onclick="selectCategory('weight', this)">⚖️ Weight</button>
-                <button class="cat-tab" onclick="selectCategory('temperature', this)">🌡️ Temperature</button>
-                <button class="cat-tab" onclick="selectCategory('area', this)">⬛ Area</button>
-                <button class="cat-tab" onclick="selectCategory('volume', this)">🧪 Volume</button>
-                <button class="cat-tab" onclick="selectCategory('speed', this)">🚗 Speed</button>
+                <button class="cat-tab active" onclick="selectCategory('length', this)" data-i18n="category.length"></button>
+                <button class="cat-tab" onclick="selectCategory('weight', this)" data-i18n="category.weight"></button>
+                <button class="cat-tab" onclick="selectCategory('temperature', this)" data-i18n="category.temperature"></button>
+                <button class="cat-tab" onclick="selectCategory('area', this)" data-i18n="category.area"></button>
+                <button class="cat-tab" onclick="selectCategory('volume', this)" data-i18n="category.volume"></button>
+                <button class="cat-tab" onclick="selectCategory('speed', this)" data-i18n="category.speed"></button>
             </div>
 
             <div class="converter-grid">
                 <div>
-                    <div class="converter-label">From</div>
-                    <input type="text" id="converter-value" placeholder="Enter value" />
+                    <div class="converter-label" data-i18n="from"></div>
+                    <input type="text" id="converter-value" placeholder="Enter value" data-i18n-placeholder="input.enter_value"/>
                     <select id="from-unit"></select>
                 </div>
 
                 <button class="switch-btn" onclick="switchUnits()">⇄</button>
 
                 <div>
-                    <div class="converter-label">To</div>
+                    <div class="converter-label" data-i18n="to"></div>
                     <input readonly type="text" id="converter-result"/>
                     <select id="to-unit"></select>
                 </div>
             </div>
 
-            <button class="btn btn-primary btn-full" onclick="convertUnits()">Convert</button>
+            <button class="btn btn-primary btn-full" onclick="convertUnits()" data-i18n="convert"></button>
             <div id="converter-error" class="eq-result" style="margin-top:0.8rem"></div>
         </div>
     </div>
@@ -270,69 +269,70 @@
     <!-- Help Page -->
     <div id="page-help" class="page">
         <div class="page-header">
-            <div class="page-title">How to Use the Calculator Suite</div>
+            <div class="page-title" data-i18n="help_subtitle"></div>
         </div>
 
         <div class="card">
             <div class="accordion open">
                 <button type="button" class="accordion-toggle" aria-expanded="true">
-                    <span>Standard Calculator</span>
+                    <span data-i18n="standard_calculator"></span>
                     <span class="accordion-icon" aria-hidden="true"></span>
                 </button>
                 <ul class="accordion-panel">
-                    <li>Enter numbers and operations using the buttons.</li>
-                    <li>Press "=" to evaluate the expression.</li>
-                    <li>Your calculation history will be displayed below the calculator.</li>
+                    <li data-i18n="standard_calculator_help_1"></li>
+                    <li data-i18n="standard_calculator_help_2"></li>
+                    <li data-i18n="standard_calculator_help_3"></li>
                 </ul>
             </div>
             <div class="accordion">
                 <button type="button" class="accordion-toggle" aria-expanded="false">
-                    <span>Scientific Calculator</span>
+                    <span data-i18n="scientific_calculator"></span>
                     <span class="accordion-icon" aria-hidden="true"></span>
                 </button>
                 <ul class="accordion-panel">
-                    <li>Supports advanced functions like exponents, square roots, factorials, and complex numbers.</li>
-                    <li>Use parentheses to control the order of operations.</li>
-                    <li>The "Ans" button allows you to use the result of your last calculation in a new expression.</li>
+                    <li data-i18n="scientific_calculator_help_1"></li>
+                    <li data-i18n="scientific_calculator_help_2"></li>
+                    <li data-i18n="scientific_calculator_help_3"></li>
                 </ul>
             </div>
             <div class="accordion">
                 <button type="button" class="accordion-toggle" aria-expanded="false">
-                    <span>Linear Equations</span>
+                    <span data-i18n="equations"></span>
                     <span class="accordion-icon" aria-hidden="true"></span>
                 </button>
                 <ul class="accordion-panel">
-                    <li>Solve linear equations with one or two unknowns.</li>
-                    <li>Enter coefficients and constants to define your equation.</li>
+                    <li data-i18n="equations_help_1"></li>
+                    <li data-i18n="equations_help_2"></li>
                 </ul>
             </div>
             <div class="accordion">
                 <button type="button" class="accordion-toggle" aria-expanded="false">
-                    <span>Unit Converter</span>
+                    <span data-i18n="unit_converter"></span>
                     <span class="accordion-icon" aria-hidden="true"></span>
                 </button>
                 <ul class="accordion-panel">
-                    <li>Convert between different units of measurement.</li>
-                    <li>Enter a value and select the units you want to convert from.</li>
+                    <li data-i18n="unit_converter_help_1"></li>
+                    <li data-i18n="unit_converter_help_2"></li>
                 </ul>
             </div>
             <div class="accordion">
                 <button type="button" class="accordion-toggle" aria-expanded="false">
-                    <span>Currency Converter</span>
+                    <span data-i18n="currency_converter"></span>
                     <span class="accordion-icon" aria-hidden="true"></span>
                 </button>
                 <ul class="accordion-panel">
-                    <li>Convert between different currencies using daily updated exchange rates.</li>
-                    <li>Enter an amount and select the currencies you want to convert between.</li>
+                    <li data-i18n="currency_converter_help_1"></li>
+                    <li data-i18n="currency_converter_help_2"></li>
                 </ul>
             </div>
             <div class="accordion">
                 <button type="button" class="accordion-toggle" aria-expanded="false">
-                    <span>Programmer Calculator</span>
+                    <span data-i18n="programmer"></span>
                     <span class="accordion-icon" aria-hidden="true"></span>
                 </button>
                 <ul class="accordion-panel">
-                    <li>Perform calculations in different number systems (binary, octal, decimal, hexadecimal).</li>
+                    <li data-i18n="programmer_help_1"></li>
+                    <li data-i18n="programmer_help_2"></li>
                 </ul>
             </div>
 
@@ -342,10 +342,15 @@
 
 </main>
 
+<!-- JavaScript files -->
 <script src="js/app.js"></script>
 <script src="js/equations.js"></script>
 <script src="js/converter.js"></script>
 <script src="js/main.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+    initI18n();
+</script>
 </div>
 </body>
 </html>

@@ -12,7 +12,6 @@ const app = (() => {
     // ── DOM helpers ────────────────────────────────────────────────────────
     const arithmeticButtons =  document.querySelectorAll('button.digit, button.op, button.sct, #ans_button');
     const nightModeToggle = document.getElementById('night-mode-toggle');
-    const languageToggle = document.getElementById('language-toggle');
     const ans_button = document.getElementById('ans_button');
     const close_paren = document.getElementById('close-paren');
     let hasCleared = false;
@@ -82,6 +81,20 @@ const app = (() => {
 
     ans_button.disabled = true;
 
+    // ── Language and theme toggles ─────────────────────────────────────────────
+    document.getElementById("lang-toggle").addEventListener("click", async () => {
+        const current = getLanguage();
+        const next = current === "en" ? "fr" : "en";
+
+        setLanguage(next);
+        await loadTranslations(next);
+        updateContent();
+    });
+
+
+
+
+
     /**
      * Handle button clicks for digits, operators, and the equals sign.
      */
@@ -109,15 +122,12 @@ const app = (() => {
                     case '(':
                         expression_to_evaluate.push('(');
                         parenthesis_stack.push(')');
-                        console.log(`Adding opening parenthesis. Current stack: ${parenthesis_stack}`);
                         break;
 
                     case ')':
-                        console.log(`Attempting to add closing parenthesis. Current stack: ${parenthesis_stack}`);
                         if (parenthesis_stack.length > 0) {
                             expression_to_evaluate.push(')');
                             parenthesis_stack.pop();
-                            console.log(`Added closing parenthesis if stack was not empty. Current stack: ${parenthesis_stack}`);
                         }
                         break;
 
@@ -176,11 +186,12 @@ const app = (() => {
             switch (token) {
                 case '×': return '*';
                 case '÷': return '/';
+                case '^': return '^';
+                case '!': return '!';
                 default: return token;
             }
         }).join('') + parenthesis_stack.join('');
         let result = input;
-        console.log(`Expression after token mapping: ${input}`);
         if (input.startsWith('*') || input.startsWith('/') || input.startsWith('+')) {
             result = getLastAnswer() + input; // Prepend last answer to handle expressions starting with an operator
         } else if (input.startsWith('-')) {
@@ -268,7 +279,6 @@ function deleteLastEntry() {
                 expression_to_evaluate.unshift('-'); // Add leading '-' if not present
             }
         }
-        console.log(`Expression after sign change: ${expression_to_evaluate.join('')}`);
         activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
     }
 
