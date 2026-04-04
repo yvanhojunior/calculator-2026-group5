@@ -10,10 +10,12 @@ const app = (() => {
     let parenthesis_stack = [];
 
     // ── DOM helpers ────────────────────────────────────────────────────────
-    const arithmeticButtons =  document.querySelectorAll('button.digit, button.op, button.sct, button.light');
+    const arithmeticButtons =  document.querySelectorAll('button.digit, button.op, button.sct, #ans_button');
     const nightModeToggle = document.getElementById('night-mode-toggle');
     const languageToggle = document.getElementById('language-toggle');
     const ans_button = document.getElementById('ans_button');
+    const close_paren = document.getElementById('close-paren');
+    let hasCleared = false;
     let currentPage = 'calculator'; // Default page
     let activeExpression = document.getElementById('std_expression'); // Start with standard expression active
     let activeResult = document.getElementById('std_result'); // Start with standard result active
@@ -95,20 +97,42 @@ const app = (() => {
             if (btn.id === 'ans_button') {
                 const lastAnswer = app.getLastAnswer();
                 expression_to_evaluate.push(lastAnswer);
-            }
-
-            if (btn.classList.contains('digit') || btn.classList.contains('op')) {
+            } else if (btn.classList.contains('digit') || btn.classList.contains('op')) {
                 expression_to_evaluate.push(value);
-            }
-            if (btn.classList.contains('sct')) {
-                if (!btn.hasAttribute('data-fn')) {
-                    expression_to_evaluate.push(value);
-                } else {
-                    expression_to_evaluate.push(value+'(');
-                    parenthesis_stack.push(')');
+            } else if (btn.classList.contains('sct')) {
+                switch (value) {
+                    case 'sqrt':
+                        expression_to_evaluate.push('sqrt(');
+                        parenthesis_stack.push(')');
+                        break;
+
+                    case '(':
+                        expression_to_evaluate.push('(');
+                        parenthesis_stack.push(')');
+                        console.log(`Adding opening parenthesis. Current stack: ${parenthesis_stack}`);
+                        break;
+
+                    case ')':
+                        console.log(`Attempting to add closing parenthesis. Current stack: ${parenthesis_stack}`);
+                        if (parenthesis_stack.length > 0) {
+                            expression_to_evaluate.push(')');
+                            parenthesis_stack.pop();
+                            console.log(`Added closing parenthesis if stack was not empty. Current stack: ${parenthesis_stack}`);
+                        }
+                        break;
+
+                    default:
+                        expression_to_evaluate.push(value);
                 }
             }
-            activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
+
+            
+            activeResult.textContent = expression_to_evaluate.length > 0 ? expression_to_evaluate.join('') + parenthesis_stack.join('') : '0';
+            if (parenthesis_stack.length > 0) {
+                close_paren.disabled = false;
+            } else {
+                close_paren.disabled = true;
+            }
             return;
         })
 
@@ -148,20 +172,21 @@ const app = (() => {
 
     /** Build an expression string using parser-friendly operator symbols. */
     function buildExpressionForApi() {
-        result = expression_to_evaluate.map(token => {
+        let input = expression_to_evaluate.map(token => {
             switch (token) {
                 case '×': return '*';
                 case '÷': return '/';
                 default: return token;
             }
         }).join('') + parenthesis_stack.join('');
-        if (result.startsWith('*') || result.startsWith('/') || result.startsWith('+')) {
-            result = getLastAnswer() + result; // Prepend last answer to handle expressions starting with an operator
+        let result = input;
+        console.log(`Expression after token mapping: ${input}`);
+        if (input.startsWith('*') || input.startsWith('/') || input.startsWith('+')) {
+            result = getLastAnswer() + input; // Prepend last answer to handle expressions starting with an operator
+        } else if (input.startsWith('-')) {
+            result = getLastAnswer() + input; // Prepend last answer to handle expressions starting with a negative sign
         }
-        if (result.startsWith('-')) {
-            result = '0' + result; // Prepend '0' to handle negative numbers at the start of the expression
-        }
-        return result;
+        return result = result.startsWith('-') ? '0' + result : result; // Prepend '0' to handle negative numbers at the start of the expression
     }
 
     // ── public API ─────────────────────────────────────────────────────────
@@ -171,6 +196,8 @@ const app = (() => {
         activeResult.textContent = "0";
         expression_to_evaluate = [];
         parenthesis_stack = [];
+        close_paren.disabled = true;
+        hasCleared = true;
     }
 
     /** Send the expression to the backend and display the result. */
@@ -204,25 +231,30 @@ const app = (() => {
             // Reset for next expression
             expression_to_evaluate = [];
             parenthesis_stack = [];
+            hasCleared = false;
         } catch (err) {
             showError('Network error – is the server running?');
             console.error(err);
         }
     }
 
-    function deleteLastEntry() {
-        if (expression_to_evaluate.length > 0) {
-            const lastToken = expression_to_evaluate.pop();
-            if (lastToken[lastToken.length - 1] === '(') {  // If the last token ends with '(', we also need to remove the corresponding ')' from the stack
-                parenthesis_stack.pop();
-            }
-            if (expression_to_evaluate.length === 0 && parenthesis_stack.length === 0) {
-                activeResult.textContent = '0';
-            } else {
-                activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('')
-            };
+function deleteLastEntry() {
+
+    if (expression_to_evaluate.length > 0) {
+        const lastToken = expression_to_evaluate.pop();
+
+        if (lastToken === ')') {
+            parenthesis_stack.push(')');
+        } else if (lastToken[lastToken.length - 1] === '(') {
+            parenthesis_stack.pop();
+        }
+        if (expression_to_evaluate.length === 0 && parenthesis_stack.length === 0) {
+            activeResult.textContent = '0';
+        } else {
+            activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
         }
     }
+}
 
     function changeSign() {
         // Handle sign change (e.g., toggle between positive and negative)
