@@ -205,7 +205,7 @@ footer button {
 }
 
 .grid.sct{
-    grid-template-columns:repeat(5,1fr);
+    grid-template-columns:repeat(4,1fr);
     gap: 0.375em;
     padding: 1.5em 0em 1em 0em;
 }
