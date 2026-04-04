@@ -7,6 +7,8 @@ function showPage(page, el) {
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('page-' + page).classList.add('active');
     el.classList.add('active');
+
+    window.dispatchEvent(new CustomEvent('pageChanged', { detail: { page } }));
 }
 
 function selectCategory(cat, el) {

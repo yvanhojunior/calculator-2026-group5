@@ -1,24 +1,14 @@
 const units = {
-    length: ["meters", "kilometers", "centimeters", "decimeters",
-        "millimeters", "feet", "inches", "miles", "yards", "nauticalmiles"],
-    weight:["kilograms", "grams", "milligrams", "pounds", "ounces", "tonnes"],
-    temperature: ["celsius", "fahrenheit", "kelvin"],
-    area: ["square_meter", "square_kilometer", "square_centimeter", "square_millimeter","square_mile", "square_yard", "square_foot", "square_inch"],
-    volume: ["liter", "milliliter", "cubic_meter", "cubic_centimeter", "cubic_millimeter", "gallon", "quart", "pint", "cup", "fluid_ounce"],
-    speed: ["meter_per_second", "kilometer_per_hour", "mile_per_hour", "feet_per_second", "knot"]
+    length: {"meters": "Meters (m)", "kilometers": "Kilometers (km)", "centimeters": "Centimeters (cm)", "decimeters": "Decimeters (dm)",
+        "millimeters": "Millimeters (mm)", "feet": "Feet (ft)", "inches": "Inches (in)", "miles": "Miles (mi)", "yards": "Yards (yd)", "nauticalmiles": "Nautical Miles (nmi)"},
+    weight: {"kilograms": "Kilograms (kg)", "grams": "Grams (g)", "milligrams": "Milligrams (mg)", "pounds": "Pounds (lb)", "ounces": "Ounces (oz)", "tonnes": "Tonnes (t)"},
+    temperature: {"celsius": "Celsius (°C)", "fahrenheit": "Fahrenheit (°F)", "kelvin": "Kelvin (K)"},
+    area: {"square_meter": "Square Meters (m²)", "square_kilometer": "Square Kilometers (km²)", "square_centimeter": "Square Centimeters (cm²)", "square_millimeter": "Square Millimeters (mm²)","square_mile": "Square Miles (mi²)","square_yard":"Square Yards (yd²)","square_foot":"Square Feet (ft²)","square_inch":"Square Inches (in²)"},
+    volume: {"liter":	"Liter (L)","milliliter":"Milliliter (mL)","cubic_meter":"Cubic Meters (m³)","cubic_centimeter":"Cubic Centimeters (cm³)","cubic_millimeter":"Cubic Millimeters (mm³)","gallon":"Gallons (gal)","quart":"Quarts (qt)","pint":"Pints (pt)","cup":"Cups","fluid_ounce":"Fluid Ounces (fl oz)"},
+    speed: {"meter_per_second":"Meters per Second (m/s)","kilometer_per_hour":"Kilometers per Hour (km/h)","mile_per_hour":"Miles per Hour (mph)","feet_per_second":"Feet per Second (ft/s)","knot":"Knots"}
 };
 
 let currentCategory = 'length';
-
-/**
- * Format a unit name for display.
- * Example: square_meter -> Square Meter
- */
-function formatUnitLabel(unit) {
-    return unit
-        .replaceAll('_', ' ')
-        .replace(/\b\w/g, char => char.toUpperCase());
-}
 
 /**
  * Update the unit dropdowns according to the selected category.
@@ -35,15 +25,15 @@ function updateUnits(category) {
     fromSelect.innerHTML = '';
     toSelect.innerHTML = '';
 
-    units[currentCategory].forEach(unit => {
+    Object.keys(units[currentCategory]).forEach(unit => {
         const fromOption = document.createElement('option');
         fromOption.value = unit;
-        fromOption.textContent = formatUnitLabel(unit);
+        fromOption.textContent = units[currentCategory][unit];
         fromSelect.appendChild(fromOption);
 
         const toOption = document.createElement('option');
         toOption.value = unit;
-        toOption.textContent = formatUnitLabel(unit);
+        toOption.textContent = units[currentCategory][unit];
         toSelect.appendChild(toOption);
     });
 
@@ -51,7 +41,6 @@ function updateUnits(category) {
         toSelect.selectedIndex = 1;
     }
 
-    // Clear fields and messages when category changes
     const errorDiv = document.getElementById('converter-error');
     const valueInput = document.getElementById('converter-value');
     const resultInput = document.getElementById('converter-result');
@@ -123,21 +112,18 @@ async function convertUnits() {
     let to;
     let targetField;
 
-    // No field filled
     if (!fromValue && !toValue) {
         errorDiv.className = 'eq-result eq-error';
-        errorDiv.innerHTML = 'Enter a value in one field';
+        errorDiv.innerHTML = 'Enter a value in the field';
         return;
     }
 
-    // Both fields filled
     if (fromValue && toValue) {
         errorDiv.className = 'eq-result eq-error';
         errorDiv.innerHTML = 'Fill only one field';
         return;
     }
 
-    // Determine conversion direction
     if (fromValue) {
         value = parseFloat(fromValue);
         from = fromUnit;
@@ -156,7 +142,6 @@ async function convertUnits() {
         return;
     }
 
-    // Same unit: no API call needed
     if (from === to) {
         targetField.value = value;
         errorDiv.className = 'eq-result eq-success';
