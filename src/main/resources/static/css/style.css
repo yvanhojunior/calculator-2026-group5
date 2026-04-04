@@ -205,7 +205,7 @@ footer button {
 }
 
 .grid.sct{
-    grid-template-columns:repeat(5,1fr);
+    grid-template-columns:repeat(4,1fr);
     gap: 0.375em;
     padding: 1.5em 0em 1em 0em;
 }
@@ -223,6 +223,9 @@ button{
     background:var(--digit);
     color:var(--text);
     cursor:pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 .digit{
@@ -230,13 +233,17 @@ button{
     color:var(--text);
 }
 
-.digit:hover, .op:hover, button.sct:hover {
+.digit:hover, .op:hover, button.sct:not(:disabled):hover {
     filter: brightness(0.85);
     transform: translateY(-2px);
     border-color: var(--text);
 }
 
-.light:hover {
+.digit:focus, .op:focus, .light:focus, button.sct:focus {
+    outline: none;
+}
+
+.light:not(:disabled):hover {
     filter: brightness(0.85);
     transform: translateY(-2px);
     border-color: var(--functions);
@@ -277,6 +284,11 @@ input[type="text"] {
 }
 
 input:focus { border-color: var(--accent); }
+
+button:disabled {
+    filter: brightness(0.5);
+    
+}
 
 /* ── Buttons ── */
 .btn {
@@ -384,6 +396,65 @@ input:focus { border-color: var(--accent); }
     background: rgba(255, 101, 132, 0.1);
     color: var(--accent2);
     border: 1px solid rgba(255, 101, 132, 0.3);
+}
+
+/* ── Help accordion ── */
+.accordion {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface2);
+    margin-bottom: 0.8rem;
+    overflow: hidden;
+}
+
+.accordion-toggle {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9rem 1rem;
+    text-align: left;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.accordion-toggle:hover {
+    background: rgba(108, 99, 255, 0.12);
+}
+
+.accordion-icon {
+    width: 1.2rem;
+    text-align: right;
+    color: var(--accent);
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.accordion-icon::before {
+    content: '+';
+    font-weight: 800;
+    font-size: larger;
+}
+
+.accordion.open .accordion-icon::before {
+    content: '-';
+    font-weight: 800;
+    font-size: larger;
+}
+
+.accordion-panel {
+    list-style: disc;
+    padding: 0 1.4rem 1rem 2.2rem;
+    color: var(--text-muted);
+}
+
+.accordion-panel li {
+    margin: 0.35rem 0;
+    min-height: 1.1rem;
 }
 
 .eq-warning {
