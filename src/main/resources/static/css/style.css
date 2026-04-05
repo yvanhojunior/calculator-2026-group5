@@ -116,7 +116,7 @@ body {
 }
 
 .nav-text {
-    font-size: 1.3em;
+    font-size: 1.2em;
 }
 
 footer button {
@@ -276,7 +276,13 @@ button.sct{
     font-weight: bold;
 }
 
-.input-row { display: flex; gap: 0.6rem; margin-bottom: 1rem; }
+.input-row {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    align-items: end;
+}
+
 
 input[type="text"] {
     flex: 1;
@@ -489,7 +495,7 @@ button:disabled {
     font-family: 'Space Mono', monospace;
 }
 
-select {
+select, #from-currency, #to-currency {
     width: 100%;
     padding: 0.7rem 1rem;
     background: var(--surface2);
@@ -501,6 +507,43 @@ select {
     outline: none;
     cursor: pointer;
     margin-top: 0.3rem;
+}
+
+.currency-field {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+.currency-menu {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    right: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 0.25rem;
+    z-index: 40;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.currency-option {
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.currency-option:hover,
+.currency-option.active {
+    background: rgba(108, 99, 255, 0.2);
 }
 
 select:focus { border-color: var(--accent); }

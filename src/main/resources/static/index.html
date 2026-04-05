@@ -227,18 +227,18 @@
         <div class="card">
             <div class="card-title" data-i18n="category"></div>
             <div class="category-tabs">
-                <button class="cat-tab active" onclick="selectCategory('length', this)" data-i18n="category.length"></button>
-                <button class="cat-tab" onclick="selectCategory('weight', this)" data-i18n="category.weight"></button>
-                <button class="cat-tab" onclick="selectCategory('temperature', this)" data-i18n="category.temperature"></button>
-                <button class="cat-tab" onclick="selectCategory('area', this)" data-i18n="category.area"></button>
-                <button class="cat-tab" onclick="selectCategory('volume', this)" data-i18n="category.volume"></button>
-                <button class="cat-tab" onclick="selectCategory('speed', this)" data-i18n="category.speed"></button>
+                <button class="cat-tab active" onclick="selectCategory('length', this)" data-i18n="unit_cat.length"></button>
+                <button class="cat-tab" onclick="selectCategory('weight', this)" data-i18n="unit_cat.weight"></button>
+                <button class="cat-tab" onclick="selectCategory('temperature', this)" data-i18n="unit_cat.temperature"></button>
+                <button class="cat-tab" onclick="selectCategory('area', this)" data-i18n="unit_cat.area"></button>
+                <button class="cat-tab" onclick="selectCategory('volume', this)" data-i18n="unit_cat.volume"></button>
+                <button class="cat-tab" onclick="selectCategory('speed', this)" data-i18n="unit_cat.speed"></button>
             </div>
 
             <div class="converter-grid">
                 <div>
                     <div class="converter-label" data-i18n="from"></div>
-                    <input type="text" id="converter-value" placeholder="Enter value" data-i18n-placeholder="input.enter_value"/>
+                    <input type="text" id="converter-value" placeholder="Enter value" data-i18n-placeholder="input.enter_value_placeholder"/>
                     <select id="from-unit"></select>
                 </div>
 
@@ -263,7 +263,34 @@
 
     <!-- Currency Converter Page -->
     <div id="page-currency" class="page">
-        Currency Converter coming soon!
+            <div class="page-header">
+                <div class="page-title" data-i18n="currency_converter"></div>
+                <div class="page-subtitle" data-i18n="currency_converter_subtitle"></div>
+            </div>
+
+            <div class="card">
+                <div class="input-row">
+                    <input type="text" id="currency-amount" data-i18n-placeholder="input.enter_amount_placeholder"/>
+
+                    <div class="currency-field">
+                        <input type="text" id="from-currency" autocomplete="off" placeholder="From: e.g. USD" data-i18n-placeholder="input.from_currency_placeholder" onclick="app.clearInput(this)"/>
+                        <div id="from-currency-menu" class="currency-menu" role="listbox" hidden></div>
+                    </div>
+
+                    <button class="switch-btn" onclick="switchCurrencies()">⇄</button>
+                    
+                    <div class="currency-field">
+                        <input type="text" id="to-currency" autocomplete="off" placeholder="To: e.g. EUR" data-i18n-placeholder="input.to_currency_placeholder" onclick="app.clearInput(this)"/>
+                        <div id="to-currency-menu" class="currency-menu" role="listbox" hidden></div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-full" onclick="convertCurrency()" data-i18n="convert"></button>
+                <div id="currency-result" class="eq-result" hidden>
+                    <input type="hidden" readonly id="currency-result-value"/>
+                    <div id="currency-result-display" class="result"></div>
+                </div>
+                <div id="currency-error" class="eq-result" style="margin-top:0.8rem"></div>
+        </div>
     </div>
 
     <!-- Help Page -->
@@ -347,6 +374,7 @@
 <script src="js/equations.js"></script>
 <script src="js/converter.js"></script>
 <script src="js/main.js"></script>
+<script src="js/currency.js"></script>
 <script src="js/i18n.js"></script>
 <script>
     initI18n();

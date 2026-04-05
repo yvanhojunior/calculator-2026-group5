@@ -95,7 +95,6 @@ function switchUnits() {
  */
 async function convertUnits() {
     const fromValue = document.getElementById('converter-value').value.trim();
-    const toValue = document.getElementById('converter-result').value.trim();
 
     const fromUnit = document.getElementById('from-unit').value;
     const toUnit = document.getElementById('to-unit').value;
@@ -112,28 +111,15 @@ async function convertUnits() {
     let to;
     let targetField;
 
-    if (!fromValue && !toValue) {
+    if (!fromValue) {
         errorDiv.className = 'eq-result eq-error';
         errorDiv.innerHTML = 'Enter a value in the field';
         return;
-    }
-
-    if (fromValue && toValue) {
-        errorDiv.className = 'eq-result eq-error';
-        errorDiv.innerHTML = 'Fill only one field';
-        return;
-    }
-
-    if (fromValue) {
+    } else {
         value = parseFloat(fromValue);
         from = fromUnit;
         to = toUnit;
         targetField = resultInput;
-    } else {
-        value = parseFloat(toValue);
-        from = toUnit;
-        to = fromUnit;
-        targetField = valueInput;
     }
 
     if (isNaN(value)) {

@@ -91,10 +91,6 @@ const app = (() => {
         updateContent();
     });
 
-
-
-
-
     /**
      * Handle button clicks for digits, operators, and the equals sign.
      */
@@ -249,23 +245,23 @@ const app = (() => {
         }
     }
 
-function deleteLastEntry() {
+    function deleteLastEntry() {
 
-    if (expression_to_evaluate.length > 0) {
-        const lastToken = expression_to_evaluate.pop();
+        if (expression_to_evaluate.length > 0) {
+            const lastToken = expression_to_evaluate.pop();
 
-        if (lastToken === ')') {
-            parenthesis_stack.push(')');
-        } else if (lastToken[lastToken.length - 1] === '(') {
-            parenthesis_stack.pop();
-        }
-        if (expression_to_evaluate.length === 0 && parenthesis_stack.length === 0) {
-            activeResult.textContent = '0';
-        } else {
-            activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
+            if (lastToken === ')') {
+                parenthesis_stack.push(')');
+            } else if (lastToken[lastToken.length - 1] === '(') {
+                parenthesis_stack.pop();
+            }
+            if (expression_to_evaluate.length === 0 && parenthesis_stack.length === 0) {
+                activeResult.textContent = '0';
+            } else {
+                activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
+            }
         }
     }
-}
 
     function changeSign() {
         // Handle sign change (e.g., toggle between positive and negative)
@@ -307,10 +303,16 @@ function deleteLastEntry() {
         return '0';
     }
 
+    function clearInput(thisInput) {
+        if (thisInput) {
+            thisInput.value = '';
+        }
+    }
+
 
     // - Unit convertor mode: Allows the  user to convert between different units (e.g., length, weight, temperature) by selecting the desired conversion type and inputting the value to be converted.
 
-    return { calculate, clearDisplay, deleteLastEntry, changeSign, percentage, getLastAnswer};
+    return { calculate, clearDisplay, clearInput, deleteLastEntry, changeSign, percentage, getLastAnswer};
 })();
 
 // Expose app globally for inline HTML onclick handlers.

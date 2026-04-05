@@ -19,7 +19,10 @@ async function loadTranslations(lang) {
 }
 
 function t(key) {
-  return translations[key] || key;
+  const value = key
+    .split(".")
+    .reduce((obj, part) => (obj && obj[part] !== undefined ? obj[part] : undefined), translations);
+  return value || key;
 }
 
 function updateContent() {
@@ -32,7 +35,8 @@ function updateContent() {
   // Placeholder handling
   document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
     const key = el.dataset.i18nPlaceholder;
-    el.placeholder = t(key);
+    const translated = t(key);
+    el.placeholder = translated;
   });
 }
 
