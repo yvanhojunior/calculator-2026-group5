@@ -4,7 +4,9 @@ expression : additionExpr ;
 
 additionExpr : multiplicationExpr (('+' | '-') multiplicationExpr)* ;
 
-multiplicationExpr : atom (('*' | '/') atom)* ;
+multiplicationExpr : exponentiationExpr (('*' | '/') exponentiationExpr)* ;
+
+exponentiationExpr : atom ('^' atom)* ;
 
 atom : COMPLEX
      | REAL

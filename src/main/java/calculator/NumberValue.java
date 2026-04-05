@@ -19,4 +19,7 @@ public interface NumberValue {
 
         calculator.NumberValue div(calculator.NumberValue other);
 
+        calculator.NumberValue pow(calculator.NumberValue other);
+
+
 }

@@ -88,6 +88,17 @@ public class RealValue implements NumberValue {
         return new RealValue(value.divide(o.value, precision), precision);
     }
 
+    @Override
+    public NumberValue pow(NumberValue other) {
+        if (other instanceof RationalValue o) {
+            double exp = (double) o.getNumerator() / o.getDenominator();
+            return new RealValue(Math.pow(value.doubleValue(), exp));
+        }
+        RealValue o = toReal(other);
+        if (isSpecial() || o.isSpecial()) return NAN;
+        return new RealValue(Math.pow(value.doubleValue(), o.getValue().doubleValue()));
+    }
+
     // Gestion des cas spéciaux pour l'addition
     private RealValue handleSpecialAdd(RealValue o) {
         if (isNaN() || o.isNaN()) return NAN;
