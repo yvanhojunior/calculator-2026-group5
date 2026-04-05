@@ -20,9 +20,10 @@
         "single_equation_placeholder": "ex. 2x + 3 = 7",
         "first_equation_placeholder": "Première équation : ex. 2x + y = 5",
         "second_equation_placeholder": "Deuxième équation : ex. x - y = 1",
-        "enter_value": "Saisir une valeur"
+        "enter_value_placeholder": "Saisir une valeur",
     },
-    "category": {
+    "category": "Catégorie",
+    "unit_cat": {
         "length": "📏 Longueur",
         "weight": "⚖️ Poids",
         "temperature": "🌡️ Température",
