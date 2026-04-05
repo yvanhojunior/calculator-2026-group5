@@ -111,3 +111,19 @@ Feature: Integer Arithmetic Expressions
     Scenario: Evaluating an expression with parentheses
       Given the expression "(2 + 3) * 4"
       Then its value is "20"
+      
+    Scenario: Negating a single number
+      Given the expression "-4"
+      Then its value is "-4"
+    
+    Scenario: Adding a negative number
+      Given the expression "-4 + 2"
+      Then its value is "-2"
+    
+    Scenario: Multiplying with a negative number
+      Given the expression "2 * -3"
+      Then its value is "-6"
+      
+    Scenario: Negative number in parentheses
+      Given the expression "(-4) * 3"
+      Then its value is "-12"
