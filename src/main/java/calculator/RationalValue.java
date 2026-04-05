@@ -75,6 +75,20 @@ public class RationalValue implements NumberValue {
     }
 
     @Override
+    public NumberValue pow(NumberValue other) {
+        if (other instanceof IntegerValue o) {
+            long exp = o.getValue();
+            if (exp < 0) {
+                return new RealValue(Math.pow((double) numerator / denominator, exp));
+            }
+            long num = (long) Math.pow(numerator, exp);
+            long den = (long) Math.pow(denominator, exp);
+            return new RationalValue(num, den);
+        }
+        return new RealValue(Math.pow((double) numerator / denominator, ((RealValue) other).getValue().doubleValue()));
+    }
+
+    @Override
     public String toString() {
         if (denominator == 1) return Long.toString(numerator);
         // Forme mixte: si |numérateur| > dénominateur, afficher "a b/c"

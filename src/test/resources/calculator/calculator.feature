@@ -127,3 +127,19 @@ Feature: Integer Arithmetic Expressions
     Scenario: Negative number in parentheses
       Given the expression "(-4) * 3"
       Then its value is "-12"
+
+  Scenario: Exponentiation of two integer numbers
+    Given the expression "2^3"
+    Then its value is "8"
+
+  Scenario: Exponentiation with zero
+    Given the expression "2^0"
+    Then its value is "1"
+
+  Scenario: Exponentiation with negative exponent
+    Given the expression "2^-1"
+    Then its value is "0.5"
+
+  Scenario: Exponentiation with negative base
+    Given the expression "-2^3"
+    Then its value is "-8"
