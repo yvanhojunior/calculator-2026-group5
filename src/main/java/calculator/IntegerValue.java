@@ -29,8 +29,11 @@ public class IntegerValue implements NumberValue {
             if (other instanceof RealValue) {
                 return new RealValue(java.math.BigDecimal.valueOf(this.value), RealValue.DEFAULT_PRECISION).add(other);
             }
+            if (other instanceof RationalValue o) {
+                return new RationalValue(this.value * o.getDenominator() + o.getNumerator(), o.getDenominator());
+            }
             throw new IllegalArgumentException("Unsupported type: " + other.getClass());
-        }
+    }
 
         @Override
         public NumberValue sub(NumberValue other) {
@@ -39,6 +42,9 @@ public class IntegerValue implements NumberValue {
             }
             if (other instanceof RealValue) {
                 return new RealValue(java.math.BigDecimal.valueOf(this.value), RealValue.DEFAULT_PRECISION).sub(other);
+            }
+            if (other instanceof RationalValue o) {
+                return new RationalValue(this.value * o.getDenominator() - o.getNumerator(), o.getDenominator());
             }
             throw new IllegalArgumentException("Unsupported type: " + other.getClass());
         }
@@ -50,6 +56,9 @@ public class IntegerValue implements NumberValue {
             }
             if (other instanceof RealValue) {
                 return new RealValue(java.math.BigDecimal.valueOf(this.value), RealValue.DEFAULT_PRECISION).mul(other);
+            }
+            if (other instanceof RationalValue o) {
+                return new RationalValue(this.value * o.getNumerator(), o.getDenominator());
             }
             throw new IllegalArgumentException("Unsupported type: " + other.getClass());
         }
@@ -76,22 +85,42 @@ public class IntegerValue implements NumberValue {
             throw new IllegalArgumentException("Unsupported type: " + other.getClass());
         }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null) return false;
-        if (o == this) return true;
-        if (!(o instanceof IntegerValue)) return false;
-        return this.value == ((IntegerValue) o).value;
-    }
+        @Override
+        public NumberValue pow(NumberValue other) {
+            if (other instanceof IntegerValue o) {
+                if (o.getValue() < 0) {
+                    // exposant négatif → résultat réel ex: 2^-1 = 0.5
+                    return new RealValue(Math.pow(this.value, o.getValue()));
+                }
+                return new IntegerValue((int) Math.pow(this.value, o.getValue()));
+            }
+            if (other instanceof RationalValue o) {
+                double exp = (double) o.getNumerator() / o.getDenominator();
+                return new RealValue(Math.pow(this.value, exp));
+            }
+            if (other instanceof RealValue o) {
+                return new RealValue(Math.pow(this.value, o.getValue().doubleValue()));
+            }
+            throw new IllegalArgumentException("Unsupported type: " + other.getClass());
+        }
 
-    @Override
-    public int hashCode() {
-        return Integer.hashCode(value);
-    }
 
         @Override
-        public String toString() {
-            return Integer.toString(value);
+        public boolean equals(Object o) {
+            if (o == null) return false;
+            if (o == this) return true;
+            if (!(o instanceof IntegerValue)) return false;
+            return this.value == ((IntegerValue) o).value;
+        }
+
+        @Override
+        public int hashCode() {
+            return Integer.hashCode(value);
+        }
+
+            @Override
+            public String toString() {
+                return Integer.toString(value);
         }
 
 }

@@ -60,6 +60,18 @@ public class ComplexValue implements NumberValue {
     }
 
     @Override
+    public NumberValue pow(NumberValue other) {
+        if (other instanceof IntegerValue o) {
+            int exp = o.getValue();
+            double r = Math.pow(Math.sqrt(real * real + imaginary * imaginary), exp);
+            double theta = Math.atan2(imaginary, real) * exp;
+            return new ComplexValue(r * Math.cos(theta), r * Math.sin(theta));
+        }
+        throw new IllegalArgumentException("Unsupported exponent type for ComplexValue");
+    }
+
+
+    @Override
     public String toString() {
         if (imaginary == 0) return Double.toString(real);
         if (real == 0) return imaginary + "i";
