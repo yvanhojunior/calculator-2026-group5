@@ -263,7 +263,34 @@
 
     <!-- Currency Converter Page -->
     <div id="page-currency" class="page">
-        Currency Converter coming soon!
+            <div class="page-header">
+                <div class="page-title" data-i18n="currency_converter"></div>
+                <div class="page-subtitle" data-i18n="currency_converter_subtitle"></div>
+            </div>
+
+            <div class="card">
+                <div class="input-row">
+                    <input type="text" id="currency-amount" data-i18n-placeholder="input.enter_amount_placeholder"/>
+
+                    <div class="currency-field">
+                        <input type="text" id="from-currency" autocomplete="off" placeholder="From: e.g. USD" data-i18n-placeholder="input.from_currency_placeholder" onclick="app.clearInput(this)"/>
+                        <div id="from-currency-menu" class="currency-menu" role="listbox" hidden></div>
+                    </div>
+
+                    <button class="switch-btn" onclick="switchCurrencies()">⇄</button>
+                    
+                    <div class="currency-field">
+                        <input type="text" id="to-currency" autocomplete="off" placeholder="To: e.g. EUR" data-i18n-placeholder="input.to_currency_placeholder" onclick="app.clearInput(this)"/>
+                        <div id="to-currency-menu" class="currency-menu" role="listbox" hidden></div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-full" onclick="convertCurrency()" data-i18n="convert"></button>
+                <div id="currency-result" class="eq-result" hidden>
+                    <input type="hidden" readonly id="currency-result-value"/>
+                    <div id="currency-result-display" class="result"></div>
+                </div>
+                <div id="currency-error" class="eq-result" style="margin-top:0.8rem"></div>
+        </div>
     </div>
 
     <!-- Help Page -->
@@ -347,6 +374,7 @@
 <script src="js/equations.js"></script>
 <script src="js/converter.js"></script>
 <script src="js/main.js"></script>
+<script src="js/currency.js"></script>
 <script src="js/i18n.js"></script>
 <script>
     initI18n();
