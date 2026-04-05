@@ -222,7 +222,7 @@ const app = (() => {
                 return;
             }
 
-            const displayResult = formatApiResult(data.result);     // We handle various result formats (to avoid showing [object Object])
+            const displayResult = formatApiResult(data.result).replaceAll(/\s/g, '');     // We handle various result formats (to avoid showing [object Object])
             activeResult.textContent = displayResult;
             activeExpression.textContent = expression;
             addHistory(expression, displayResult);
