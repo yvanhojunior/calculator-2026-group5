@@ -21,6 +21,9 @@
         "first_equation_placeholder": "First equation: e.g. 2x + y = 5",
         "second_equation_placeholder": "Second equation: e.g. x - y = 1",
         "enter_value_placeholder": "Enter value",
+        "enter_amount_placeholder": "Enter amount",
+        "from_currency_placeholder": "From: e.g. USD",
+        "to_currency_placeholder": "To: e.g. EUR"
     },
     "category": "Category",
     "unit_cat": {
