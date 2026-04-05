@@ -16,7 +16,6 @@ async function loadCurrencyList() {
 
     let current_time = Math.floor(Date.now() / 1000);   // Current time in seconds
 
-    console.log('Currency data timestamps - Last Updated:', lastUpdated, 'Next Update:', nextUpdate, 'Current Time:', current_time);
     if (current_time < nextUpdate && current_time >= lastUpdated) {
         for (const currency of currencies) {
             byCode[currency.code] = {
@@ -26,7 +25,6 @@ async function loadCurrencyList() {
             };
         }
     } else if (current_time >= nextUpdate) {
-        console.log('Currency data is outdated, refreshing...');
         const refreshResponse = await fetch('/api/currencies');
         if (!refreshResponse.ok) {
             throw new Error('Unable to refresh currency list');
@@ -113,11 +111,7 @@ async function convertCurrency() {
     from = fromInput.value.trim().toUpperCase();
     to = toInput.value.trim().toUpperCase();
 
-    console.log('Converting', amount, from, 'to', to);
-
     const currencyList = await loadCurrencyList();
-
-    console.log('Loaded currency list:', currencyList);
 
     if (!currencyList[from] || !currencyList[to]) {
         console.log('Invalid currency code:', from, to);
@@ -129,9 +123,6 @@ async function convertCurrency() {
     const fromRate = currencyList[from].rate;
     const toRate = currencyList[to].rate;
     const convertedAmount = (amount / fromRate) * toRate;
-
-    console.log('Converted amount:', convertedAmount);
-    console.log('From symbol:', currencyList[from].symbol, 'To symbol:', currencyList[to].symbol);
 
     const formattedValue = `${currencyList[to].symbol || ''}${convertedAmount.toFixed(4)}`;
     if (resultValue) {

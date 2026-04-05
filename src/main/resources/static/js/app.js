@@ -188,12 +188,7 @@ const app = (() => {
             }
         }).join('') + parenthesis_stack.join('');
         let result = input;
-        if (input.startsWith('*') || input.startsWith('/') || input.startsWith('+')) {
-            result = getLastAnswer() + input; // Prepend last answer to handle expressions starting with an operator
-        } else if (input.startsWith('-')) {
-            result = getLastAnswer() + input; // Prepend last answer to handle expressions starting with a negative sign
-        }
-        return result = result.startsWith('-') ? '0' + result : result; // Prepend '0' to handle negative numbers at the start of the expression
+        return result;
     }
 
     // ── public API ─────────────────────────────────────────────────────────

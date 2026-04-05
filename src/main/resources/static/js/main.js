@@ -62,7 +62,6 @@ function initAccordions() {
 function initCurrencyAutocomplete() {
     const currencies = window.currency_list;
     if (!currencies) {
-        console.log('Currency list not available');
         return;
     }
 
@@ -191,7 +190,6 @@ document.addEventListener('DOMContentLoaded', initAccordions);
 document.addEventListener('DOMContentLoaded', () => {
     if (window.currency_list) {
         initCurrencyAutocomplete();
-        console.log('Currency list already loaded');
         return;
     }
 
