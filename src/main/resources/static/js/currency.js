@@ -15,6 +15,8 @@ async function loadCurrencyList() {
     const nextUpdate = data.next_update;
 
     let current_time = Math.floor(Date.now() / 1000);   // Current time in seconds
+
+    console.log('Currency data timestamps - Last Updated:', lastUpdated, 'Next Update:', nextUpdate, 'Current Time:', current_time);
     if (current_time < nextUpdate && current_time >= lastUpdated) {
         for (const currency of currencies) {
             byCode[currency.code] = {
@@ -24,7 +26,40 @@ async function loadCurrencyList() {
             };
         }
     } else if (current_time >= nextUpdate) {
-        // Data is outdated, need to make a API call
+        console.log('Currency data is outdated, refreshing...');
+        const refreshResponse = await fetch('/api/currencies');
+        if (!refreshResponse.ok) {
+            throw new Error('Unable to refresh currency list');
+        }
+        const refreshData = await refreshResponse.json();
+
+        const refreshedCurrencies = Array.isArray(refreshData.currencies)
+            ? refreshData.currencies
+            : Object.entries(refreshData.conversion_rates || {}).map(([code, rate]) => ({
+                  code,
+                  name: code,
+                  rate,
+                  symbol: code + ' '
+              }));
+        const refreshedLastUpdated = refreshData.last_updated || refreshData.time_last_update_unix;
+        const refreshedNextUpdate = refreshData.next_update || refreshData.time_next_update_unix;
+
+        for (const currency of refreshedCurrencies) {
+            byCode[currency.code] = {
+                name: currency.name,
+                rate: currency.rate,
+                symbol: currency.symbol
+            };
+        }
+        try {
+            localStorage.setItem('currency_list', JSON.stringify({
+                currencies: refreshedCurrencies,
+                last_updated: refreshedLastUpdated,
+                next_update: refreshedNextUpdate
+            }));
+        } catch (e) {
+            console.warn('Failed to save refreshed currency list to localStorage:', e);
+        }
     }
 
     window.currency_list = byCode;
