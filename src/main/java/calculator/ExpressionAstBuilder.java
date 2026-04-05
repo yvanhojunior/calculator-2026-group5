@@ -25,6 +25,14 @@ public class ExpressionAstBuilder extends ExpressionBaseVisitor<Expression> {
         if (ctx.COMPLEX() != null) {
             return parseComplex(ctx.COMPLEX().getText());
         }
+        if (ctx.atom() != null) {
+            Expression inner = visit(ctx.atom());
+            try {
+                return new Minus(java.util.Arrays.asList(new MyNumber(new IntegerValue(0)), inner));
+            } catch (IllegalConstruction e) {
+                return null;
+            }
+        }
         return visit(ctx.expression());
     }
 
