@@ -4,12 +4,15 @@ expression : additionExpr ;
 
 additionExpr : multiplicationExpr (('+' | '-') multiplicationExpr)* ;
 
-multiplicationExpr : atom (('*' | '/') atom)* ;
+multiplicationExpr : exponentiationExpr (('*' | '/') exponentiationExpr)* ;
+
+exponentiationExpr : atom ('^' atom)* ;
 
 atom : COMPLEX
      | REAL
      | RATIONAL
      | INT
+     | '-' atom
      | '(' expression ')' ;
 
 // Nombres complexes: 2+3i, 3i, -1.5i

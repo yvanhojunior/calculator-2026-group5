@@ -27,7 +27,8 @@ public class CalculatorController {
             expression = expression.replace("%2F", "/");
             expression = expression.replace("%2A", "*");
             expression = expression.replace("%2D", "-");
-            Expression expr = ExpressionParser.parse(expression);
+            expression = expression.replace("%5E", "^");
+            Expression expr = calculator.read(expression);
             NumberValue result = calculator.eval(expr);
             return ResponseEntity.ok(Map.of("result", result.toString()));
         } catch (ArithmeticException e) {

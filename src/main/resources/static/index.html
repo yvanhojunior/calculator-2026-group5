@@ -21,38 +21,38 @@
     <body>
         <button class="nav-item active" onclick="showPage('calculator', this)">
             <span class="nav-icon">🧮</span>
-            Calculator
+            <span class="nav-text" data-i18n="calculator"></span>
         </button>
         <button class="nav-item" onclick="showPage('scientific', this)">
             <span class="nav-icon">🔬</span>
-            Scientific
+            <span class="nav-text" data-i18n="scientific"></span>
         </button>
         <button class="nav-item" onclick="showPage('equations', this)">
             <span class="nav-icon">📐</span>
-            Linear Equations
+            <span class="nav-text" data-i18n="equations"></span>
         </button>
         <button class="nav-item" onclick="showPage('programmer', this)">
             <span class="nav-icon">💻</span>
-            Programmer
+            <span class="nav-text" data-i18n="programmer"></span>
         </button>
         <button class="nav-item" onclick="showPage('converter', this)">
             <span class="nav-icon">⚖️</span>
-            Unit Converter
+            <span class="nav-text" data-i18n="unit_converter"></span>
         </button>
         <button class="nav-item" onclick="showPage('currency', this)">
             <span class="nav-icon">💱</span>
-            Currency Converter
+            <span class="nav-text" data-i18n="currency_converter"></span>
         </button>
-        <button class="nav-item" onclick="showPage('about', this)">
+        <button class="nav-item" onclick="showPage('help', this)">
             <span class="nav-icon">ℹ️</span>
-            About
+            <span class="nav-text" data-i18n="help"></span>
         </button>
     </body>
     <footer>
         <button id="night-mode-toggle" onclick="toggleNightMode()">
         <span id="night-mode-icon">🌙</span>
         </button>
-        <button id="language-toggle" onclick="toggleLanguage()">
+        <button id="lang-toggle">
             <span id="translate-icon" value="en">🌐</span>
         </button>
     </footer>
@@ -64,8 +64,8 @@
     <!-- Calculator Page -->
     <div id="page-calculator" class="page active">
         <div class="page-header">
-            <div class="page-title">Calculator</div>
-            <div class="page-subtitle">Evaluate arithmetic expressions</div>
+            <div class="page-title" data-i18n="calculator"></div>
+            <div class="page-subtitle" data-i18n="calculator_subtitle"></div>
         </div>
 
         <!-- Display Screen -->
@@ -111,7 +111,7 @@
             <div id="std_error" class="error" role="alert"></div>
 
             <div class="history-section">
-                <div class="history-title">History</div>
+                <div class="history-title" data-i18n="history"></div>
                 <ul id="std_history" class="history"></ul>
             </div>
         </div>
@@ -120,10 +120,9 @@
     <!-- Scientific Calculator Page -->
     <div id="page-scientific" class="page">
         <div class="page-header">
-            <div class="page-title">Scientific Calculator</div>
-            <div class="page-subtitle">Evaluate advanced mathematical expressions</div>
+            <div class="page-title" data-i18n="scientific"></div>
+            <div class="page-subtitle" data-i18n="scientific_subtitle"></div>
         </div>
-
 
         <div class="card">
 
@@ -136,50 +135,43 @@
             <!-- Scientific calculator buttons -->
             <div class="grid sct">
                 <row>
-                    <button class="sct" data-fn="sin" value="sin">sin</button>
-                    <button class="sct" data-fn="cos" value="cos">cos</button>
-                    <button class="sct" data-fn="tan" value="tan">tan</button>
-                    <button class="sct" data-fn="pi" value="Math.PI">π</button>
+                    <button class="sct" value="mod">mod</button>
+                    <button class="sct" style="font-family: 'Cascadia Code';" value="i">i</button>
+                    <button class="light" onclick="app.changeSign()">+/-</button>
                     <button class="light" onclick="app.deleteLastEntry()">⌫</button>
                 </row>
                 <row>
-                    <button class="sct" data-fn="log" value="log">log</button>
-                    <button class="sct" data-fn="ln" value="ln">ln</button>
-                    <button class="sct" data-fn="factorial" value="!">x<span style="font-style: normal;">!</span></button>
-                    <button class="sct" data-fn="inv" value="x^-1">x⁻¹</button>
+                    <button class="sct" value="^">xʸ</button>
+                    <button class="sct" value="^2">x²</button>
+                    <button class="sct" value="sqrt">√</button>
                     <button class="light" onclick="app.clearDisplay()">C</button>
                 </row>
                 <row>
-                    <button class="sct" data-fn="pow10" value="10^">10ˣ</button>
-                    <button class="sct" data-fn="exp" value="Math.E">eˣ</button>
-                    <button class="sct" data-fn="leftParen" value="(">(</button>
-                    <button class="sct" data-fn="rightParen" value=")">)</button>
+                    <button class="sct" value="!">x<span style="font-style: normal;">!</span></button>
+                    <button class="sct" value="(">(</button>
+                    <button id="close-paren" class="sct" value=")" disabled>)</button>
                     <button class="op" value="÷">÷</button>
                 </row>
                 <row>
-                    <button class="sct" data-fn="modulo" value="mod">mod</button>
                     <button class="digit" value="7">7</button>
                     <button class="digit" value="8">8</button>
                     <button class="digit" value="9">9</button>
                     <button class="op" value="×">×</button>
                 </row>
                 <row>
-                    <button class="sct" data-fn="power2" value="^2">x²</button>
                     <button class="digit" value="4">4</button>
                     <button class="digit" value="5">5</button>
                     <button class="digit" value="6">6</button>
                     <button class="op" value="-">−</button>
                 </row>
                 <row>
-                    <button class="sct" data-fn="sqrt" value="sqrt">√</button>
                     <button class="digit" value="1">1</button>
                     <button class="digit" value="2">2</button>
                     <button class="digit" value="3">3</button>
                     <button class="op" value="+">+</button>
                 </row>
                 <row>
-                    <button class="sct" data-fn="powerY" value="^">xʸ</button>
-                    <button class="light" data-fn="opposite" value="opposite">+/-</button>
+                    <button id="ans_button" class="light" onclick="app.getLastAnswer()" disabled >Ans</button>
                     <button class="digit" value="0">0</button>
                     <button class="op" value=".">.</button>
                     <button class="op" onclick="app.calculate()">=</button>
@@ -189,7 +181,7 @@
             <div id="sct_error" class="error" role="alert"></div>
 
             <div class="history-section">
-                <div class="history-title">History</div>
+                <div class="history-title" data-i18n="history"></div>
                 <ul id="sct_history" class="history"></ul>
             </div>
         </div>
@@ -199,28 +191,28 @@
     <!-- Linear Equations Page -->
     <div id="page-equations" class="page">
         <div class="page-header">
-            <div class="page-title">Linear Equations</div>
-            <div class="page-subtitle">Solve first-degree equations and systems</div>
+            <div class="page-title" data-i18n="equations"></div>
+            <div class="page-subtitle" data-i18n="equations_subtitle"></div>
         </div>
 
         <div class="card">
-            <div class="card-title">Single Equation</div>
-            <p class="hint">Example: <code>2x + 3 = 7</code></p>
+            <div class="card-title" data-i18n="single_equation"></div>
+            <p class="hint" data-i18n="equation_example"></p>
             <div class="input-row">
-                <input type="text" id="equation" placeholder="e.g. 2x + 3 = 7" />
-                <button class="btn btn-secondary" onclick="solveEquation()">Solve</button>
+                <input type="text" id="equation" placeholder="e.g. 2x + 3 = 7" data-i18n-placeholder="input.single_equation_placeholder"/>
+                <button class="btn btn-secondary" onclick="solveEquation()" data-i18n="solve"></button>
             </div>
             <div id="result-single" class="eq-result"></div>
         </div>
 
         <div class="card">
-            <div class="card-title">System of Two Equations</div>
-            <p class="hint">Example: <code>2x + y = 5</code> and <code>x - y = 1</code></p>
+            <div class="card-title" data-i18n="system_of_equations"></div>
+            <p class="hint" data-i18n="system_example"></p>
             <div class="input-row">
-                <input type="text" id="eq1" placeholder="First equation: e.g. 2x + y = 5" />
-                <input type="text" id="eq2" placeholder="Second equation: e.g. x - y = 1" />
+                <input type="text" id="eq1" placeholder="First equation: e.g. 2x + y = 5" data-i18n-placeholder="input.first_equation_placeholder"/>
+                <input type="text" id="eq2" placeholder="Second equation: e.g. x - y = 1" data-i18n-placeholder="input.second_equation_placeholder"/>
             </div>
-            <button class="btn btn-secondary btn-full" onclick="solveSystem()">Solve System</button>
+            <button class="btn btn-secondary btn-full" onclick="solveSystem()" data-i18n="solve_system"></button>
             <div id="result-system" class="eq-result"></div>
         </div>
     </div>
@@ -228,38 +220,38 @@
     <!-- Unit Converter Page -->
     <div id="page-converter" class="page">
         <div class="page-header">
-            <div class="page-title">Unit Converter</div>
-            <div class="page-subtitle">Convert between units of measurement</div>
+            <div class="page-title" data-i18n="unit_converter"></div>
+            <div class="page-subtitle" data-i18n="unit_converter_subtitle"></div>
         </div>
 
         <div class="card">
-            <div class="card-title">Category</div>
+            <div class="card-title" data-i18n="category"></div>
             <div class="category-tabs">
-                <button class="cat-tab active" onclick="selectCategory('length', this)">📏 Length</button>
-                <button class="cat-tab" onclick="selectCategory('weight', this)">⚖️ Weight</button>
-                <button class="cat-tab" onclick="selectCategory('temperature', this)">🌡️ Temperature</button>
-                <button class="cat-tab" onclick="selectCategory('area', this)">⬛ Area</button>
-                <button class="cat-tab" onclick="selectCategory('volume', this)">🧪 Volume</button>
-                <button class="cat-tab" onclick="selectCategory('speed', this)">🚗 Speed</button>
+                <button class="cat-tab active" onclick="selectCategory('length', this)" data-i18n="category.length"></button>
+                <button class="cat-tab" onclick="selectCategory('weight', this)" data-i18n="category.weight"></button>
+                <button class="cat-tab" onclick="selectCategory('temperature', this)" data-i18n="category.temperature"></button>
+                <button class="cat-tab" onclick="selectCategory('area', this)" data-i18n="category.area"></button>
+                <button class="cat-tab" onclick="selectCategory('volume', this)" data-i18n="category.volume"></button>
+                <button class="cat-tab" onclick="selectCategory('speed', this)" data-i18n="category.speed"></button>
             </div>
 
             <div class="converter-grid">
                 <div>
-                    <div class="converter-label">From</div>
-                    <input type="text" id="converter-value" placeholder="Enter value" />
+                    <div class="converter-label" data-i18n="from"></div>
+                    <input type="text" id="converter-value" placeholder="Enter value" data-i18n-placeholder="input.enter_value"/>
                     <select id="from-unit"></select>
                 </div>
 
                 <button class="switch-btn" onclick="switchUnits()">⇄</button>
 
                 <div>
-                    <div class="converter-label">To</div>
+                    <div class="converter-label" data-i18n="to"></div>
                     <input readonly type="text" id="converter-result"/>
                     <select id="to-unit"></select>
                 </div>
             </div>
 
-            <button class="btn btn-primary btn-full" onclick="convertUnits()">Convert</button>
+            <button class="btn btn-primary btn-full" onclick="convertUnits()" data-i18n="convert"></button>
             <div id="converter-error" class="eq-result" style="margin-top:0.8rem"></div>
         </div>
     </div>
@@ -274,17 +266,91 @@
         Currency Converter coming soon!
     </div>
 
-    <!-- About Page -->
-    <div id="page-about" class="page">
-        Built-in help and documentation coming soon!
+    <!-- Help Page -->
+    <div id="page-help" class="page">
+        <div class="page-header">
+            <div class="page-title" data-i18n="help_subtitle"></div>
+        </div>
+
+        <div class="card">
+            <div class="accordion open">
+                <button type="button" class="accordion-toggle" aria-expanded="true">
+                    <span data-i18n="standard_calculator"></span>
+                    <span class="accordion-icon" aria-hidden="true"></span>
+                </button>
+                <ul class="accordion-panel">
+                    <li data-i18n="standard_calculator_help_1"></li>
+                    <li data-i18n="standard_calculator_help_2"></li>
+                    <li data-i18n="standard_calculator_help_3"></li>
+                </ul>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-toggle" aria-expanded="false">
+                    <span data-i18n="scientific_calculator"></span>
+                    <span class="accordion-icon" aria-hidden="true"></span>
+                </button>
+                <ul class="accordion-panel">
+                    <li data-i18n="scientific_calculator_help_1"></li>
+                    <li data-i18n="scientific_calculator_help_2"></li>
+                    <li data-i18n="scientific_calculator_help_3"></li>
+                </ul>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-toggle" aria-expanded="false">
+                    <span data-i18n="equations"></span>
+                    <span class="accordion-icon" aria-hidden="true"></span>
+                </button>
+                <ul class="accordion-panel">
+                    <li data-i18n="equations_help_1"></li>
+                    <li data-i18n="equations_help_2"></li>
+                </ul>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-toggle" aria-expanded="false">
+                    <span data-i18n="unit_converter"></span>
+                    <span class="accordion-icon" aria-hidden="true"></span>
+                </button>
+                <ul class="accordion-panel">
+                    <li data-i18n="unit_converter_help_1"></li>
+                    <li data-i18n="unit_converter_help_2"></li>
+                </ul>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-toggle" aria-expanded="false">
+                    <span data-i18n="currency_converter"></span>
+                    <span class="accordion-icon" aria-hidden="true"></span>
+                </button>
+                <ul class="accordion-panel">
+                    <li data-i18n="currency_converter_help_1"></li>
+                    <li data-i18n="currency_converter_help_2"></li>
+                </ul>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-toggle" aria-expanded="false">
+                    <span data-i18n="programmer"></span>
+                    <span class="accordion-icon" aria-hidden="true"></span>
+                </button>
+                <ul class="accordion-panel">
+                    <li data-i18n="programmer_help_1"></li>
+                    <li data-i18n="programmer_help_2"></li>
+                </ul>
+            </div>
+
+
+        </div>
     </div>
 
 </main>
 
+<!-- JavaScript files -->
 <script src="js/app.js"></script>
 <script src="js/equations.js"></script>
 <script src="js/converter.js"></script>
 <script src="js/main.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+    initI18n();
+</script>
 </div>
 </body>
 </html>

@@ -25,7 +25,32 @@ public class ExpressionAstBuilder extends ExpressionBaseVisitor<Expression> {
         if (ctx.COMPLEX() != null) {
             return parseComplex(ctx.COMPLEX().getText());
         }
+        if (ctx.atom() != null) {
+            Expression inner = visit(ctx.atom());
+            try {
+                return new Minus(java.util.Arrays.asList(new MyNumber(new IntegerValue(0)), inner));
+            } catch (IllegalConstruction e) {
+                return null;
+            }
+        }
         return visit(ctx.expression());
+    }
+
+    @Override
+    public Expression visitExponentiationExpr(calculator.ExpressionParser.ExponentiationExprContext ctx) {
+        Expression result = visit(ctx.atom(0));
+        for (int i = 1; i < ctx.atom().size(); i++) {
+            Expression right = visit(ctx.atom(i));
+            java.util.List<Expression> params = new java.util.ArrayList<>();
+            params.add(result);
+            params.add(right);
+            try {
+                result = new Power(params);
+            } catch (IllegalConstruction e) {
+                return null;
+            }
+        }
+        return result;
     }
 
     /**
@@ -52,14 +77,12 @@ public class ExpressionAstBuilder extends ExpressionBaseVisitor<Expression> {
      */
     @Override
     public Expression visitMultiplicationExpr(calculator.ExpressionParser.MultiplicationExprContext ctx) {
-        Expression result = visit(ctx.atom(0));
-
-        for (int i = 1; i < ctx.atom().size(); i++) {
-            Expression right = visit(ctx.atom(i));
+        Expression result = visit(ctx.exponentiationExpr(0));
+        for (int i = 1; i < ctx.exponentiationExpr().size(); i++) {
+            Expression right = visit(ctx.exponentiationExpr(i));
             java.util.List<Expression> params = new java.util.ArrayList<>();
             params.add(result);
             params.add(right);
-
             try {
                 String operator = ctx.getChild(2 * i - 1).getText();
                 if (operator.equals("*")) {
@@ -71,7 +94,6 @@ public class ExpressionAstBuilder extends ExpressionBaseVisitor<Expression> {
                 return null;
             }
         }
-
         return result;
     }
 
