@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [1.2.12] - 2026-04-05
+### Added
+- Support for exponentiation operator `^` (e.g. `2^3` → `8`)
+- Support for negative numbers in expressions (e.g. `-4 + 2` → `-2`)
+- `Power` class for exponentiation operation
+- `pow()` method in `NumberValue` interface, implemented in `IntegerValue`, `RealValue`, `RationalValue`, `ComplexValue`
+### Fixed
+- `IntegerValue`: added `RationalValue` support in `add`, `sub`, `mul` operations
+- `IntegerValue.pow()`: handles negative exponents and `RationalValue` exponents
+- `RealValue.pow()`: handles `RationalValue` exponents
+- `CalculatorController`: use ANTLR parser (`calculator.read()`) instead of manual parser
+- `CalculatorController`: decode `%5E` → `^` in URL
+- `ExpressionAstBuilder`: handle unary minus via `0 - atom`
+### Closes
+- #100 Support for exponentiation operator (^)
+- #101 Support for negative numbers in expressions
 
 ## [1.2.11] - 2026-04-04
 ### Fixed
