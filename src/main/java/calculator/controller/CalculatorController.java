@@ -5,8 +5,8 @@ import java.util.List;
 import calculator.*;
 import calculator.converter.UnitConverter;
 import calculator.parser.ExpressionParser;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
