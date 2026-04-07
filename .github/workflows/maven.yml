@@ -41,8 +41,8 @@ jobs:
       run: mvn -B verify --file pom.xml
 
     - id: deploy
-      name: Deploy JAR to alwaysdata (master only)
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+      name: Deploy JAR to alwaysdata (develop only)
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' }}
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.ALWAYSDATA_SSH_HOST }}
@@ -55,7 +55,7 @@ jobs:
 
     - id: restart
       name: Restart app process on alwaysdata (optional)
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && env.ALWAYSDATA_POST_DEPLOY_CMD != '' }}
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' && env.ALWAYSDATA_POST_DEPLOY_CMD != '' }}
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.ALWAYSDATA_SSH_HOST }}
