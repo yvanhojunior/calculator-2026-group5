@@ -8,17 +8,15 @@ const app = (() => {
     // ── state ──────────────────────────────────────────────────────────────
     let expression_to_evaluate = [];
     let parenthesis_stack = [];
+    const THEME_STORAGE_KEY = 'theme';
+    let currentPage = 'calculator'; // Default page
 
     // ── DOM helpers ────────────────────────────────────────────────────────
     const arithmeticButtons =  document.querySelectorAll('button.digit, button.op, button.sct, #ans_button');
-    const nightModeToggle = document.getElementById('night-mode-toggle');
     const ans_button = document.getElementById('ans_button');
     const close_paren = document.getElementById('close-paren');
-    let hasCleared = false;
-    let currentPage = 'calculator'; // Default page
     let activeExpression = document.getElementById('std_expression'); // Start with standard expression active
     let activeResult = document.getElementById('std_result'); // Start with standard result active
-    let activeDisplay = document.getElementById('std_display'); // Start with standard display active
     let activeHistory = document.getElementById('std_history'); // Start with standard history active
     let activeError = document.getElementById('std_error'); // Start with standard error active
 
@@ -38,10 +36,6 @@ const app = (() => {
     /** Synchronize active references based on the current page. */
     function syncActiveRefs(pageName) {
         const isScientific = pageName === 'scientific';
-
-        activeDisplay = isScientific
-            ? document.getElementById('sct_display')
-            : document.getElementById('std_display');
 
         activeExpression = isScientific
             ? document.getElementById('sct_expression')
@@ -78,6 +72,38 @@ const app = (() => {
     function getCurrentPage() {
         return window.currentPage;
     }
+
+    function applyTheme(theme) {
+        const isDark = theme === 'dark';
+        document.documentElement.classList.toggle('dark-theme', isDark);
+
+        const icon = document.getElementById('night-mode-icon');
+        if (icon) {
+            icon.textContent = isDark ? '☀️' : '🌙';
+        }
+    }
+
+    function getInitialTheme() {
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+            return savedTheme;
+        }
+
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        }
+
+        return 'light';
+    }
+
+    function toggleNightMode() {
+        const isDark = document.documentElement.classList.contains('dark-theme');
+        const nextTheme = isDark ? 'light' : 'dark';
+        localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+        applyTheme(nextTheme);
+    }
+
+    applyTheme(getInitialTheme());
 
     ans_button.disabled = true;
 
@@ -199,7 +225,6 @@ const app = (() => {
         expression_to_evaluate = [];
         parenthesis_stack = [];
         close_paren.disabled = true;
-        hasCleared = true;
     }
 
     /** Send the expression to the backend and display the result. */
@@ -233,7 +258,6 @@ const app = (() => {
             // Reset for next expression
             expression_to_evaluate = [];
             parenthesis_stack = [];
-            hasCleared = false;
         } catch (err) {
             showError('Network error – is the server running?');
             console.error(err);
@@ -307,8 +331,9 @@ const app = (() => {
 
     // - Unit convertor mode: Allows the  user to convert between different units (e.g., length, weight, temperature) by selecting the desired conversion type and inputting the value to be converted.
 
-    return { calculate, clearDisplay, clearInput, deleteLastEntry, changeSign, percentage, getLastAnswer};
+    return { calculate, clearDisplay, clearInput, deleteLastEntry, changeSign, percentage, getLastAnswer, toggleNightMode};
 })();
 
 // Expose app globally for inline HTML onclick handlers.
 window.app = app;
+window.toggleNightMode = () => app.toggleNightMode();
