@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [1.2.13] - 2026-04-07
+### Fixed
+- `RationalValue`: added `IntegerValue` support in `add`, `sub`, `mul`, `div` operations via `toRational()` helper
+- Mixed type arithmetic between `RationalValue` and `IntegerValue` now works correctly (e.g. `(1÷3)×9` → `3`)
 ## [1.2.12] - 2026-04-05
 ### Added
 - Support for exponentiation operator `^` (e.g. `2^3` → `8`)
