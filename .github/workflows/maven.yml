@@ -73,6 +73,7 @@ jobs:
         port: ${{ secrets.ALWAYSDATA_SSH_PORT || 22 }}
         source: target/calculator-cucumber-0.5.0.jar
         target: ${{ secrets.ALWAYSDATA_DEPLOY_PATH }}
+        strip_components: 1
         overwrite: true
 
     - id: restart
