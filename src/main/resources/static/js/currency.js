@@ -84,6 +84,7 @@ async function convertCurrency() {
     const resultDiv = document.getElementById('currency-result');
     const resultValue = document.getElementById('currency-result-value');
     const resultDisplay = document.getElementById('currency-result-display');
+    const unitRate = document.getElementById('currency-result-unitary');
 
     if (!amountInput || !fromInput || !toInput || !errorDiv || !resultDiv) {
         return;
@@ -125,11 +126,9 @@ async function convertCurrency() {
     const convertedAmount = (amount / fromRate) * toRate;
 
     const formattedValue = `${currencyList[to].symbol || ''}${convertedAmount.toFixed(4)}`;
-    if (resultValue) {
-        resultValue.value = formattedValue;
-    }
     if (resultDisplay) {
         resultDisplay.textContent = formattedValue;
+        unitRate.textContent = `1 ${from} = ${(toRate / fromRate).toFixed(4)} ${to}`;
     }
     resultDiv.className = 'eq-result eq-success';
     if (!resultDisplay) {

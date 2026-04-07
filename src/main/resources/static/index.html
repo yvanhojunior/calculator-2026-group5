@@ -31,10 +31,10 @@
             <span class="nav-icon">📐</span>
             <span class="nav-text" data-i18n="equations"></span>
         </button>
-        <button class="nav-item" onclick="showPage('programmer', this)">
+<!--         <button class="nav-item" onclick="showPage('programmer', this)">
             <span class="nav-icon">💻</span>
             <span class="nav-text" data-i18n="programmer"></span>
-        </button>
+        </button> -->
         <button class="nav-item" onclick="showPage('converter', this)">
             <span class="nav-icon">⚖️</span>
             <span class="nav-text" data-i18n="unit_converter"></span>
@@ -50,7 +50,7 @@
     </body>
     <footer>
         <button id="night-mode-toggle" onclick="toggleNightMode()">
-        <span id="night-mode-icon">🌙</span>
+        <span id="night-mode-icon" value="light-theme">🌙</span>
         </button>
         <button id="lang-toggle">
             <span id="translate-icon" value="en">🌐</span>
@@ -197,7 +197,7 @@
 
         <div class="card">
             <div class="card-title" data-i18n="single_equation"></div>
-            <p class="hint" data-i18n="equation_example"></p>
+            <p class="hint" data-i18n-html="equation_example"></p>
             <div class="input-row">
                 <input type="text" id="equation" placeholder="e.g. 2x + 3 = 7" data-i18n-placeholder="input.single_equation_placeholder"/>
                 <button class="btn btn-secondary" onclick="solveEquation()" data-i18n="solve"></button>
@@ -207,7 +207,7 @@
 
         <div class="card">
             <div class="card-title" data-i18n="system_of_equations"></div>
-            <p class="hint" data-i18n="system_example"></p>
+            <p class="hint" data-i18n-html="system_example"></p>
             <div class="input-row">
                 <input type="text" id="eq1" placeholder="First equation: e.g. 2x + y = 5" data-i18n-placeholder="input.first_equation_placeholder"/>
                 <input type="text" id="eq2" placeholder="Second equation: e.g. x - y = 1" data-i18n-placeholder="input.second_equation_placeholder"/>
@@ -286,8 +286,8 @@
                 </div>
                 <button class="btn btn-primary btn-full" onclick="convertCurrency()" data-i18n="convert"></button>
                 <div id="currency-result" class="eq-result" hidden>
-                    <input type="hidden" readonly id="currency-result-value"/>
                     <div id="currency-result-display" class="result"></div>
+                    <div id="currency-result-unitary" style="text-align: right;"></div>
                 </div>
                 <div id="currency-error" class="eq-result" style="margin-top:0.8rem"></div>
         </div>
@@ -352,7 +352,7 @@
                     <li data-i18n="currency_converter_help_2"></li>
                 </ul>
             </div>
-            <div class="accordion">
+            <div class="accordion" hidden>
                 <button type="button" class="accordion-toggle" aria-expanded="false">
                     <span data-i18n="programmer"></span>
                     <span class="accordion-icon" aria-hidden="true"></span>

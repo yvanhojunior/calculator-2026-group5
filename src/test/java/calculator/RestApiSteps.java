@@ -1,40 +1,77 @@
 package calculator;
 
 import io.cucumber.java.en.*;
-import io.restassured.response.Response;
-import static io.restassured.RestAssured.*;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 public class RestApiSteps {
 
-    private Response response;
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private HttpResponse<String> response;
 
     @Given("the REST API server is running on port {int}")
     public void initBaseUri(Integer port) {
-        baseURI = "http://localhost:" + port;
+        this.baseUri = "http://localhost:" + port;
     }
+
+    private String baseUri;
 
     @When("I send a GET request to {string} with expression {string}")
     public void sendGetRequest(String endpoint, String expression) {
-        response = given()
-                .param("expression", expression)
-                .when()
-                .get(endpoint);
+        try {
+            String encodedExpression = URLEncoder.encode(expression, StandardCharsets.UTF_8);
+            URI uri = URI.create(baseUri + endpoint + "?expression=" + encodedExpression);
+            HttpRequest request = HttpRequest.newBuilder(uri).GET().build();
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            fail("Failed to send HTTP request: " + e.getMessage());
+        }
     }
 
     @Then("the API returns status code {int}")
     public void assertStatusCode(Integer expectedStatus) {
-        assertEquals(expectedStatus, response.getStatusCode());
+        assertNotNull(response);
+        assertEquals(expectedStatus.intValue(), response.statusCode());
     }
 
     @Then("the response contains result {int}")
     public void assertResult(Integer expectedResult) {
-        int actualResult = response.jsonPath().getInt("result");
-        assertEquals(expectedResult, actualResult);
+        assertNotNull(response);
+        try {
+            Map<String, Object> body = objectMapper.readValue(
+                response.body(),
+                new TypeReference<Map<String, Object>>() {}
+            );
+            Object result = body.get("result");
+            assertNotNull(result);
+            assertEquals(expectedResult.intValue(), Integer.parseInt(String.valueOf(result)));
+        } catch (Exception e) {
+            fail("Failed to parse response body: " + e.getMessage());
+        }
     }
 
     @Then("the response contains an error message")
     public void assertErrorMessage() {
-        assertNotNull(response.jsonPath().getString("error"));
+        assertNotNull(response);
+        try {
+            Map<String, Object> body = objectMapper.readValue(
+                response.body(),
+                new TypeReference<Map<String, Object>>() {}
+            );
+            assertNotNull(body.get("error"));
+        } catch (Exception e) {
+            fail("Failed to parse response body: " + e.getMessage());
+        }
     }
 }

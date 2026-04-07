@@ -32,6 +32,12 @@ function updateContent() {
     el.textContent = t(key);
   });
 
+  // HTML handling for trusted translation strings (e.g. inline <code> examples)
+  document.querySelectorAll("[data-i18n-html]").forEach(el => {
+    const key = el.dataset.i18nHtml;
+    el.innerHTML = t(key);
+  });
+
   // Placeholder handling
   document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
     const key = el.dataset.i18nPlaceholder;
