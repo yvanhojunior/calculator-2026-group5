@@ -37,7 +37,7 @@ public class RationalValue implements NumberValue {
 
     @Override
     public NumberValue add(NumberValue other) {
-        RationalValue o = (RationalValue) other;
+        RationalValue o = toRational(other);
         return new RationalValue(
                 this.numerator * o.denominator + o.numerator * this.denominator,
                 this.denominator * o.denominator
@@ -46,7 +46,7 @@ public class RationalValue implements NumberValue {
 
     @Override
     public NumberValue sub(NumberValue other) {
-        RationalValue o = (RationalValue) other;
+        RationalValue o = toRational(other);
         return new RationalValue(
                 this.numerator * o.denominator - o.numerator * this.denominator,
                 this.denominator * o.denominator
@@ -55,7 +55,7 @@ public class RationalValue implements NumberValue {
 
     @Override
     public NumberValue mul(NumberValue other) {
-        RationalValue o = (RationalValue) other;
+        RationalValue o = toRational(other);
         return new RationalValue(
                 this.numerator * o.numerator,
                 this.denominator * o.denominator
@@ -64,7 +64,7 @@ public class RationalValue implements NumberValue {
 
     @Override
     public NumberValue div(NumberValue other) {
-        RationalValue o = (RationalValue) other;
+        RationalValue o = toRational(other);
         if (o.numerator == 0) {
             throw new ArithmeticException("Division by zero.");
         }
@@ -72,6 +72,12 @@ public class RationalValue implements NumberValue {
                 this.numerator * o.denominator,
                 this.denominator * o.numerator
         );
+    }
+
+    private RationalValue toRational(NumberValue other){
+        if(other instanceof RationalValue o) return o;
+        if(other instanceof IntegerValue o) return new RationalValue(o.getValue(), 1);
+        throw new IllegalArgumentException("Unsupported type: " +other.getClass());
     }
 
     @Override
