@@ -40,6 +40,26 @@ jobs:
       name: Build with Maven (including running all tests)
       run: mvn -B verify --file pom.xml
 
+    - id: sshpreflight
+      name: Validate deploy SSH secrets (non-empty)
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' }}
+      env:
+        SSH_HOST: ${{ secrets.ALWAYSDATA_SSH_HOST }}
+        SSH_USER: ${{ secrets.ALWAYSDATA_SSH_USER }}
+        SSH_KEY: ${{ secrets.ALWAYSDATA_SSH_KEY }}
+        SSH_PASSWORD: ${{ secrets.ALWAYSDATA_SSH_PASSWORD }}
+        DEPLOY_PATH: ${{ secrets.ALWAYSDATA_DEPLOY_PATH }}
+      run: |
+        set -euo pipefail
+        [ -n "${SSH_HOST}" ] || { echo "Missing secret: ALWAYSDATA_SSH_HOST"; exit 1; }
+        [ -n "${SSH_USER}" ] || { echo "Missing secret: ALWAYSDATA_SSH_USER"; exit 1; }
+        [ -n "${DEPLOY_PATH}" ] || { echo "Missing secret: ALWAYSDATA_DEPLOY_PATH"; exit 1; }
+        if [ -z "${SSH_KEY}" ] && [ -z "${SSH_PASSWORD}" ]; then
+          echo "Missing auth secret: set ALWAYSDATA_SSH_KEY or ALWAYSDATA_SSH_PASSWORD"
+          exit 1
+        fi
+        echo "SSH deploy secrets are present"
+
     - id: deploy
       name: Deploy JAR to alwaysdata (develop only)
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' }}
@@ -48,6 +68,8 @@ jobs:
         host: ${{ secrets.ALWAYSDATA_SSH_HOST }}
         username: ${{ secrets.ALWAYSDATA_SSH_USER }}
         key: ${{ secrets.ALWAYSDATA_SSH_KEY }}
+        password: ${{ secrets.ALWAYSDATA_SSH_PASSWORD }}
+        passphrase: ${{ secrets.ALWAYSDATA_SSH_PASSPHRASE }}
         port: ${{ secrets.ALWAYSDATA_SSH_PORT || 22 }}
         source: target/calculator-cucumber-0.5.0.jar
         target: ${{ secrets.ALWAYSDATA_DEPLOY_PATH }}
@@ -61,6 +83,8 @@ jobs:
         host: ${{ secrets.ALWAYSDATA_SSH_HOST }}
         username: ${{ secrets.ALWAYSDATA_SSH_USER }}
         key: ${{ secrets.ALWAYSDATA_SSH_KEY }}
+        password: ${{ secrets.ALWAYSDATA_SSH_PASSWORD }}
+        passphrase: ${{ secrets.ALWAYSDATA_SSH_PASSPHRASE }}
         port: ${{ secrets.ALWAYSDATA_SSH_PORT || 22 }}
         script: ${{ env.ALWAYSDATA_POST_DEPLOY_CMD }}
       
