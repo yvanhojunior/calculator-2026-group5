@@ -152,9 +152,6 @@ currencies_codes = {
 };
 
 async function loadCurrencyList() {
-    if (window.currency_list) {
-        return window.currency_list;
-    }
 
     let current_time = Math.floor(Date.now() / 1000);   // Current time in seconds
     let data = null;
@@ -220,7 +217,6 @@ async function loadCurrencyList() {
                 last_updated: refreshedLastUpdated,
                 expDate: refreshedNextUpdate
             }));
-            console.log('Currency list saved to localStorage');
         } catch (e) {
             console.warn('Failed to save currency list to localStorage:', e);
         }
@@ -283,7 +279,6 @@ async function convertCurrency() {
     const currencyList = await loadCurrencyList();
 
     if (!currencyList[from] || !currencyList[to]) {
-        console.log('Invalid currency code:', from, to);
         errorDiv.className = 'eq-result eq-error';
         errorDiv.innerHTML = 'Invalid currency code';
         return;
