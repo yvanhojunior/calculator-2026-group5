@@ -36,7 +36,7 @@ class TestNotation {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = {"*", "+", "/", "-"})
+	@ValueSource(strings = {"*", "+", "/", "-", "%"})
 	void testOutput(String symbol) {
 		int value1 = 8;
 		int value2 = 6;
@@ -49,6 +49,7 @@ class TestNotation {
 				case "-"	->	op = new Minus(params);
 				case "*"	->	op = new Times(params);
 				case "/"	->	op = new Divides(params);
+				case "%"	->	op = new Modulo(params);
 				default		->	fail();
 			}
 		} catch (IllegalConstruction _) {
