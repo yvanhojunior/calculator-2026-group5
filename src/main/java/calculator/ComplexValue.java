@@ -63,9 +63,23 @@ public class ComplexValue implements NumberValue {
     public NumberValue pow(NumberValue other) {
         if (other instanceof IntegerValue o) {
             int exp = o.getValue();
-            double r = Math.pow(Math.sqrt(real * real + imaginary * imaginary), exp);
-            double theta = Math.atan2(imaginary, real) * exp;
-            return new ComplexValue(r * Math.cos(theta), r * Math.sin(theta));
+            if (exp == 0) return new ComplexValue(1, 0);
+            // Binary exponentiation using cartesian multiplication
+            ComplexValue result = new ComplexValue(1, 0);
+            ComplexValue base = new ComplexValue(this.real, this.imaginary);
+            int n = exp;
+            while (n > 0) {
+                if ((n & 1) == 1) {
+                    result = (ComplexValue) result.mul(base);
+                }
+                base = (ComplexValue) base.mul(base);
+                n >>= 1;
+            }
+            // Clean small numerical errors
+            double threshold = 1e-7;
+            double cleanedReal = Math.abs(result.real) < threshold ? 0.0 : result.real;
+            double cleanedImaginary = Math.abs(result.imaginary) < threshold ? 0.0 : result.imaginary;
+            return new ComplexValue(cleanedReal, cleanedImaginary);
         }
         throw new IllegalArgumentException("Unsupported exponent type for ComplexValue");
     }
