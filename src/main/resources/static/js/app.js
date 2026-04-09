@@ -73,6 +73,18 @@ const app = (() => {
         return window.currentPage;
     }
 
+    ans_button.disabled = true;
+
+    // ── Language and theme toggles ─────────────────────────────────────────────
+    document.getElementById("lang-toggle").addEventListener("click", async () => {
+        const current = getLanguage();
+        const next = current === "en" ? "fr" : "en";
+
+        setLanguage(next);
+        await loadTranslations(next);
+        updateContent();
+    });
+
     function applyTheme(theme) {
         const isDark = theme === 'dark';
         document.documentElement.classList.toggle('dark-theme', isDark);
@@ -105,17 +117,6 @@ const app = (() => {
 
     applyTheme(getInitialTheme());
 
-    ans_button.disabled = true;
-
-    // ── Language and theme toggles ─────────────────────────────────────────────
-    document.getElementById("lang-toggle").addEventListener("click", async () => {
-        const current = getLanguage();
-        const next = current === "en" ? "fr" : "en";
-
-        setLanguage(next);
-        await loadTranslations(next);
-        updateContent();
-    });
 
     /**
      * Handle button clicks for digits, operators, and the equals sign.
@@ -169,6 +170,59 @@ const app = (() => {
         })
 
     })
+
+    /** Trigger the same action as clicking the button with the given value. */
+    function clickButtonWithValue(value) {
+        const button = Array.from(arithmeticButtons).find(btn => btn.value === value);
+        if (button) {
+            button.click();
+            return true;
+        }
+        return false;
+    }
+
+    /** Listen to numpad key presses and reuse the existing button handlers. */
+    document.addEventListener('keydown', (event) => {
+        const target = event.target;
+        if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target?.isContentEditable) {
+        }
+
+        if (!event.code || !event.code.startsWith('Numpad')) {
+            return;
+        }
+
+        switch (event.code) {
+            case 'NumpadEnter':
+                event.preventDefault();
+                calculate();
+                return;
+            case 'NumpadAdd':
+                event.preventDefault();
+                clickButtonWithValue('+');
+                return;
+            case 'NumpadSubtract':
+                event.preventDefault();
+                clickButtonWithValue('-');
+                return;
+            case 'NumpadMultiply':
+                event.preventDefault();
+                clickButtonWithValue('×');
+                return;
+            case 'NumpadDivide':
+                event.preventDefault();
+                clickButtonWithValue('÷');
+                return;
+            case 'NumpadDecimal':
+                event.preventDefault();
+                clickButtonWithValue('.');
+                return;
+            default:
+                if (/^Numpad\d$/.test(event.code)) {
+                    event.preventDefault();
+                    clickButtonWithValue(event.code.replace('Numpad', ''));
+                }
+        }
+    });
 
     /** Append an entry to the history list. */
     function addHistory(expression, result) {
