@@ -57,6 +57,9 @@ public class RealValue implements NumberValue {
 
     @Override
     public NumberValue add(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return new ComplexValue(value.doubleValue(), 0).add(o);
+        }
         RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return handleSpecialAdd(o);
         return new RealValue(value.add(o.value), precision);
@@ -64,6 +67,9 @@ public class RealValue implements NumberValue {
 
     @Override
     public NumberValue sub(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return new ComplexValue(value.doubleValue(), 0).sub(o);
+        }
         RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return handleSpecialSub(o);
         return new RealValue(value.subtract(o.value), precision);
@@ -71,6 +77,9 @@ public class RealValue implements NumberValue {
 
     @Override
     public NumberValue mul(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return new ComplexValue(value.doubleValue(), 0).mul(o);
+        }
         RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return handleSpecialMul(o);
         return new RealValue(value.multiply(o.value, precision), precision);
@@ -78,6 +87,9 @@ public class RealValue implements NumberValue {
 
     @Override
     public NumberValue div(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return new ComplexValue(value.doubleValue(), 0).div(o);
+        }
         RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return handleSpecialDiv(o);
         if (o.value.compareTo(BigDecimal.ZERO) == 0) {

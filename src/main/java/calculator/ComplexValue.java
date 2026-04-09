@@ -23,21 +23,38 @@ public class ComplexValue implements NumberValue {
     public double getReal() { return real; }
     public double getImaginary() { return imaginary; }
 
+    private static ComplexValue toComplex(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return o;
+        }
+        if (other instanceof IntegerValue o) {
+            return new ComplexValue(o.getValue(), 0);
+        }
+        if (other instanceof RationalValue o) {
+            return new ComplexValue((double) o.getNumerator() / o.getDenominator(), 0);
+        }
+        if (other instanceof RealValue o) {
+            return new ComplexValue(o.getValue().doubleValue(), 0);
+        }
+        throw new IllegalArgumentException("Unsupported type: " + other.getClass());
+    }
+
     @Override
     public NumberValue add(NumberValue other) {
-        ComplexValue o = (ComplexValue) other;
+        ComplexValue o = toComplex(other);
         return new ComplexValue(this.real + o.real, this.imaginary + o.imaginary);
     }
 
     @Override
     public NumberValue sub(NumberValue other) {
-        ComplexValue o = (ComplexValue) other;
+        ComplexValue o = toComplex(other);
         return new ComplexValue(this.real - o.real, this.imaginary - o.imaginary);
     }
 
     @Override
     public NumberValue mul(NumberValue other) {
-        ComplexValue o = (ComplexValue) other;
+        ComplexValue o = toComplex(other);
+
         // (a+bi)(c+di) = (ac-bd) + (ad+bc)i
         return new ComplexValue(
                 this.real * o.real - this.imaginary * o.imaginary,
@@ -47,7 +64,7 @@ public class ComplexValue implements NumberValue {
 
     @Override
     public NumberValue div(NumberValue other) {
-        ComplexValue o = (ComplexValue) other;
+        ComplexValue o = toComplex(other);
         // (a+bi)/(c+di) = (a+bi)(c-di) / (c²+d²)
         double denominator = o.real * o.real + o.imaginary * o.imaginary;
         if (denominator == 0) {
@@ -63,9 +80,23 @@ public class ComplexValue implements NumberValue {
     public NumberValue pow(NumberValue other) {
         if (other instanceof IntegerValue o) {
             int exp = o.getValue();
-            double r = Math.pow(Math.sqrt(real * real + imaginary * imaginary), exp);
-            double theta = Math.atan2(imaginary, real) * exp;
-            return new ComplexValue(r * Math.cos(theta), r * Math.sin(theta));
+            if (exp == 0) return new ComplexValue(1, 0);
+            // Binary exponentiation using cartesian multiplication
+            ComplexValue result = new ComplexValue(1, 0);
+            ComplexValue base = new ComplexValue(this.real, this.imaginary);
+            int n = exp;
+            while (n > 0) {
+                if ((n & 1) == 1) {
+                    result = (ComplexValue) result.mul(base);
+                }
+                base = (ComplexValue) base.mul(base);
+                n >>= 1;
+            }
+            // Clean small numerical errors
+            double threshold = 1e-7;
+            double cleanedReal = Math.abs(result.real) < threshold ? 0.0 : result.real;
+            double cleanedImaginary = Math.abs(result.imaginary) < threshold ? 0.0 : result.imaginary;
+            return new ComplexValue(cleanedReal, cleanedImaginary);
         }
         throw new IllegalArgumentException("Unsupported exponent type for ComplexValue");
     }

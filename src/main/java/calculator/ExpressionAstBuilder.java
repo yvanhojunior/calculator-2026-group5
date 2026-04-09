@@ -58,7 +58,12 @@ public class ExpressionAstBuilder extends ExpressionBaseVisitor<Expression> {
      */
     private MyNumber parseComplex(String text) {
         if (!text.contains("+") && !text.contains("-")) {
-            double imaginary = Double.parseDouble(text.replace("i", ""));
+            String coefficient = text.substring(0, text.length() - 1);
+            double imaginary = switch (coefficient) {
+                case "", "+" -> 1.0;
+                case "-" -> -1.0;
+                default -> Double.parseDouble(coefficient);
+            };
             return new MyNumber(new ComplexValue(0, imaginary));
         }
         int splitIndex = text.lastIndexOf('+');

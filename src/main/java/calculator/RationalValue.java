@@ -37,6 +37,9 @@ public class RationalValue implements NumberValue {
 
     @Override
     public NumberValue add(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return new ComplexValue((double) numerator / denominator, 0).add(o);
+        }
         RationalValue o = toRational(other);
         return new RationalValue(
                 this.numerator * o.denominator + o.numerator * this.denominator,
@@ -46,6 +49,9 @@ public class RationalValue implements NumberValue {
 
     @Override
     public NumberValue sub(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return new ComplexValue((double) numerator / denominator, 0).sub(o);
+        }
         RationalValue o = toRational(other);
         return new RationalValue(
                 this.numerator * o.denominator - o.numerator * this.denominator,
@@ -55,6 +61,9 @@ public class RationalValue implements NumberValue {
 
     @Override
     public NumberValue mul(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return new ComplexValue((double) numerator / denominator, 0).mul(o);
+        }
         RationalValue o = toRational(other);
         return new RationalValue(
                 this.numerator * o.numerator,
@@ -64,6 +73,9 @@ public class RationalValue implements NumberValue {
 
     @Override
     public NumberValue div(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return new ComplexValue((double) numerator / denominator, 0).div(o);
+        }
         RationalValue o = toRational(other);
         if (o.numerator == 0) {
             throw new ArithmeticException("Division by zero.");

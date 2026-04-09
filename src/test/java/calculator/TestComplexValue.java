@@ -3,7 +3,17 @@ package calculator;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import io.cucumber.java.lu.a.as;
+
 class TestComplexValue {
+
+    @Test
+    void testMixedIntegerAndComplexExpression() {
+        Calculator calculator = new Calculator();
+        Expression expr = calculator.read("(8-i)*8");
+        NumberValue result = calculator.eval(expr);
+        assertEquals(new ComplexValue(64, -8), result);
+    }
 
     @Test
     void testAddition() {
@@ -66,5 +76,33 @@ class TestComplexValue {
     void testEquals() {
         assertEquals(new ComplexValue(2, 3), new ComplexValue(2, 3));
         assertNotEquals(new ComplexValue(2, 3), new ComplexValue(2, 4));
+    }
+
+    @Test
+    void testImaginaryUnitSquare() {
+        // i * i = -1 + 0i
+        ComplexValue i = new ComplexValue(0, 1);
+        assertEquals(new ComplexValue(-1, 0), i.mul(i));
+    }
+
+    @Test
+    void testImaginaryUnitPowerTwo() {
+        // i^2 = -1 + 0i
+        ComplexValue i = new ComplexValue(0, 1);
+        assertEquals(new ComplexValue(-1, 0), i.pow(new IntegerValue(2)));
+    }
+
+    @Test
+    void testImaginaryUnitPowerThree() {
+        // i^3 = i^2 * i = -1 * i = -i
+        ComplexValue i = new ComplexValue(0, 1);
+        assertEquals(new ComplexValue(0, -1), i.pow(new IntegerValue(3)));
+    }
+
+    @Test
+    void testImaginaryUnitPowerFour() {
+        // i^4 = (i^2)^2 = (-1)^2 = 1
+        ComplexValue i = new ComplexValue(0, 1);
+        assertEquals(new ComplexValue(1, 0), i.pow(new IntegerValue(4)));
     }
 }
