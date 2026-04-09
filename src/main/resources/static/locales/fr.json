@@ -51,7 +51,7 @@
     "scientific_calculator_help_3": "Le bouton \"Ans\" vous permet d'utiliser le résultat de votre dernier calcul dans une nouvelle expression.",
     "equations_help_1": "Résolvez des équations linéaires avec une ou deux inconnues.",
     "equations_help_2": "Saisissez les coefficients et les constantes pour définir votre équation.",
-    "equations_help_3": "L'utilisateur doit utiliser `x` et `y` comme variables d'entrée et suivre le modèle suivant : `ax (+by) + c = d`.",
+    "equations_help_3": "L'utilisateur doit utiliser <code>x</code> et <code>y</code> comme variables d'entrée et suivre le modèle suivant : <code>ax (+by) + c = d</code>.",
     "equations_help_4": "Fonctionne avec des nombres décimaux mais pas avec des fractions.",
     "unit_converter_help_1": "Convertir entre différentes unités de mesure.",
     "unit_converter_help_2": "Saisissez une valeur et sélectionnez les unités depuis lesquelles vous souhaitez convertir.",

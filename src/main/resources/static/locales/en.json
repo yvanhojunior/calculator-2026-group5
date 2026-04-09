@@ -51,7 +51,7 @@
     "scientific_calculator_help_3": "The \"Ans\" button allows you to use the result of your last calculation in a new expression.",
     "equations_help_1": "Solve linear equations with one or two unknowns.",
     "equations_help_2": "Enter coefficients and constants to define your equation.",
-    "equations_help_3": "The user must use `x` and `y`as input variable and use the following pattern: `ax (+by) + c = d`.",
+    "equations_help_3": "The user must use <code>x</code> and <code>y</code> as input variables and use the following pattern: <code>ax (+by) + c = d</code>.",
     "equations_help_4": "Works with decimal numbers but not fractions.",
     "unit_converter_help_1": "Convert between different units of measurement.",
     "unit_converter_help_2": "Enter a value and select the units you want to convert from.",
