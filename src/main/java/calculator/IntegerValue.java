@@ -26,6 +26,9 @@ public class IntegerValue implements NumberValue {
             if (other instanceof IntegerValue o) {
                 return new IntegerValue(this.value + o.value);
             }
+            if (other instanceof ComplexValue o) {
+                return new ComplexValue(this.value + o.getReal(), o.getImaginary());
+            }
             if (other instanceof RealValue) {
                 return new RealValue(java.math.BigDecimal.valueOf(this.value), RealValue.DEFAULT_PRECISION).add(other);
             }
@@ -40,6 +43,9 @@ public class IntegerValue implements NumberValue {
             if (other instanceof IntegerValue o) {
                 return new IntegerValue(this.value - o.value);
             }
+            if (other instanceof ComplexValue o) {
+                return new ComplexValue(this.value - o.getReal(), -o.getImaginary());
+            }
             if (other instanceof RealValue) {
                 return new RealValue(java.math.BigDecimal.valueOf(this.value), RealValue.DEFAULT_PRECISION).sub(other);
             }
@@ -53,6 +59,9 @@ public class IntegerValue implements NumberValue {
         public NumberValue mul(NumberValue other) {
             if (other instanceof IntegerValue o) {
                 return new IntegerValue(this.value * o.value);
+            }
+            if (other instanceof ComplexValue o) {
+                return new ComplexValue(this.value * o.getReal(), this.value * o.getImaginary());
             }
             if (other instanceof RealValue) {
                 return new RealValue(java.math.BigDecimal.valueOf(this.value), RealValue.DEFAULT_PRECISION).mul(other);
@@ -76,6 +85,17 @@ public class IntegerValue implements NumberValue {
                 } else {
                     return new RealValue((double) this.value / o.value);
                 }
+            }
+
+            if (other instanceof ComplexValue o) {
+                double denominator = o.getReal() * o.getReal() + o.getImaginary() * o.getImaginary();
+                if (denominator == 0) {
+                    throw new ArithmeticException("Division by zero complex number.");
+                }
+                return new ComplexValue(
+                        (this.value * o.getReal()) / denominator,
+                        (-this.value * o.getImaginary()) / denominator
+                );
             }
 
             if (other instanceof RealValue) {

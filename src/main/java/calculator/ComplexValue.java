@@ -23,21 +23,38 @@ public class ComplexValue implements NumberValue {
     public double getReal() { return real; }
     public double getImaginary() { return imaginary; }
 
+    private static ComplexValue toComplex(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return o;
+        }
+        if (other instanceof IntegerValue o) {
+            return new ComplexValue(o.getValue(), 0);
+        }
+        if (other instanceof RationalValue o) {
+            return new ComplexValue((double) o.getNumerator() / o.getDenominator(), 0);
+        }
+        if (other instanceof RealValue o) {
+            return new ComplexValue(o.getValue().doubleValue(), 0);
+        }
+        throw new IllegalArgumentException("Unsupported type: " + other.getClass());
+    }
+
     @Override
     public NumberValue add(NumberValue other) {
-        ComplexValue o = (ComplexValue) other;
+        ComplexValue o = toComplex(other);
         return new ComplexValue(this.real + o.real, this.imaginary + o.imaginary);
     }
 
     @Override
     public NumberValue sub(NumberValue other) {
-        ComplexValue o = (ComplexValue) other;
+        ComplexValue o = toComplex(other);
         return new ComplexValue(this.real - o.real, this.imaginary - o.imaginary);
     }
 
     @Override
     public NumberValue mul(NumberValue other) {
-        ComplexValue o = (ComplexValue) other;
+        ComplexValue o = toComplex(other);
+
         // (a+bi)(c+di) = (ac-bd) + (ad+bc)i
         return new ComplexValue(
                 this.real * o.real - this.imaginary * o.imaginary,
@@ -47,7 +64,7 @@ public class ComplexValue implements NumberValue {
 
     @Override
     public NumberValue div(NumberValue other) {
-        ComplexValue o = (ComplexValue) other;
+        ComplexValue o = toComplex(other);
         // (a+bi)/(c+di) = (a+bi)(c-di) / (c²+d²)
         double denominator = o.real * o.real + o.imaginary * o.imaginary;
         if (denominator == 0) {

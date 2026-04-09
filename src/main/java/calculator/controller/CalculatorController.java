@@ -25,13 +25,10 @@ public class CalculatorController {
     @GetMapping("/calculate")
     public ResponseEntity<Map<String, Object>> calculate(HttpServletRequest request) {
         try {
-            String rawQuery = request.getQueryString();
-            String expression = rawQuery.replace("expression=", "");
-            expression = expression.replace("%2B", "+");
-            expression = expression.replace("%2F", "/");
-            expression = expression.replace("%2A", "*");
-            expression = expression.replace("%2D", "-");
-            expression = expression.replace("%5E", "^");
+            String expression = request.getParameter("expression");
+            if (expression == null || expression.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Missing expression parameter"));
+            }
             Expression expr = calculator.read(expression);
             NumberValue result = calculator.eval(expr);
             return ResponseEntity.ok(Map.of("result", result.toString()));

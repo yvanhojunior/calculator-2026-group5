@@ -3,7 +3,17 @@ package calculator;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import io.cucumber.java.lu.a.as;
+
 class TestComplexValue {
+
+    @Test
+    void testMixedIntegerAndComplexExpression() {
+        Calculator calculator = new Calculator();
+        Expression expr = calculator.read("(8-i)*8");
+        NumberValue result = calculator.eval(expr);
+        assertEquals(new ComplexValue(64, -8), result);
+    }
 
     @Test
     void testAddition() {
