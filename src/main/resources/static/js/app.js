@@ -210,6 +210,7 @@ const app = (() => {
                 case '÷': return '/';
                 case '^': return '^';
                 case '!': return '!';
+                case 'mod': return '%';
                 default: return token;
             }
         }).join('') + parenthesis_stack.join('');
