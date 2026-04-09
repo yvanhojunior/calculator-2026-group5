@@ -38,6 +38,7 @@ public class CalculatorSteps {
 				case "-"	->	op = new Minus(params);
 				case "*"	->	op = new Times(params);
 				case "/"	->	op = new Divides(params);
+				case "%"	->	op = new Modulo(params);
 				default		->	fail();
 			}
 		} catch (IllegalConstruction _) {
@@ -89,7 +90,7 @@ public class CalculatorSteps {
 		}
 	}
 
-	@When("^I provide a (.*) number (\\d+)$")
+	@When("^I provide a (.*) number (-?\\d+)$")
 	public void whenIProvideANumber(String s, int val) {
 		//add extra parameter to the operation
 		params = new ArrayList<>();
@@ -123,6 +124,11 @@ public class CalculatorSteps {
 			// résultat réel attendu
 			assertEquals(new RealValue(val), result);
 		}
+	}
+
+	@Then("the operation evaluates to an error")
+	public void thenTheOperationEvaluatesToAnError() {
+		assertThrows(ArithmeticException.class, () -> c.eval(op));
 	}
 
 	@Then("its value is {string}")

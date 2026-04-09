@@ -130,7 +130,9 @@ public class IntegerValue implements NumberValue {
                 if (o.value == 0) {
                     throw new ArithmeticException("Modulo by zero is not allowed.");
                 }
-                return new IntegerValue(this.value % o.value);
+                int divisor = Math.abs(o.value);
+                int result = ((this.value % divisor) + divisor) % divisor;
+                return new IntegerValue(result);
             }
             throw new IllegalArgumentException("Unsupported type: " + other.getClass());
         }
