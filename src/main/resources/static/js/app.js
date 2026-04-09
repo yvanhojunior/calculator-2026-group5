@@ -8,12 +8,14 @@ const app = (() => {
     // ── state ──────────────────────────────────────────────────────────────
     let expression_to_evaluate = [];
     let parenthesis_stack = [];
+    let latestFraction = null; // Store the latest fraction result for SD button functionality
     const THEME_STORAGE_KEY = 'theme';
     let currentPage = 'calculator'; // Default page
 
     // ── DOM helpers ────────────────────────────────────────────────────────
     const arithmeticButtons =  document.querySelectorAll('button.digit, button.op, button.sct, #ans_button');
     const ans_button = document.getElementById('ans_button');
+    const sd_button = document.getElementById('sd_button');
     const close_paren = document.getElementById('close-paren');
     let activeExpression = document.getElementById('std_expression'); // Start with standard expression active
     let activeResult = document.getElementById('std_result'); // Start with standard result active
@@ -106,6 +108,7 @@ const app = (() => {
     applyTheme(getInitialTheme());
 
     ans_button.disabled = true;
+    sd_button.disabled = true;
 
     // ── Language and theme toggles ─────────────────────────────────────────────
     document.getElementById("lang-toggle").addEventListener("click", async () => {
@@ -136,10 +139,12 @@ const app = (() => {
                 expression_to_evaluate.push(value);
             } else if (btn.classList.contains('sct')) {
                 switch (value) {
+                    /*
                     case 'sqrt':
                         expression_to_evaluate.push('sqrt(');
                         parenthesis_stack.push(')');
                         break;
+                        */
 
                     case '(':
                         expression_to_evaluate.push('(');
@@ -153,17 +158,28 @@ const app = (() => {
                         }
                         break;
 
+                    case '!':
+                        computeFactorial();
+                        break;
+
                     default:
                         expression_to_evaluate.push(value);
                 }
             }
 
-            
             activeResult.textContent = expression_to_evaluate.length > 0 ? expression_to_evaluate.join('') + parenthesis_stack.join('') : '0';
             if (parenthesis_stack.length > 0) {
                 close_paren.disabled = false;
             } else {
                 close_paren.disabled = true;
+            }
+
+            // SD button only works on a result from the calculator. Disable it if the user starts entering a new expression.
+            if (expression_to_evaluate.length > 0 || parenthesis_stack.length > 0) {
+                sd_button.disabled = true;
+            } else if (ans_button.disabled === false && getLastAnswer().includes('/')) { // Only re-enable SD if Ans is available, otherwise it would be confusing to have SD enabled but not do anything.
+                latestFraction = getLastAnswer();
+                sd_button.disabled = false;
             }
             return;
         })
@@ -233,7 +249,7 @@ const app = (() => {
         try {
             if (expression_to_evaluate.length === 0) {
                 showError('Please enter an expression to calculate.');
-                activeResult.textContent = '0';
+                activeDisplay.textContent = '0';
                 return;
             }
 
@@ -258,12 +274,26 @@ const app = (() => {
             // Reset for next expression
             expression_to_evaluate = [];
             parenthesis_stack = [];
+            if (displayResult.includes('/')) {
+                console.log(`Storing latest fraction result for SD button: ${displayResult}`);
+                latestFraction = displayResult;
+                sd_button.disabled = false;
+            } else {
+                console.log('Latest result is not a fraction, disabling SD button.');
+                latestFraction = null;
+                sd_button.disabled = true;
+            }
+
+
         } catch (err) {
             showError('Network error – is the server running?');
             console.error(err);
         }
     }
 
+    /**
+     * Delete the last entry in the expression, handling parentheses correctly, and update the display accordingly. If the expression becomes empty, reset the display to '0'.
+     */
     function deleteLastEntry() {
 
         if (expression_to_evaluate.length > 0) {
@@ -276,12 +306,16 @@ const app = (() => {
             }
             if (expression_to_evaluate.length === 0 && parenthesis_stack.length === 0) {
                 activeResult.textContent = '0';
+                sd_button.disabled = true;
             } else {
                 activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
             }
         }
     }
 
+    /**
+     * Handle sign change by toggling a leading '-' in the expression or applying it to the last answer if the expression is empty. Update the display accordingly.
+     */
     function changeSign() {
         // Handle sign change (e.g., toggle between positive and negative)
         if (expression_to_evaluate.length === 0) {
@@ -297,6 +331,9 @@ const app = (() => {
         activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
     }
 
+    /**
+     * Handle percentage calculation by converting the last number in the expression to a percentage (dividing by 100) and updating the display accordingly.
+     */
     function percentage() {
         // Handle percentage calculation (e.g., convert current expression to a percentage)
         if (expression_to_evaluate.length > 0) {
@@ -311,6 +348,10 @@ const app = (() => {
         }
     }
 
+    /**
+     * Retrieve the last answer from the history to support the "Ans" button functionality.
+     * @returns {string} The last answer as a string, or '0' if no history is available.
+     */
     function getLastAnswer() {
         if (activeHistory && activeHistory.firstChild) {
             const lastResult = activeHistory.firstChild.querySelector('.hist-result');
@@ -322,16 +363,86 @@ const app = (() => {
         return '0';
     }
 
+    /**
+     * Clear the input field of a given element (e.g., when switching modes).
+     * @param {*} thisInput 
+     */
     function clearInput(thisInput) {
         if (thisInput) {
             thisInput.value = '';
         }
     }
 
+    /**
+     * Compute the factorial of the last number in the expression and update the display.
+     * @returns {void}
+     */
+    function computeFactorial() {
+        // Get the last number from the expression, meaning the last sequence of digits before an operator
+        const lastNumberMatch = expression_to_evaluate.join('').match(/(\d+\.?\d*)$/);
+        if (lastNumberMatch) {
+            const lastNumber = parseInt(Math.ceil(lastNumberMatch[0]));
 
-    // - Unit convertor mode: Allows the  user to convert between different units (e.g., length, weight, temperature) by selecting the desired conversion type and inputting the value to be converted.
+            if (lastNumber < 0) {
+                showError('Factorial is not defined for negative numbers.');
+                return;
+            } else if (lastNumber > 15) { // Limit to 15! to prevent overflow and long computation times
+                showError('Factorial is too large to compute (max 15!).');
+                return;
+            } else if (lastNumber === 0 || lastNumber === 1) {
+                expression_to_evaluate.splice(-lastNumber.toString().length, lastNumber.toString().length, '1');
+            } else {
+                let factorial = 1;
+                for (let i = 2; i <= lastNumber; i++) {
+                    factorial *= i;
+                }
+                expression_to_evaluate.splice(-lastNumber.toString().length, lastNumber.toString().length, String(factorial));
+            }
+            activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
+        } else {
+            showError('Please enter a number before the factorial operator.');
+        }
 
-    return { calculate, clearDisplay, clearInput, deleteLastEntry, changeSign, percentage, getLastAnswer, toggleNightMode};
+    }
+
+    /**
+     * Switch between standard and decimal formats by sending the current result to the backend for conversion. If the current result is a fraction, convert it to decimal; if it's a decimal, switch back to the latest fraction if available. Update the display accordingly.
+     * @returns {Promise<void>}
+     */
+    async function switchStandardDecimal() {
+        try {
+            if (activeResult.textContent.includes('/')) {
+                // We go from standard to decimal
+                const [numerator, denominator] = activeResult.textContent.split('/').map(Number);
+                const reponse = await fetch(`/api/switchFormat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'                    },
+                    body: JSON.stringify({ numerator, denominator })
+                });
+                const data = await reponse.json();
+                if (!reponse.ok) {
+                    showError(data.error ?? 'Failed to switch to decimal format. Please try again.');
+                    return;
+                }
+                activeResult.textContent = data.decimalValue;
+                console.log(`Switching to decimal format with result: ${activeResult.textContent}`);
+
+                return;
+            } else if (activeResult.textContent.includes('.')) {
+                // We go from decimal to standard
+                activeResult.textContent = latestFraction ? latestFraction : activeResult.textContent;
+                console.log(`Switching to standard format with result: ${activeResult.textContent}`);
+                return;
+            }
+        } catch (err) {
+            showError('Failed to switch between standard and decimal formats.');
+            console.error(err);
+        }
+    }
+
+
+    return { calculate, clearDisplay, clearInput, deleteLastEntry, changeSign, percentage, getLastAnswer, toggleNightMode, switchStandardDecimal };
 })();
 
 // Expose app globally for inline HTML onclick handlers.
