@@ -22,17 +22,39 @@ const app = (() => {
     let activeHistory = document.getElementById('std_history'); // Start with standard history active
     let activeError = document.getElementById('std_error'); // Start with standard error active
 
-    /** Show an error message and clear it after 3 s. */
-    function showError(msg) {
+    /** Show an i18n-aware error message and clear it after 3 s. */
+    function showError(messageKeyOrText) {
         if (!activeError) {
             return;
         }
-        activeError.textContent = msg;
+
+        const translated = typeof t === 'function' ? t(messageKeyOrText) : messageKeyOrText;
+        activeError.textContent = translated;
         setTimeout(() => {
             if (activeError) {
                 activeError.textContent = '';
             }
         }, 3000);
+    }
+
+    /** Resolve API errors to i18n keys when possible, with readable fallback. */
+    function resolveApiError(data, fallbackKey) {
+        if (data && typeof data.errorCode === 'string' && data.errorCode.trim().length > 0) {
+            return data.errorCode;
+        }
+
+        const message = data && typeof data.error === 'string' ? data.error : '';
+        if (!message) {
+            return fallbackKey;
+        }
+
+        if (message.startsWith('Missing expression parameter')) return 'errors.missing_expression_parameter';
+        if (message.startsWith('Division by zero')) return 'errors.division_by_zero';
+        if (message.startsWith('Invalid expression')) return 'errors.invalid_expression';
+        if (message.startsWith('Missing numerator or denominator')) return 'errors.missing_numerator_or_denominator';
+        if (message.startsWith('Invalid number format')) return 'errors.invalid_number_format';
+
+        return message;
     }
 
     /** Synchronize active references based on the current page. */
@@ -350,7 +372,7 @@ const app = (() => {
 
         try {
             if (expression_to_evaluate.length === 0) {
-                showError('Please enter an expression to calculate.');
+                showError('errors.enter_expression');
                 activeDisplay.textContent = '0';
                 return;
             }
@@ -361,7 +383,7 @@ const app = (() => {
             const data = await response.json();
 
             if (!response.ok) {
-                showError(data.error ?? 'Failed to calculate expression. Please try again.');
+                showError(resolveApiError(data, 'errors.calculate_failed'));
                 return;
             }
 
@@ -388,7 +410,7 @@ const app = (() => {
 
 
         } catch (err) {
-            showError('Network error – is the server running?');
+            showError('errors.network');
             console.error(err);
         }
     }
@@ -486,10 +508,11 @@ const app = (() => {
             const lastNumber = parseInt(Math.ceil(lastNumberMatch[0]));
 
             if (lastNumber < 0) {
-                showError('Factorial is not defined for negative numbers.');
+                // Never happens
+                showError('errors.factorial_negative');
                 return;
             } else if (lastNumber > 15) { // Limit to 15! to prevent overflow and long computation times
-                showError('Factorial is too large to compute (max 15!).');
+                showError('errors.factorial_too_large');
                 return;
             } else if (lastNumber === 0 || lastNumber === 1) {
                 expression_to_evaluate.splice(-lastNumber.toString().length, lastNumber.toString().length, '1');
@@ -502,7 +525,7 @@ const app = (() => {
             }
             activeResult.textContent = expression_to_evaluate.join('') + parenthesis_stack.join('');
         } else {
-            showError('Please enter a number before the factorial operator.');
+            showError('errors.factorial_missing_number');
         }
 
     }
@@ -517,7 +540,7 @@ const app = (() => {
                 // We go from standard to decimal
                 const fraction = parseDisplayedFraction(activeResult.textContent);
                 if (!fraction || !Number.isFinite(fraction.numerator) || !Number.isFinite(fraction.denominator)) {
-                    showError('Invalid fraction format.');
+                    showError('errors.invalid_fraction');
                     return;
                 }
 
@@ -530,7 +553,7 @@ const app = (() => {
                 });
                 const data = await reponse.json();
                 if (!reponse.ok) {
-                    showError(data.error ?? 'Failed to switch to decimal format. Please try again.');
+                    showError(resolveApiError(data, 'errors.switch_decimal_failed'));
                     return;
                 }
                 activeResult.textContent = data.decimalValue;
@@ -544,7 +567,7 @@ const app = (() => {
                 return;
             }
         } catch (err) {
-            showError('Failed to switch between standard and decimal formats.');
+            showError('errors.switch_format_failed');
             console.error(err);
         }
     }

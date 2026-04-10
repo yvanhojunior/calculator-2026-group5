@@ -16,6 +16,13 @@ public class CalculatorController {
 
     private final Calculator calculator = new Calculator();
 
+    private Map<String, Object> errorResponse(String errorCode, String errorMessage) {
+        return Map.of(
+                "errorCode", errorCode,
+                "error", errorMessage
+        );
+    }
+
     /**
      * Evaluates an arithmetic expression passed as a query parameter.
      * Example: GET /api/calculate?expression=3+4
@@ -28,15 +35,15 @@ public class CalculatorController {
         try {
             String expression = request.getParameter("expression");
             if (expression == null || expression.trim().isEmpty()) {
-                return ResponseEntity.badRequest().body(Map.of("error", "Missing expression parameter"));
+                return ResponseEntity.badRequest().body(errorResponse("errors.missing_expression_parameter", "Missing expression parameter"));
             }
             Expression expr = calculator.read(expression);
             NumberValue result = calculator.eval(expr);
             return ResponseEntity.ok(Map.of("result", result.toString()));
         } catch (ArithmeticException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Division by zero"));
+            return ResponseEntity.badRequest().body(errorResponse("errors.division_by_zero", "Division by zero"));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid expression: " + e.getMessage()));
+            return ResponseEntity.badRequest().body(errorResponse("errors.invalid_expression", "Invalid expression: " + e.getMessage()));
         }
     }
 
@@ -45,10 +52,14 @@ public class CalculatorController {
         String numerator = request.get("numerator");
         String denominator = request.get("denominator");
         if (numerator == null || denominator == null) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Missing numerator or denominator"));
+            return ResponseEntity.badRequest().body(errorResponse("errors.missing_numerator_or_denominator", "Missing numerator or denominator"));
         }
-        RealValue decimalValue = new RationalValue(Long.parseLong(numerator), Long.parseLong(denominator)).toReal();
-        return ResponseEntity.ok(Map.of("decimalValue", decimalValue.toString()));
+        try {
+            RealValue decimalValue = new RationalValue(Long.parseLong(numerator), Long.parseLong(denominator)).toReal();
+            return ResponseEntity.ok(Map.of("decimalValue", decimalValue.toString()));
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(errorResponse("errors.invalid_number_format", "Invalid number format"));
+        }
     }
 
     @GetMapping("/ping")
