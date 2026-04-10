@@ -9,6 +9,7 @@ import java.util.List;
  * @see Minus
  * @see Plus
  * @see Divides
+ * @see Modulo
  */
 public final class Times extends Operation {
 	/**

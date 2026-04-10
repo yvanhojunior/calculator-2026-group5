@@ -143,3 +143,51 @@ Feature: Integer Arithmetic Expressions
   Scenario: Exponentiation with negative base
     Given the expression "-2^3"
     Then its value is "-8"
+    
+  Scenario: Modulo-ing two positive integer numbers
+    Given an integer operation '%'
+    When I provide a first number 7
+    And I provide a second number 5
+    Then the operation evaluates to 2
+
+  Scenario: Modulo-ing a positive integer by a larger positive integer
+    Given an integer operation '%'
+    When I provide a first number 5
+    And I provide a second number 7
+    Then the operation evaluates to 5
+
+  Scenario: Modulo-ing a positive integer by itself
+    Given an integer operation '%'
+    When I provide a first number 5
+    And I provide a second number 5
+    Then the operation evaluates to 0
+
+  Scenario: Modulo-ing a positive integer by 1
+    Given an integer operation '%'
+    When I provide a first number 5
+    And I provide a second number 1
+    Then the operation evaluates to 0
+
+  Scenario: Modulo-ing zero by a positive integer
+    Given an integer operation '%'
+    When I provide a first number 0
+    And I provide a second number 5
+    Then the operation evaluates to 0
+  
+  Scenario: Modulo-ing a positive integer by zero
+    Given an integer operation '%'
+    When I provide a first number 5
+    And I provide a second number 0
+    Then the operation evaluates to an error
+
+  Scenario: Modulo-ing a negative integer by a positive integer
+    Given an integer operation '%'
+    When I provide a first number -5
+    And I provide a second number 3
+    Then the operation evaluates to 1
+
+  Scenario: Modulo-ing a positive integer by a negative integer
+    Given an integer operation '%'
+    When I provide a first number 5
+    And I provide a second number -3
+    Then the operation evaluates to 2

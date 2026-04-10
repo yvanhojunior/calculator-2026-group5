@@ -21,5 +21,6 @@ public interface NumberValue {
 
         calculator.NumberValue pow(calculator.NumberValue other);
 
+        calculator.NumberValue mod(calculator.NumberValue other);
 
 }

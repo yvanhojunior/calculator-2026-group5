@@ -36,6 +36,20 @@ class TestRealValue {
     }
 
     @Test
+    void testModulo() {
+        RealValue a = new RealValue(7.0);
+        RealValue b = new RealValue(2.0);
+        assertEquals(new RealValue(1.0), a.mod(b));
+    }
+
+    @Test
+    void testNegativeModulo() {
+        RealValue a = new RealValue(-7.0);
+        RealValue b = new RealValue(2.0);
+        assertEquals(new RealValue(1.0), a.mod(b));
+    }
+
+    @Test
     void testDivisionByZeroGivesInfinity() {
         // 1.0 / 0.0 = +Infinity
         RealValue a = new RealValue(1.0);

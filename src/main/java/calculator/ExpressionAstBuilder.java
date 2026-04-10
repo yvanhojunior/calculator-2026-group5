@@ -76,7 +76,7 @@ public class ExpressionAstBuilder extends ExpressionBaseVisitor<Expression> {
     /**
      * Visit one expression of multiplication/division (e.g: "2 * 3 / 4").
      * Build one AST tree chaining operations left to right.
-     * Manage the operators '*' et '/' by creating objects Times or Divides.
+        * Manage the operators '*', '/' and '%' by creating Times, Divides or Modulo.
      * @param ctx the parse tree
      * @return null in case of construction error.
      */
@@ -92,6 +92,8 @@ public class ExpressionAstBuilder extends ExpressionBaseVisitor<Expression> {
                 String operator = ctx.getChild(2 * i - 1).getText();
                 if (operator.equals("*")) {
                     result = new Times(params);
+                } else if (operator.equals("%")) {
+                    result = new Modulo(params);
                 } else {
                     result = new Divides(params);
                 }
