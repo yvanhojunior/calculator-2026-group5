@@ -79,7 +79,7 @@ jobs:
     - id: restart
       name: Restart app process on alwaysdata (optional)
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' && env.ALWAYSDATA_POST_DEPLOY_CMD != '' }}
-      uses: appleboy/ssh-action@v1.0.3
+      uses: appleboy/ssh-action@v1.2.5
       with:
         host: ${{ secrets.ALWAYSDATA_SSH_HOST }}
         username: ${{ secrets.ALWAYSDATA_SSH_USER }}
