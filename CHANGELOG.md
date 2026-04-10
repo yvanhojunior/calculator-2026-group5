@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [1.2.16] - 2026-04-10
+### Fixed
+- `CLI`: replaced manual `ExpressionParser` with ANTLR-based `calculator.read()` for full expression support
+- `CLI`: made `evaluate()` and `printHelp()` public for testability
+### Added
+- `CLI`: added Javadoc documentation
+- `TestCLI`: added JUnit tests for CLI (help, exit, quit, expressions, error handling)
+### Closes
+- #9 Command-line interface
+- #25 Implement a Read-Eval-Print Loop (REPL) for the CLI
+- #26 Implement a built-in help function for the CLI
+
 ## [1.2.15] - 2026-04-10
 ### Refactored
 - `NotationVisitor`: `switch cases:` broken into `if...else` loops
