@@ -58,5 +58,21 @@
     "currency_converter_help_1": "Convert between different currencies using daily updated exchange rates.",
     "currency_converter_help_2": "Enter an amount and select the currencies you want to convert between.",
     "programmer_help_1": "Perform calculations in different number systems (binary, octal, decimal, hexadecimal).",
-    "programmer_help_2": "Use the base conversion feature to switch between number systems."
+    "programmer_help_2": "Use the base conversion feature to switch between number systems.",
+    "errors": {
+        "enter_expression": "Please enter an expression to calculate.",
+        "missing_expression_parameter": "Missing expression parameter.",
+        "calculate_failed": "Failed to calculate expression. Please try again.",
+        "division_by_zero": "Division by zero.",
+        "invalid_expression": "Invalid expression.",
+        "missing_numerator_or_denominator": "Missing numerator or denominator.",
+        "invalid_number_format": "Invalid number format.",
+        "network": "Network error - is the server running?",
+        "factorial_negative": "Factorial is not defined for negative numbers.",
+        "factorial_too_large": "Factorial is too large to compute (max 15!).",
+        "factorial_missing_number": "Please enter a number before the factorial operator.",
+        "invalid_fraction": "Invalid fraction format.",
+        "switch_decimal_failed": "Failed to switch to decimal format. Please try again.",
+        "switch_format_failed": "Failed to switch between standard and decimal formats."
+    }
 }
