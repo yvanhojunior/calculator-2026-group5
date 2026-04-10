@@ -139,4 +139,8 @@ public class RationalValue implements NumberValue {
     public int hashCode() {
         return Long.hashCode(numerator) * 31 + Long.hashCode(denominator);
     }
+
+    public RealValue toReal() {
+        return new RealValue((double) numerator / denominator);
+    }
 }

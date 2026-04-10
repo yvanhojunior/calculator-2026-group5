@@ -84,4 +84,11 @@ class TestRationalValue {
         // 18/12 réduit à 3/2 doit afficher "1 1/2"
         assertEquals("1 1/2", new RationalValue(18, 12).toString());
     }
+
+    @Test
+    void testToReal() {
+        RationalValue a = new RationalValue(1, 4);
+        RealValue expected = new RealValue(0.25);
+        assertEquals(expected, a.toReal());
+    }
 }

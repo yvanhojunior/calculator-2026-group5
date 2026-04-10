@@ -38,4 +38,15 @@ public class CalculatorController {
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid expression: " + e.getMessage()));
         }
     }
+
+    @PostMapping("/switchFormat")
+    public ResponseEntity<Map<String, Object>> switchFormat(@RequestBody Map<String, String> request) {
+        String numerator = request.get("numerator");
+        String denominator = request.get("denominator");
+        if (numerator == null || denominator == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Missing numerator or denominator"));
+        }
+        RealValue decimalValue = new RationalValue(Long.parseLong(numerator), Long.parseLong(denominator)).toReal();
+        return ResponseEntity.ok(Map.of("decimalValue", decimalValue.toString()));
+    }
 }
