@@ -231,7 +231,7 @@ const app = (() => {
         switch (event.code) {
             case 'NumpadEnter':
                 event.preventDefault();
-                calculate();
+                clickButtonWithValue('=');
                 return;
             case 'NumpadAdd':
                 event.preventDefault();
