@@ -63,7 +63,7 @@ jobs:
     - id: deploy
       name: Deploy JAR to alwaysdata (develop only)
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' }}
-      uses: appleboy/scp-action@v0.1.7
+      uses: appleboy/scp-action@v1.0.0
       with:
         host: ${{ secrets.ALWAYSDATA_SSH_HOST }}
         username: ${{ secrets.ALWAYSDATA_SSH_USER }}
