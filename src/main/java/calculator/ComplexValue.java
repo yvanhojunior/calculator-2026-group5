@@ -129,4 +129,11 @@ public class ComplexValue implements NumberValue {
     public int hashCode() {
         return Double.hashCode(real) * 31 + Double.hashCode(imaginary);
     }
+
+    public RealValue toReal() {
+        if (imaginary != 0) {
+            throw new IllegalStateException("Cannot convert a non-real complex number to RealValue.");
+        }
+        return new RealValue(real);
+    }
 }

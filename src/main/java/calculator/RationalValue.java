@@ -143,4 +143,8 @@ public class RationalValue implements NumberValue {
     public RealValue toReal() {
         return new RealValue((double) numerator / denominator);
     }
+
+    public Double getValue() {
+        return (double) numerator / denominator;
+    }
 }
