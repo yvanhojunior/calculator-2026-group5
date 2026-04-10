@@ -155,4 +155,8 @@ public class IntegerValue implements NumberValue {
                 return Integer.toString(value);
         }
 
+        public RealValue toReal() {
+            return new RealValue((double) value);
+        }
+
 }
