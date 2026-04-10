@@ -12,7 +12,7 @@ Test coverage: ![Coverage](.github/badges/jacoco.svg)
 
 This repository contains Java code for computing arithmetic expressions. It is deliberately incomplete as it serves to be the basis of all kinds of extensions, such as a more sophisticated Calculator application. The code was written to be used for educational purposes at the University of Mons, Belgium in the context of the software evolution course.
 
-**For more information about how to use this repository for the student project assignment, please read the [Wiki pages](https://github.com/University-of-Mons/calculator-cucumber-2026/wiki).**
+**For more information about how to use this repository for the student project assignment, please read the [Wiki pages](https://github.com/yvanhojunior/calculator-2026-group5/wiki).**
 
 ### Unit testing and BDD
 
@@ -49,18 +49,16 @@ The BDD scenarios are specified as .feature files in the src\test\resources dire
 
 ## Versions
 
-We use [SemVer](http://semver.org/) for semantic versioning. For the versions available, see the [tags on this repository](https://github.com/University-of-Mons/calculator-cucumber-2025/tags). 
+We use [SemVer](http://semver.org/) for semantic versioning. For the versions available, see the [tags on this repository](https://github.com/yvanhojunior/calculator-2026-group5/tags). 
 
 ## Contributors
 
-* Tom Mens
-* Gauvain Devillez @GauvainD
+* Franck Njampou Kadjou @CallMeFranck
+* Gilles Jaunart @BolBoBul
+* Yvann Junior Tchuimadjio @yvanhojunior
 
 ## Licence
 
 
 [This code is available under the GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/) (GPLv3)
 
-## Acknowledgments
-
-* Software Engineering Lab, Faculty of Sciences, University of Mons, Belgium.

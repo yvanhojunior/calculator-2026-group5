@@ -4,8 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [1.2.15] - 2026-04-09
+## [1.2.16] - 2026-04-10
 ### Fixed
 - `CLI`: replaced manual `ExpressionParser` with ANTLR-based `calculator.read()` for full expression support
 - `CLI`: made `evaluate()` and `printHelp()` public for testability
@@ -16,6 +15,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - #9 Command-line interface
 - #25 Implement a Read-Eval-Print Loop (REPL) for the CLI
 - #26 Implement a built-in help function for the CLI
+
+## [1.2.15] - 2026-04-10
+### Refactored
+- `NotationVisitor`: `switch cases:` broken into `if...else` loops
+### Added
+- Support for modulo operator `%` (e.g.`8%3` → `2`)
+- Support for factorial operator `!` (e.g. `5!` → `120`)
+- API endpoint (`/switchFormat`) in `CalculatorController` to convert rational value to decimal value via `toReal()` helper (e.g. `3/8` ↔ `0.375`) 
+- `Modulo`class for modulo operation
+- `mod()` method in `NumberValue` interface, implemented in `IntegerValue`, `RealValue`, `RationalValue`, `ComplexValue`
+### Fixed
+- `ExpressionParser`: added support for parsing modulo and factorial operators
+- `ExpressionAstBuilder`: added support for building AST nodes for modulo and factorial operations
+- `Evaluator`: added support for evaluating modulo and factorial operations
 
 ## [1.2.14] - 2026-04-07
 ### Refactored

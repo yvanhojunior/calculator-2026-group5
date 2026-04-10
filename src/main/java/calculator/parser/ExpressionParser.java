@@ -55,7 +55,7 @@ public class ExpressionParser {
             if (c == '(') depth++;
             else if (c == ')') depth--;
             else if (depth == 0 && (c == '+' || c == '-')) pos = i;
-            else if (depth == 0 && (c == '*' || c == '/') && pos == -1) pos = i;
+            else if (depth == 0 && (c == '*' || c == '/' || c == '%') && pos == -1) pos = i;
         }
         return pos;
     }

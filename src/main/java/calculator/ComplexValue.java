@@ -101,6 +101,11 @@ public class ComplexValue implements NumberValue {
         throw new IllegalArgumentException("Unsupported exponent type for ComplexValue");
     }
 
+    @Override
+    public NumberValue mod(NumberValue other) {
+        throw new UnsupportedOperationException("Modulo operation is not defined for complex numbers.");
+    }
+
 
     @Override
     public String toString() {

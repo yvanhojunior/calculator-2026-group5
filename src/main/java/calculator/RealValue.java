@@ -111,6 +111,21 @@ public class RealValue implements NumberValue {
         return new RealValue(Math.pow(value.doubleValue(), o.getValue().doubleValue()));
     }
 
+    @Override
+    public NumberValue mod(NumberValue other) {
+        RealValue o = toReal(other);
+        if (isSpecial() || o.isSpecial()) return NAN;
+        if (o.value.compareTo(BigDecimal.ZERO) == 0) {
+            throw new ArithmeticException("Modulo by zero is not allowed.");
+        }
+        BigDecimal result = value.remainder(o.value, precision);
+        // Le résultat du modulo doit toujours être positif ou nul
+        if (result.signum() < 0) {
+            result = result.add(o.value, precision);
+        }
+        return new RealValue(result, precision);
+    }
+
     // Gestion des cas spéciaux pour l'addition
     private RealValue handleSpecialAdd(RealValue o) {
         if (isNaN() || o.isNaN()) return NAN;

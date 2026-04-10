@@ -107,6 +107,11 @@ public class RationalValue implements NumberValue {
     }
 
     @Override
+    public NumberValue mod(NumberValue other) {
+        throw new IllegalArgumentException("Unsupported type: " + other.getClass());
+    }
+
+    @Override
     public String toString() {
         if (denominator == 1) return Long.toString(numerator);
         // Forme mixte: si |numérateur| > dénominateur, afficher "a b/c"
@@ -133,5 +138,9 @@ public class RationalValue implements NumberValue {
     @Override
     public int hashCode() {
         return Long.hashCode(numerator) * 31 + Long.hashCode(denominator);
+    }
+
+    public RealValue toReal() {
+        return new RealValue((double) numerator / denominator);
     }
 }
