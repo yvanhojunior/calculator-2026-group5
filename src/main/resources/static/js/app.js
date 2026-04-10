@@ -271,6 +271,54 @@ const app = (() => {
         return String(result);
     }
 
+    /**
+     * Convert fraction strings to a stable display format.
+     * Example: "5 1/3" -> "16/3".
+     */
+    function normalizeFractionDisplay(value) {
+        const normalized = String(value).trim().replace(/\s+/g, ' ');
+        const mixedMatch = normalized.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);
+        if (!mixedMatch) {
+            return normalized;
+        }
+
+        const whole = Number(mixedMatch[1]);
+        const remainder = Number(mixedMatch[2]);
+        const denominator = Number(mixedMatch[3]);
+        const sign = whole < 0 ? -1 : 1;
+        const numerator = sign * (Math.abs(whole) * denominator + remainder);
+        return `${numerator}/${denominator}`;
+    }
+
+    /**
+     * Parse a displayed fraction ("a/b" or "w a/b") into numerator/denominator.
+     */
+    function parseDisplayedFraction(value) {
+        const normalized = String(value).trim().replace(/\s+/g, ' ');
+
+        const simpleMatch = normalized.match(/^(-?\d+)\/(\d+)$/);
+        if (simpleMatch) {
+            return {
+                numerator: Number(simpleMatch[1]),
+                denominator: Number(simpleMatch[2])
+            };
+        }
+
+        const mixedMatch = normalized.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);
+        if (mixedMatch) {
+            const whole = Number(mixedMatch[1]);
+            const remainder = Number(mixedMatch[2]);
+            const denominator = Number(mixedMatch[3]);
+            const sign = whole < 0 ? -1 : 1;
+            return {
+                numerator: sign * (Math.abs(whole) * denominator + remainder),
+                denominator
+            };
+        }
+
+        return null;
+    }
+
     /** Build an expression string using parser-friendly operator symbols. */
     function buildExpressionForApi() {
         let input = expression_to_evaluate.map(token => {
@@ -317,7 +365,7 @@ const app = (() => {
                 return;
             }
 
-            const displayResult = formatApiResult(data.result).replaceAll(/\s/g, '');     // We handle various result formats (to avoid showing [object Object])
+            const displayResult = normalizeFractionDisplay(formatApiResult(data.result));
             activeResult.textContent = displayResult;
             activeExpression.textContent = expression;
             addHistory(expression, displayResult);
@@ -467,7 +515,13 @@ const app = (() => {
         try {
             if (activeResult.textContent.includes('/')) {
                 // We go from standard to decimal
-                const [numerator, denominator] = activeResult.textContent.split('/').map(Number);
+                const fraction = parseDisplayedFraction(activeResult.textContent);
+                if (!fraction || !Number.isFinite(fraction.numerator) || !Number.isFinite(fraction.denominator)) {
+                    showError('Invalid fraction format.');
+                    return;
+                }
+
+                const { numerator, denominator } = fraction;
                 const reponse = await fetch(`/api/switchFormat`, {
                     method: 'POST',
                     headers: {
