@@ -4,6 +4,7 @@ import calculator.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.time.Instant;
 import java.util.Map;
 
 /**
@@ -48,5 +49,15 @@ public class CalculatorController {
         }
         RealValue decimalValue = new RationalValue(Long.parseLong(numerator), Long.parseLong(denominator)).toReal();
         return ResponseEntity.ok(Map.of("decimalValue", decimalValue.toString()));
+    }
+
+    @GetMapping("/ping")
+    public ResponseEntity<Map<String, Object>> ping(HttpServletRequest request) {
+        return ResponseEntity.ok(Map.of(
+                "status", "UP",
+                "service", "calculator-api",
+                "timestamp", Instant.now().toString(),
+                "path", request.getRequestURI()
+        ));
     }
 }
