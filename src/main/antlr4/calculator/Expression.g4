@@ -4,7 +4,7 @@ expression : additionExpr ;
 
 additionExpr : multiplicationExpr (('+' | '-') multiplicationExpr)* ;
 
-multiplicationExpr : exponentiationExpr (('*' | '/') exponentiationExpr)* ;
+multiplicationExpr : exponentiationExpr (('*' | '/' | '%') exponentiationExpr)* ;
 
 exponentiationExpr : atom ('^' atom)* ;
 

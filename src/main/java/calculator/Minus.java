@@ -9,6 +9,7 @@ import java.util.List;
  * @see Plus
  * @see Times
  * @see Divides
+ * @see Modulo
  */
 public final class Minus extends Operation {
 

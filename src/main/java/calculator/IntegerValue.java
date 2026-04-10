@@ -124,6 +124,18 @@ public class IntegerValue implements NumberValue {
             throw new IllegalArgumentException("Unsupported type: " + other.getClass());
         }
 
+        @Override
+        public NumberValue mod(NumberValue other) {
+            if (other instanceof IntegerValue o) {
+                if (o.value == 0) {
+                    throw new ArithmeticException("Modulo by zero is not allowed.");
+                }
+                int divisor = Math.abs(o.value);
+                int result = ((this.value % divisor) + divisor) % divisor;
+                return new IntegerValue(result);
+            }
+            throw new IllegalArgumentException("Unsupported type: " + other.getClass());
+        }
 
         @Override
         public boolean equals(Object o) {
