@@ -43,6 +43,7 @@ public class ExpressionParser {
             case '-' -> new Minus(Arrays.asList(leftExpr, rightExpr));
             case '*' -> new Times(Arrays.asList(leftExpr, rightExpr));
             case '/' -> new Divides(Arrays.asList(leftExpr, rightExpr));
+            case '%' -> new Modulo(Arrays.asList(leftExpr, rightExpr));
             default -> throw new Exception("Unknown operator: " + op);
         };
     }
