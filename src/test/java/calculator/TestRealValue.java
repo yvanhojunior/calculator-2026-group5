@@ -2,6 +2,9 @@ package calculator;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+
+import io.cucumber.java.lu.a.as;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 
@@ -114,4 +117,133 @@ class TestRealValue {
         assertEquals(RealValue.NAN, RealValue.NAN);
         assertEquals(RealValue.POS_INF, RealValue.POS_INF);
     }
+
+    @Test
+    void testHashCode() {
+        assertEquals(new RealValue(1.5).hashCode(), new RealValue(1.5).hashCode());
+        assertNotEquals(new RealValue(1.5).hashCode(), new RealValue(2.5).hashCode());
+        assertEquals(RealValue.NAN.hashCode(), RealValue.NAN.hashCode());
+        assertEquals(RealValue.POS_INF.hashCode(), RealValue.POS_INF.hashCode());
+    }
+
+    @Test
+    void testAdditionWithNaN() {
+        assertEquals(RealValue.NAN, new RealValue(1.0).add(RealValue.NAN));
+        assertEquals(RealValue.NAN, new RealValue(-1.0).add(RealValue.NAN));
+    }
+
+    @Test
+    void testSubtractionWithNaN() {
+        assertEquals(RealValue.NAN, new RealValue(1.0).sub(RealValue.NAN));
+        assertEquals(RealValue.NAN, new RealValue(-1.0).sub(RealValue.NAN));
+    }
+
+    @Test
+    void testMultiplicationWithNaN() {
+        assertEquals(RealValue.NAN, new RealValue(2.0).mul(RealValue.NAN));
+        assertEquals(RealValue.NAN, new RealValue(-2.0).mul(RealValue.NAN));
+    }
+
+    @Test
+    void testDivisionWithNaN() {
+        assertEquals(RealValue.NAN, new RealValue(3.0).div(RealValue.NAN));
+        assertEquals(RealValue.NAN, new RealValue(-3.0).div(RealValue.NAN));
+    }
+
+    @Test
+    void testAdditionWithInfinity() {
+        assertEquals(RealValue.POS_INF, new RealValue(1.0).add(RealValue.POS_INF));
+        assertEquals(RealValue.NEG_INF, new RealValue(-1.0).add(RealValue.NEG_INF));
+    }
+
+    @Test
+    void testMultiplicationWithInfinity() {
+        assertEquals(RealValue.POS_INF, new RealValue(2.0).mul(RealValue.POS_INF));
+        assertEquals(RealValue.NEG_INF, new RealValue(-2.0).mul(RealValue.POS_INF));
+    }
+
+    @Test
+    void testSubtractionWithInfinity() {
+        assertEquals(RealValue.NEG_INF, new RealValue(1.0).sub(RealValue.POS_INF));
+        assertEquals(RealValue.POS_INF, new RealValue(-1.0).sub(RealValue.NEG_INF));
+    }
+
+    @Test
+    void testDivisionWithInfinity() {
+        assertEquals(RealValue.NAN, new RealValue(3.0).div(RealValue.POS_INF));
+        assertEquals(RealValue.NAN, new RealValue(-3.0).div(RealValue.POS_INF));
+    }
+
+    @Test
+    void testModuloWithInfinity() {
+        assertEquals(RealValue.NAN, new RealValue(3.0).mod(RealValue.POS_INF));
+        assertEquals(RealValue.NAN, new RealValue(-3.0).mod(RealValue.POS_INF));
+    }
+
+    @Test
+    void testModuloWithNaN() {
+        assertEquals(RealValue.NAN, new RealValue(3.0).mod(RealValue.NAN));
+        assertEquals(RealValue.NAN, new RealValue(-3.0).mod(RealValue.NAN));
+    }
+
+    @Test
+    void testAdditionWithInteger() {
+        assertEquals(new RealValue(3.5), new RealValue(1.5).add(new IntegerValue(2)));
+        assertEquals(new RealValue(0.5), new RealValue(1.5).add(new IntegerValue(-1)));
+    }
+
+    @Test
+    void testSubtractionWithInteger() {
+        assertEquals(new RealValue(0.5), new RealValue(2.5).sub(new IntegerValue(2)));
+        assertEquals(new RealValue(4.5), new RealValue(2.5).sub(new IntegerValue(-2)));
+    }
+
+    @Test
+    void testMultiplicationWithInteger() {
+        assertEquals(new RealValue(7.5), new RealValue(2.5).mul(new IntegerValue(3)));
+        assertEquals(new RealValue(-2.5), new RealValue(2.5).mul(new IntegerValue(-1)));
+    }
+
+    @Test
+    void testDivisionWithInteger() {
+        assertEquals(new RealValue(1.25), new RealValue(2.5).div(new IntegerValue(2)));
+        assertEquals(new RealValue(-1.25), new RealValue(2.5).div(new IntegerValue(-2)));
+    }
+
+    @Test
+    void testModuloWithInteger() {
+        assertEquals(new RealValue(0.5), new RealValue(2.5).mod(new IntegerValue(2)));
+        assertEquals(new RealValue(0.5), new RealValue(2.5).mod(new IntegerValue(-2)));
+    }
+
+    @Test
+    void testAdditionWithRational() {
+        assertEquals(new RealValue(2.0), new RealValue(1.5).add(new RationalValue(1, 2)));
+        assertEquals(new RealValue(3.0), new RealValue(1.5).add(new RationalValue(3, 2)));
+    }
+
+    @Test
+    void testSubtractionWithRational() {
+        assertEquals(new RealValue(1.0), new RealValue(1.5).sub(new RationalValue(1, 2)));
+        assertEquals(new RealValue(0.0), new RealValue(1.5).sub(new RationalValue(3, 2)));
+    }
+
+    @Test
+    void testMultiplicationWithRational() {
+        assertEquals(new RealValue(0.75), new RealValue(1.5).mul(new RationalValue(1, 2)));
+        assertEquals(new RealValue(2.25), new RealValue(1.5).mul(new RationalValue(3, 2)));
+    }
+
+    @Test
+    void testDivisionWithRational() {
+        assertEquals(new RealValue(3.0), new RealValue(1.5).div(new RationalValue(1, 2)));
+        assertEquals(new RealValue(1.0), new RealValue(1.5).div(new RationalValue(3, 2)));
+    }
+
+    @Test
+    void testModuloWithRational() {
+        assertEquals(new RealValue(0.0), new RealValue(1.5).mod(new RationalValue(1, 2)));
+        assertEquals(new RealValue(0.0), new RealValue(1.5).mod(new RationalValue(3, 2)));
+    }
+
 }

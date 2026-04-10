@@ -197,6 +197,10 @@ public class RealValue implements NumberValue {
 
     private RealValue toReal(NumberValue other) {
         if (other instanceof RealValue) return (RealValue) other;
+        if (other instanceof RationalValue) {
+            RationalValue r = (RationalValue) other;
+            return new RealValue(new BigDecimal(r.getNumerator()).divide(new BigDecimal(r.getDenominator()), precision), precision);
+        }
         if (other instanceof IntegerValue)
             return new RealValue(((IntegerValue) other).getValue());
         throw new IllegalArgumentException("Cannot convert " + other.getClass() + " to RealValue");
