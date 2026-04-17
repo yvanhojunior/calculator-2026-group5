@@ -2,8 +2,7 @@
 
 Code quality: ![Maven Build](https://github.com/yvanhojunior/calculator-2026-group5/actions/workflows/maven.yml/badge.svg)
 
-Test coverage: ![Coverage](.github/badges/jacoco.svg)
-![Branches](.github/badges/branches.svg)
+Test coverage: [![Codecov](https://codecov.io/gh/yvanhojunior/calculator-2026-group5/branch/master/graph/badge.svg)](https://codecov.io/gh/yvanhojunior/calculator-2026-group5)
 
 
 # Calculating arithmetic expressions
