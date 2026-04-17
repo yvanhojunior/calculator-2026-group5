@@ -4,7 +4,7 @@ expression : additionExpr ;
 
 additionExpr : multiplicationExpr (('+' | '-') multiplicationExpr)* ;
 
-multiplicationExpr : exponentiationExpr (('*' | '/') exponentiationExpr)* ;
+multiplicationExpr : exponentiationExpr (('*' | '/' | '%') exponentiationExpr)* ;
 
 exponentiationExpr : atom ('^' atom)* ;
 
@@ -17,7 +17,8 @@ atom : COMPLEX
 
 // Nombres complexes: 2+3i, 3i, -1.5i
 COMPLEX : (INT | REAL) [+-] (INT | REAL) 'i'
-        | (INT | REAL) 'i' ;
+        | (INT | REAL) 'i'
+        | 'i' ;
 
 // Nombres réels: 3.14, 0.5, .5
 REAL    : [0-9]* '.' [0-9]+ ;

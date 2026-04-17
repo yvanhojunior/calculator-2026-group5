@@ -43,6 +43,7 @@ public class ExpressionParser {
             case '-' -> new Minus(Arrays.asList(leftExpr, rightExpr));
             case '*' -> new Times(Arrays.asList(leftExpr, rightExpr));
             case '/' -> new Divides(Arrays.asList(leftExpr, rightExpr));
+            case '%' -> new Modulo(Arrays.asList(leftExpr, rightExpr));
             default -> throw new Exception("Unknown operator: " + op);
         };
     }
@@ -55,7 +56,7 @@ public class ExpressionParser {
             if (c == '(') depth++;
             else if (c == ')') depth--;
             else if (depth == 0 && (c == '+' || c == '-')) pos = i;
-            else if (depth == 0 && (c == '*' || c == '/') && pos == -1) pos = i;
+            else if (depth == 0 && (c == '*' || c == '/' || c == '%') && pos == -1) pos = i;
         }
         return pos;
     }

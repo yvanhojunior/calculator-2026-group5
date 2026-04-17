@@ -143,7 +143,7 @@
                 <row>
                     <button class="sct" value="^">xʸ</button>
                     <button class="sct" value="^2">x²</button>
-                    <button class="sct" value="sqrt">√</button>
+                    <button id="sd_button" class="light" value="sd" onclick="app.switchStandardDecimal()" disabled>S ⇄ D</button>
                     <button class="light" onclick="app.clearDisplay()">C</button>
                 </row>
                 <row>
@@ -171,7 +171,7 @@
                     <button class="op" value="+">+</button>
                 </row>
                 <row>
-                    <button id="ans_button" class="light" onclick="app.getLastAnswer()" disabled >Ans</button>
+                    <button id="ans_button" class="light" disabled >Ans</button>
                     <button class="digit" value="0">0</button>
                     <button class="op" value=".">.</button>
                     <button class="op" onclick="app.calculate()">=</button>
@@ -300,6 +300,7 @@
         </div>
 
         <div class="card">
+            <!-- Help for standard calculator -->
             <div class="accordion open">
                 <button type="button" class="accordion-toggle" aria-expanded="true">
                     <span data-i18n="standard_calculator"></span>
@@ -311,6 +312,8 @@
                     <li data-i18n="standard_calculator_help_3"></li>
                 </ul>
             </div>
+
+            <!-- Help for scientific calculator -->
             <div class="accordion">
                 <button type="button" class="accordion-toggle" aria-expanded="false">
                     <span data-i18n="scientific_calculator"></span>
@@ -322,6 +325,8 @@
                     <li data-i18n="scientific_calculator_help_3"></li>
                 </ul>
             </div>
+
+            <!-- Help for equations solver -->
             <div class="accordion">
                 <button type="button" class="accordion-toggle" aria-expanded="false">
                     <span data-i18n="equations"></span>
@@ -330,8 +335,12 @@
                 <ul class="accordion-panel">
                     <li data-i18n="equations_help_1"></li>
                     <li data-i18n="equations_help_2"></li>
+                    <li data-i18n-html="equations_help_3"></li>
+                    <li data-i18n="equations_help_4"></li>
                 </ul>
             </div>
+
+            <!-- Help for unit converter -->
             <div class="accordion">
                 <button type="button" class="accordion-toggle" aria-expanded="false">
                     <span data-i18n="unit_converter"></span>
@@ -342,6 +351,8 @@
                     <li data-i18n="unit_converter_help_2"></li>
                 </ul>
             </div>
+
+            <!-- Help for currency converter -->
             <div class="accordion">
                 <button type="button" class="accordion-toggle" aria-expanded="false">
                     <span data-i18n="currency_converter"></span>
@@ -352,6 +363,8 @@
                     <li data-i18n="currency_converter_help_2"></li>
                 </ul>
             </div>
+
+            <!-- Help for programmer calculator (hidden for now) -->
             <div class="accordion" hidden>
                 <button type="button" class="accordion-toggle" aria-expanded="false">
                     <span data-i18n="programmer"></span>

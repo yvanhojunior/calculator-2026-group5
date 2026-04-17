@@ -84,4 +84,59 @@ class TestRationalValue {
         // 18/12 réduit à 3/2 doit afficher "1 1/2"
         assertEquals("1 1/2", new RationalValue(18, 12).toString());
     }
+
+    @Test
+    void testToReal() {
+        RationalValue a = new RationalValue(1, 4);
+        RealValue expected = new RealValue(0.25);
+        assertEquals(expected, a.toReal());
+    }
+
+    @Test
+    void testPowWithPositiveExponent() {
+        RationalValue a = new RationalValue(1, 2);
+        IntegerValue exp = new IntegerValue(3);
+        assertEquals(new RationalValue(1, 8), a.pow(exp));
+    }
+
+    @Test
+    void testPowWithNegativeExponent() {
+        RationalValue a = new RationalValue(1, 2);
+        IntegerValue exp = new IntegerValue(-2);
+        assertEquals(new RealValue(4.0), a.pow(exp));
+    }
+
+    @Test
+    void testPowWithRealExponent() {
+        RationalValue a = new RationalValue(1, 2);
+        RealValue exp = new RealValue(2.0);
+        assertEquals(new RealValue(0.25), a.pow(exp));
+    }
+
+    @Test
+    void testModuloOperation() {
+        RationalValue a = new RationalValue(1, 2);
+        RationalValue b = new RationalValue(1, 3);
+        assertThrows(IllegalArgumentException.class, () -> a.mod(b));
+    }
+
+    @Test
+    void testHashCode() {
+        RationalValue a = new RationalValue(1, 2);
+        RationalValue b = new RationalValue(2, 4);
+        assertEquals(a.hashCode(), b.hashCode());
+    }
+
+    @Test
+    void testGetNumeratorAndDenominator() {
+        RationalValue a = new RationalValue(3, 4);
+        assertEquals(3, a.getNumerator());
+        assertEquals(4, a.getDenominator());
+    }
+
+    @Test
+    void testGetValue() {
+        RationalValue a = new RationalValue(3, 4);
+        assertEquals(0.75, a.getValue().doubleValue(), 1e-9);
+    }
 }

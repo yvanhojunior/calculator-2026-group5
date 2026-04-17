@@ -57,6 +57,9 @@ public class RealValue implements NumberValue {
 
     @Override
     public NumberValue add(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return new ComplexValue(value.doubleValue(), 0).add(o);
+        }
         RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return handleSpecialAdd(o);
         return new RealValue(value.add(o.value), precision);
@@ -64,6 +67,9 @@ public class RealValue implements NumberValue {
 
     @Override
     public NumberValue sub(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return new ComplexValue(value.doubleValue(), 0).sub(o);
+        }
         RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return handleSpecialSub(o);
         return new RealValue(value.subtract(o.value), precision);
@@ -71,6 +77,9 @@ public class RealValue implements NumberValue {
 
     @Override
     public NumberValue mul(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return new ComplexValue(value.doubleValue(), 0).mul(o);
+        }
         RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return handleSpecialMul(o);
         return new RealValue(value.multiply(o.value, precision), precision);
@@ -78,6 +87,9 @@ public class RealValue implements NumberValue {
 
     @Override
     public NumberValue div(NumberValue other) {
+        if (other instanceof ComplexValue o) {
+            return new ComplexValue(value.doubleValue(), 0).div(o);
+        }
         RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return handleSpecialDiv(o);
         if (o.value.compareTo(BigDecimal.ZERO) == 0) {
@@ -97,6 +109,21 @@ public class RealValue implements NumberValue {
         RealValue o = toReal(other);
         if (isSpecial() || o.isSpecial()) return NAN;
         return new RealValue(Math.pow(value.doubleValue(), o.getValue().doubleValue()));
+    }
+
+    @Override
+    public NumberValue mod(NumberValue other) {
+        RealValue o = toReal(other);
+        if (isSpecial() || o.isSpecial()) return NAN;
+        if (o.value.compareTo(BigDecimal.ZERO) == 0) {
+            throw new ArithmeticException("Modulo by zero is not allowed.");
+        }
+        BigDecimal result = value.remainder(o.value, precision);
+        // Le résultat du modulo doit toujours être positif ou nul
+        if (result.signum() < 0) {
+            result = result.add(o.value, precision);
+        }
+        return new RealValue(result, precision);
     }
 
     // Gestion des cas spéciaux pour l'addition
@@ -170,6 +197,10 @@ public class RealValue implements NumberValue {
 
     private RealValue toReal(NumberValue other) {
         if (other instanceof RealValue) return (RealValue) other;
+        if (other instanceof RationalValue) {
+            RationalValue r = (RationalValue) other;
+            return new RealValue(new BigDecimal(r.getNumerator()).divide(new BigDecimal(r.getDenominator()), precision), precision);
+        }
         if (other instanceof IntegerValue)
             return new RealValue(((IntegerValue) other).getValue());
         throw new IllegalArgumentException("Cannot convert " + other.getClass() + " to RealValue");

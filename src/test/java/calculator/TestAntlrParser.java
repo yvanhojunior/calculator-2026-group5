@@ -71,5 +71,15 @@ public class TestAntlrParser {
         assertEquals(new IntegerValue(8), result);
     }
 
+    @Test
+    void shouldComputeModuloAsRemainder() {
+        Calculator calc = new Calculator();
+
+        Expression expr = calc.read("9 % 8");
+        NumberValue result = calc.eval(expr);
+
+        assertEquals(new IntegerValue(1), result);
+    }
+
 
 }

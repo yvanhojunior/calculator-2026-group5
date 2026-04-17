@@ -40,17 +40,17 @@ public class NotationVisitor extends Visitor {
             args.push(stack.pop());
         }
 
-        String result = switch (notation) {
-            case PREFIX -> 
+        String result;
+        if (notation == Notation.PREFIX) {
             // ex for 3 + 4: + ( 3, 4 ) | ex for 3 + 4 + 5: + ( 3, 4, 5 )
-                o.getSymbol() + " (" + args.stream().collect(Collectors.joining(", ")) + ")";
-            case INFIX -> 
+            result = o.getSymbol() + " (" + args.stream().collect(Collectors.joining(", ")) + ")";
+        } else if (notation == Notation.INFIX) {
             // ex for 3 + 4 | ex for 3 + 4 + 5: ( 3 + 4 + 5 )
-                "( " + args.stream().collect(Collectors.joining(" " + o.getSymbol() + " ")) + " )";
-            case POSTFIX -> 
-            // ex for 3 + 4: ( 3, 4 ) + | ex for 3 + 4 + 5: ( 3, 4 , 5 ) + 
-                "(" + args.stream().collect(Collectors.joining(", ")) + ") " + o.getSymbol();
-        };
+            result = "( " + args.stream().collect(Collectors.joining(" " + o.getSymbol() + " ")) + " )";
+        } else {
+            // ex for 3 + 4: ( 3, 4 ) + | ex for 3 + 4 + 5: ( 3, 4, 5 ) +
+            result = "(" + args.stream().collect(Collectors.joining(", ")) + ") " + o.getSymbol();
+        }
 
         stack.push(result);
     }
