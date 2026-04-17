@@ -1,4 +1,4 @@
-# Build and test a Java project with Maven, and compute and report test coverage 
+# Build and test a Java project with Maven, and compute and report test coverage
 
 name: Java CI with Maven
 
@@ -27,7 +27,10 @@ jobs:
     - id: checkout
       name: checkout repository
       uses: actions/checkout@v6
-      
+      with:
+        # fetch-depth 0 avoids edge-cases when committing/pushing back
+        fetch-depth: 0
+
     - id: setupjava
       name: Set up with Java 25
       uses: actions/setup-java@v5
@@ -35,7 +38,7 @@ jobs:
         distribution: 'temurin'
         java-version: 25
         cache: 'maven'
-        
+
     - id: mvn
       name: Build with Maven (including running all tests)
       run: mvn -B verify --file pom.xml
@@ -88,12 +91,12 @@ jobs:
         passphrase: ${{ secrets.ALWAYSDATA_SSH_PASSPHRASE }}
         port: ${{ secrets.ALWAYSDATA_SSH_PORT || 22 }}
         script: ${{ env.ALWAYSDATA_POST_DEPLOY_CMD }}
-      
+
     - id: testreport
       name: Publish Test Report
       if: ${{ always() }}
-      uses: scacap/action-surefire-report@v1.9.1 
-      
+      uses: scacap/action-surefire-report@v1.9.1
+
     - name: Generate JaCoCo Badge
       id: jacoco
       uses: cicirello/jacoco-badge-generator@v2.12.1
@@ -101,35 +104,32 @@ jobs:
         generate-coverage-badge: true
         generate-branches-badge: true
         generate-summary: true
-        
+
     - name: Log coverage percentage
       run: |
         echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
         echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
-        
-#    - name: Commit and push the svg badges and the json coverage summary (if it changed)
-#      uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9.1.4
-#      with:
-#        default_author: github_actions
-#        message: 'commit coverage badge and summary'
-#        add: '*.svg *.json'
-#        
-#    - name: Upload JaCoCo coverage report
-#      uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
-#      with:
-#        name: jacoco-report
-#        path: target/site/jacoco/
-#        
-#    - name: Comment on PR with coverage percentages
-#      if: ${{ github.event_name == 'pull_request' }}
-#      run: |
-#        REPORT=$(<.github/badges/coverage-summary.json)
-#        COVERAGE=$(jq -r '.coverage' <<< "$REPORT")%
-#        BRANCHES=$(jq -r '.branches' <<< "$REPORT")%
-#        NEWLINE=$'\n'
-#        BODY="## Test Coverage Summary ${NEWLINE}* __Coverage:__ ${COVERAGE}${NEWLINE}* __Branches:__ ${BRANCHES}"
-#        gh pr comment ${{github.event.pull_request.number}} -b "${BODY}"
-#      continue-on-error: true
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+
+    # Commit/push updated badges so README shows new values
+    - name: Commit and push coverage badges
+      if: >
+        ${{
+          github.event_name == 'push' &&
+          (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') &&
+          github.actor != 'github-actions[bot]'
+        }}
+      run: |
+        set -euo pipefail
+
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+        git add .github/badges/jacoco.svg .github/badges/branches.svg .github/badges/coverage-summary.json || true
+
+        if git diff --cached --quiet; then
+          echo "No badge changes to commit"
+          exit 0
+        fi
+
+        git commit -m "Update coverage badges"
+        git push
