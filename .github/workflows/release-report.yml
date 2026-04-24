@@ -37,7 +37,7 @@ jobs:
 
       - name: Publish test report (workflow UI)
         if: ${{ always() }}
-        uses: scacap/action-surefire-report@v1.9.1
+        uses: scacap/action-surefire-report@v1.10.0
 
       # Validate the required reports exist (fail if missing)
       - name: Verify required reports exist
